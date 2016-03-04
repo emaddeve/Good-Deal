@@ -1,10 +1,13 @@
 package com.emad.gooddeals;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
@@ -25,11 +28,19 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     GPSTracker gps;
     Bitmap photo;
+    Context context;
+
+
+
     private static final int CAMERA_REQUEST = 1888;
     //TextView t = (TextView) findViewById(R.id.textView2);
 
@@ -68,6 +79,50 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)  {
+        // if the result is capturing Image
+        if (requestCode == CAMERA_REQUEST) {
+            gps = new GPSTracker(this);
+
+            if (resultCode == RESULT_OK) {
+                // previewCapturedImage();
+
+                    photo = (Bitmap) data.getExtras().get("data");
+                    Intent i = new Intent(this,TakePhoto.class);
+                    try {
+
+                       String path = saveToInternalStorage(photo);
+
+                    i.putExtra("image",photo);
+                    i.putExtra("path",path);
+
+                    startActivity(i);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    // \n is for new line
+
+                } else {
+                    // Can't get location.
+                    // GPS or network is not enabled.
+                    // Ask user to enable GPS/network in settings.
+
+                }
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // user cancelled Image capture
+                Toast.makeText(this,
+                        "Cancelled", Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                // failed to capture image
+                Toast.makeText(this,
+                        "Error!", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+
 
     @Override
     public void onBackPressed() {
@@ -126,48 +181,27 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // if the result is capturing Image
-        if (requestCode == CAMERA_REQUEST) {
-             gps = new GPSTracker(this);
+    private String saveToInternalStorage(Bitmap bitmapImage) throws IOException {
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath=new File(directory,"profile.jpg");
 
-            if (resultCode == RESULT_OK) {
-                // previewCapturedImage();
-                if (gps.canGetLocation()) {
-                    double latitude = gps.getLatitude();
-                    double longitude = gps.getLongitude();
-                    Toast.makeText(this, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-                    photo = (Bitmap) data.getExtras().get("data");
-                    Intent i = new Intent(this,TakePhoto.class);
-                    i.putExtra("image",photo);
-                    i.putExtra("latitude",latitude);
-                    i.putExtra("longitude", longitude);
-                    startActivity(i);
-
-                    // \n is for new line
-
-                } else {
-                    // Can't get location.
-                    // GPS or network is not enabled.
-                    // Ask user to enable GPS/network in settings.
-
-                }
-
-            } else if (resultCode == RESULT_CANCELED) {
-                // user cancelled Image capture
-                Toast.makeText(this,
-                        "Cancelled", Toast.LENGTH_SHORT)
-                        .show();
-            } else {
-                // failed to capture image
-                Toast.makeText(this,
-                        "Error!", Toast.LENGTH_SHORT)
-                        .show();
-            }
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            fos.close();
         }
-
+        return directory.getAbsolutePath();
     }
+
+
 }
 
 
