@@ -47,7 +47,9 @@ public class TakePhoto extends Activity {
 
     }
 
-
+    /**
+     * method for getting the location using the class GPSTracker
+     */
     public void getLocation(){
         if (gps.canGetLocation()) {
             double latitude = gps.getLatitude();
@@ -59,6 +61,9 @@ public class TakePhoto extends Activity {
         }
     }
 
+    /**
+     * Method for setting the fields values
+     */
     public void setField() {
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -71,6 +76,9 @@ public class TakePhoto extends Activity {
 
     }
 
+    /**
+     * Method for creating a jsonobject with proper information and execute asynct
+     */
     public void sendOffer(){
         try {
             encodedImage = imageToJson.getStringFromBitmap(image);
