@@ -53,15 +53,15 @@ public class SendOffer extends AsyncTask<Void, Void, Void> {
             OutputStream out = new BufferedOutputStream(conn.getOutputStream());
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
             writer.write(parameters.toString());
-            System.out.println("params.tostring" + parameters.toString());
+            System.out.println("params.tostring"  + parameters.toString());
 
             writer.close();
             out.close();
 
 
             int responseCode = conn.getResponseCode();
-            System.out.println("\nSending 'POST' request to URL : " + url);
-            System.out.println("Response Code : " + responseCode);
+            System.out.println("\nSending 'POST' request to URL : " +  url);
+            System.out.println("Response Code : " +  responseCode);
 
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
@@ -72,9 +72,9 @@ public class SendOffer extends AsyncTask<Void, Void, Void> {
             }
             in.close();
 
-            System.out.println("Response in universal: " + response.toString());
+            System.out.println("Response in universal: "+   response.toString());
         } catch (Exception exception) {
-            System.out.println("Exception: " + exception);
+            System.out.println("Exception: "  + exception);
 
 
         }

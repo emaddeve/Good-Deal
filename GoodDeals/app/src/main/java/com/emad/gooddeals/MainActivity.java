@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity
     TextView t6;
     ImageView i2;
 
+
     String s="name of offer";
     String s2="descritpi about ;thies";
 
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity
         t3=(TextView)findViewById(R.id.textView2);
         t4=(TextView)findViewById(R.id.textView7);
         i2=(ImageView)findViewById(R.id.i2);
+        imageToJson = new ImageToJson();
 
 
 
@@ -113,6 +115,8 @@ public class MainActivity extends AppCompatActivity
                 try {
                     t3.setText(response.getString("autor"));
                     t4.setText(response.getString("message"));
+                    i2.setImageBitmap(imageToJson.getBitmapFromString(response.getString("image")));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

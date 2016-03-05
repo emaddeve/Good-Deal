@@ -60,7 +60,7 @@ public class TakePhoto extends Activity {
              longitude = gps.getLongitude();
             setField();
 
-            Toast.makeText(this, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Your Location is - \nLat: " +  latitude +  "\nLong: " +  longitude, Toast.LENGTH_LONG).show();
 
         }
     }
