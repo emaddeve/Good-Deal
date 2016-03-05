@@ -1,19 +1,20 @@
 package com.emad.gooddeals;
 
 import android.Manifest;
-import android.app.ProgressDialog;
+
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.ExifInterface;
+
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
+
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,14 +24,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -39,7 +51,25 @@ public class MainActivity extends AppCompatActivity
     Bitmap photo;
     Context context;
 
+    JSONObject jsonObject = new JSONObject();
+    String encodedImage;
+    Bitmap image;
+    ImageToJson imageToJson;
+    Bitmap image2;
 
+    String imageString;
+    double longitude;
+    double lit;
+    String name;
+    String desc;
+    TextView t3;
+    TextView t4;
+    TextView t5;
+    TextView t6;
+    ImageView i2;
+
+    String s="name of offer";
+    String s2="descritpi about ;thies";
 
     private static final int CAMERA_REQUEST = 1888;
     //TextView t = (TextView) findViewById(R.id.textView2);
@@ -50,6 +80,12 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        t3=(TextView)findViewById(R.id.textView2);
+        t4=(TextView)findViewById(R.id.textView7);
+        i2=(ImageView)findViewById(R.id.i2);
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +104,22 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get("http://10.0.2.2:8080/messenger/webapi/messages/1", new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    t3.setText(response.getString("autor"));
+                    t4.setText(response.getString("message"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -78,38 +130,31 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+
     }
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)  {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // if the result is capturing Image
         if (requestCode == CAMERA_REQUEST) {
-            gps = new GPSTracker(this);
+
 
             if (resultCode == RESULT_OK) {
                 // previewCapturedImage();
 
-                    photo = (Bitmap) data.getExtras().get("data");
-                    Intent i = new Intent(this,TakePhoto.class);
+                photo = (Bitmap) data.getExtras().get("data");
+                Intent i = new Intent(this, TakePhoto.class);
                     try {
+                        String path = saveToInternalStorage(photo);
 
-                       String path = saveToInternalStorage(photo);
-
-                    i.putExtra("image",photo);
-                    i.putExtra("path",path);
-
-                    startActivity(i);
+                      i.putExtra("image",photo);
+                    //  i.putExtra("path",path);
+                      startActivity(i);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     // \n is for new line
 
-                } else {
-                    // Can't get location.
-                    // GPS or network is not enabled.
-                    // Ask user to enable GPS/network in settings.
-
                 }
-
             } else if (resultCode == RESULT_CANCELED) {
                 // user cancelled Image capture
                 Toast.makeText(this,
@@ -121,7 +166,9 @@ public class MainActivity extends AppCompatActivity
                         "Error!", Toast.LENGTH_SHORT)
                         .show();
             }
-        }
+
+    }
+
 
 
     @Override
@@ -200,7 +247,6 @@ public class MainActivity extends AppCompatActivity
         }
         return directory.getAbsolutePath();
     }
-
 
 }
 

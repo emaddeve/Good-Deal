@@ -2,12 +2,13 @@ package com.emad.gooddeals;
 import android.app.Activity;
 
 
-
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import android.os.Bundle;
 
 
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -22,8 +23,8 @@ import org.json.JSONObject;
  */
 public class TakePhoto extends Activity {
     ImageToJson imageToJson;
-    private ImageView imageView;
-
+    ImageView imageView;
+    JSONObject jsonObject;
     String encodedImage;
     Bitmap image;
     Double latitude;
@@ -33,7 +34,7 @@ public class TakePhoto extends Activity {
     EditText offerDisc;
 
     GPSTracker gps;
-    JSONObject jsonObject;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,9 @@ public class TakePhoto extends Activity {
         imageView = (ImageView) findViewById(R.id.imageView);
         offerName = (EditText)findViewById(R.id.OfferName);
         offerDisc = (EditText)findViewById(R.id.OfferDisc);
+        imageToJson=new ImageToJson();
+        jsonObject=new JSONObject();
+        gps = new GPSTracker(this);
         getLocation();
 
 
@@ -52,8 +56,8 @@ public class TakePhoto extends Activity {
      */
     public void getLocation(){
         if (gps.canGetLocation()) {
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
+             latitude = gps.getLatitude();
+             longitude = gps.getLongitude();
             setField();
 
             Toast.makeText(this, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
@@ -72,6 +76,7 @@ public class TakePhoto extends Activity {
             image = (Bitmap) extras.get("image");
             imageView.setImageBitmap(image);
 
+
         }
 
     }
@@ -79,14 +84,15 @@ public class TakePhoto extends Activity {
     /**
      * Method for creating a jsonobject with proper information and execute asynct
      */
-    public void sendOffer(){
+    public void sendOffer(View view){
         try {
             encodedImage = imageToJson.getStringFromBitmap(image);
             jsonObject.put("name",offerName.getText().toString());
             jsonObject.put("Discription",offerDisc.getText().toString());
             jsonObject.put("longitude",longitude);
             jsonObject.put("latitude",latitude);
-            jsonObject.put("image",encodedImage);
+            jsonObject.put("image", encodedImage);
+
             SendOffer asyncT = new SendOffer(jsonObject);
             asyncT.execute();
 
