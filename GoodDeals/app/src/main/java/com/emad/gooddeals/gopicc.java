@@ -85,7 +85,7 @@ public class gopicc extends Fragment {
                 if (gps.canGetLocation()) {
                     double latitude = gps.getLatitude();
                     double longitude = gps.getLongitude();
-                    Toast.makeText(getContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Your Location is - \nLat: "   latitude   "\nLong: "   longitude, Toast.LENGTH_LONG).show();
                     photo = (Bitmap) data.getExtras().get("data");
                     Intent i = new Intent(getActivity(),TakePhoto.class);
                     i.putExtra("image",photo);
@@ -130,7 +130,7 @@ public class gopicc extends Fragment {
             encodedImage= imageToJson.getStringFromBitmap(photo);
           //  e.setText(encodedImage);
           //  try {
-            //    jsonObject = new JSONObject("{\"image\":\"" + encodedImage +"\"}");
+            //    jsonObject = new JSONObject("{\"image\":\""   encodedImage  "\"}");
              //   String jsonString = jsonObject.getString("image");
              //   Bitmap m = imageToJson.getBitmapFromString(jsonString);
              //   imageView.setImageBitmap(m);
