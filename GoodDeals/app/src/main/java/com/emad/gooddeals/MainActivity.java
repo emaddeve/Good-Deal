@@ -43,6 +43,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import cz.msebera.android.httpclient.Header;
+import data.stevo.SQlite.Offres;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 try {
+                   // Offres offres = new Offres(response);
                     t3.setText(response.getString("autor"));
                     t4.setText(response.getString("message"));
                     i2.setImageBitmap(imageToJson.getBitmapFromString(response.getString("image")));

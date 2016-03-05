@@ -4,6 +4,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
 
@@ -19,10 +22,12 @@ public class Offres {
     private String magasin;
     private Date datePublication;
     private Date dateFin;
+ //   JSONObject jsonObject;
 
-
-    public Offres() {
-    }
+    public Offres(){}
+ //   public Offres(JSONObject jsonObject) {
+   // this.jsonObject= jsonObject;
+  //  }
 
     public Offres(String titre,Drawable image, String description, String categorie, Date datePublication, Date dateFin, String magasin) {
         this.titre = titre;
@@ -35,9 +40,12 @@ public class Offres {
     }
 
     //GETTERS
-    public int getId() {
+    public int getId() throws JSONException {
+       //return jsonObjet.getInt("id");
         return id;
     }
+
+
 
     //SETTERS
     public void setId(int id) {
@@ -45,6 +53,7 @@ public class Offres {
     }
 
     public String getTitre() {
+        //return jsonObjet.getString("title");
         return titre;
     }
 
@@ -99,10 +108,10 @@ public class Offres {
     @Override
     public String toString() {
         return "L'offre " +  titre+   "ayant  la description: "   +description+
-                  " est de la categorie " +  categorie+
-                  " a ete prise dans le magasin: "+   magasin+
-                  " le "+   datePublication+
-                  " et s'acheve le "+   dateFin;
+                " est de la categorie " +  categorie+
+                " a ete prise dans le magasin: "+   magasin+
+                " le "+   datePublication+
+                " et s'acheve le "+   dateFin;
     }
 
 
