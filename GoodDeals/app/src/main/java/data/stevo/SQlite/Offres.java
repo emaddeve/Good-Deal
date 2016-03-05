@@ -98,11 +98,11 @@ public class Offres {
 
     @Override
     public String toString() {
-        return "L'offre " + titre + "ayant  la description: " + description
-                + " est de la categorie " + categorie
-                + " a ete prise dans le magasin: " + magasin
-                + " le " + datePublication
-                + " et s'acheve le " + dateFin;
+        return "L'offre " +  titre+   "ayant  la description: "   +description+
+                  " est de la categorie " +  categorie+
+                  " a ete prise dans le magasin: "+   magasin+
+                  " le "+   datePublication+
+                  " et s'acheve le "+   dateFin;
     }
 
 
