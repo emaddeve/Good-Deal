@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    private static final int CAMERA_REQUEST = 1888;
+    private static final int CAMERA_REQUEST = 900;
     //TextView t = (TextView) findViewById(R.id.textView2);
 
     @Override
