@@ -32,8 +32,8 @@ public class TakePhoto extends Activity {
 
     EditText offerName;
     EditText offerDisc;
-
     GPSTracker gps;
+
 
 
     @Override
@@ -45,8 +45,8 @@ public class TakePhoto extends Activity {
         offerDisc = (EditText)findViewById(R.id.OfferDisc);
         imageToJson=new ImageToJson();
         jsonObject=new JSONObject();
-        gps = new GPSTracker(this);
-        getLocation();
+
+        setField();
 
 
     }
@@ -55,15 +55,32 @@ public class TakePhoto extends Activity {
      * method for getting the location using the class GPSTracker
      */
     public void getLocation(){
-        if (gps.canGetLocation()) {
-             latitude = gps.getLatitude();
-             longitude = gps.getLongitude();
-            setField();
 
-            Toast.makeText(this, "Your Location is - \nLat: " +  latitude +  "\nLong: " +  longitude, Toast.LENGTH_LONG).show();
 
+        gps = new GPSTracker(TakePhoto.this);
+
+        // check if GPS enabled
+        if(gps.canGetLocation()){
+
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+
+            // \n is for new line
+            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
         }
+
     }
+
+
+
+
+
+
 
     /**
      * Method for setting the fields values
@@ -93,9 +110,10 @@ public class TakePhoto extends Activity {
             jsonObject.put("latitude",latitude);
             jsonObject.put("image", encodedImage);
 
-            SendOffer asyncT = new SendOffer(jsonObject);
-            asyncT.execute();
+            getLocation();
 
+          //  SendOffer asyncT = new SendOffer(jsonObject);
+          //  asyncT.execute();
 
         } catch (JSONException e1) {
             e1.printStackTrace();

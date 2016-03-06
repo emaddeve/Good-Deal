@@ -109,21 +109,26 @@ public class MainActivity extends AppCompatActivity
 
 
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://10.0.2.2:8080/messenger/webapi/messages/1", new JsonHttpResponseHandler(){
+        client.get("http://10.0.2.2:8080/GoodDealsWS/webapi/offers/", new JsonHttpResponseHandler(){
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
                 try {
-                   // Offres offres = new Offres(response);
-                    t3.setText(response.getString("autor"));
-                    t4.setText(response.getString("message"));
-                    i2.setImageBitmap(imageToJson.getBitmapFromString(response.getString("image")));
+
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject json = response.getJSONObject(i);
+                        // Offres offres = new Offres(response);
+                        t3.setText(json.getString("category"));
+                        t4.setText(json.getString("description"));
+                        i2.setImageBitmap(imageToJson.getBitmapFromString(json.getString("imageString")));
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-        });
+            });
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
