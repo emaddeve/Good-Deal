@@ -5,13 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.emad.gooddeals.ImageToJson;
+
+import org.json.JSONObject;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * - * Created by stevo on 05/03/16.
  * Created by stevo on 03/03/16.
  * Class DAO qui va nous permettre de gerer la connexion a notre base de donnée.
  * De gerer les opertions a effectuer sur la table offres de notre base de donnée.
@@ -25,10 +28,13 @@ public class OffresDao {
     private static final int NUM_COL_MAGASIN = 5;
     private static final int NUM_COL_DATE_PUBLICATION = 6;
     private static final int NUM_COL_DATE_FIN = 7;
+    private ImageToJson imageToJson;
+    private JSONObject jsonObject;
     // Champs de la base de données
     private SQLiteDatabase database;
     private GoodDealHelper goodDealHelperHelper;
-    private String[] allColumns = {GoodDealHelper.COLUMN_ID,
+    private String[] allColumns = {
+            GoodDealHelper.COLUMN_ID,
             GoodDealHelper.COLUMN_TITRE,
             GoodDealHelper.COLUMN_IMAGE,
             GoodDealHelper.COLUMN_DESCRIPTIOM,
@@ -62,6 +68,12 @@ public class OffresDao {
             return null;
         }
         return new Date(cursor.getLong(index));
+    }
+    /**
+     * Methode Utilitaire permettant de charger notre date et prend en parametre un entier
+     */
+    public static Date LongToDate( long index) {//index ici est lidentifiant de la colonne a laquelle on accede
+        return new Date(index);
     }
 
     /**
@@ -118,7 +130,7 @@ public class OffresDao {
         //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
         offre.setId(cursor.getInt(NUM_COL_ID));
         offre.setTitre(cursor.getString(NUM_COL_TITRE));
-        offre.setImage(cursor.getBlob(cursor.getColumnIndexOrThrow(GoodDealHelper.COLUMN_IMAGE)));
+        offre.setImage(cursor.getString(NUM_COL_IMAGE));
         offre.setDescription(cursor.getString(NUM_COL_DESCRIPTION));
         offre.setCategorie(cursor.getString(NUM_COL_CATEGORIE));
         offre.setMagasin(cursor.getString(NUM_COL_MAGASIN));
@@ -138,7 +150,7 @@ public class OffresDao {
         ContentValues values = new ContentValues();
         //on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
         values.put(GoodDealHelper.COLUMN_TITRE, offre.getTitre());
-        values.put(GoodDealHelper.COLUMN_IMAGE, offre.getImage());
+        values.put(GoodDealHelper.COLUMN_IMAGE, imageToJson.getStringFromBitmap(offre.getImage()));
         values.put(GoodDealHelper.COLUMN_DESCRIPTIOM, offre.getDescription());
         values.put(GoodDealHelper.COLUMN_CATEGORIE, offre.getCategorie());
         values.put(GoodDealHelper.COLUMN_MAGASIN, offre.getMagasin());
@@ -155,7 +167,7 @@ public class OffresDao {
         //il faut simple préciser quelle offre on doit mettre à jour grâce à l'ID
         ContentValues values = new ContentValues();
         values.put(GoodDealHelper.COLUMN_TITRE, offre.getTitre());
-        values.put(GoodDealHelper.COLUMN_IMAGE, offre.getImage());
+        values.put(GoodDealHelper.COLUMN_IMAGE, imageToJson.getStringFromBitmap(offre.getImage()));
         values.put(GoodDealHelper.COLUMN_DESCRIPTIOM, offre.getDescription());
         values.put(GoodDealHelper.COLUMN_CATEGORIE, offre.getCategorie());
         values.put(GoodDealHelper.COLUMN_MAGASIN, offre.getMagasin());

@@ -42,7 +42,7 @@ public class SendOffer extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
         StringBuffer response = null;
         try {
-            URL url = new URL("myurl");
+            URL url = new URL("http://localhost:8888/");
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000);

@@ -22,20 +22,21 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:id="@+id/imageView"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/OfferName"
+        android:layout_marginStart="25dp" />
 
     <EditText
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/OfferName"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_marginTop="54dp" />
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/OfferDisc" />
 
     <EditText
         android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:id="@+id/OfferDisc"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/OfferName"
+        android:layout_alignEnd="@+id/btnSendOffer" />
 </RelativeLayout>

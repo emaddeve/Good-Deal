@@ -1,50 +1,71 @@
 package data.stevo.SQlite;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 
-import java.io.ByteArrayOutputStream;
+import android.graphics.Bitmap;
+
+import com.emad.gooddeals.ImageToJson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
 
 /**
  * Created by stevo on 02/03/16.
+ * Classe representant une offre
  */
 public class Offres {
     private int id;
     private String titre;
-    private Drawable image;
+    private Bitmap image;
+    private int imageId;//attribut de test de l'affichage dune image
     private String description;
     private String categorie;
     private String magasin;
     private Date datePublication;
     private Date dateFin;
+    private JSONObject jsonObject;
+    private ImageToJson imageToJson=new ImageToJson();
 
+    public Offres(JSONObject jsonObject) {
+        this.jsonObject = jsonObject;
+    }
 
     public Offres() {
-    }
 
-    public Offres(String titre,Drawable image, String description, String categorie, Date datePublication, Date dateFin, String magasin) {
+    }
+    /**
+     *constructeur de test
+     */
+    public Offres(String titre, int image, String description) {
         this.titre = titre;
-        this.image = image;
+        this.imageId = image;
         this.description = description;
-        this.categorie = categorie;
-        this.datePublication = datePublication;
-        this.dateFin = dateFin;
-        this.magasin = magasin;
+
     }
 
-    //GETTERS
-    public int getId() {
+    //GETTERS et SETTERS
+    public int getImageId(){
+        return imageId;
+    }
+    public int getId() throws JSONException {
+        try {
+            id = jsonObject.getInt("id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return id;
     }
 
-    //SETTERS
     public void setId(int id) {
         this.id = id;
     }
 
     public String getTitre() {
+        /**try {
+            titre = jsonObject.getString("titre");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
         return titre;
     }
 
@@ -52,8 +73,27 @@ public class Offres {
         this.titre = titre;
     }
 
+    public Bitmap getImage() {
+       /** try {
+            image = imageToJson.getBitmapFromString(jsonObject.getString("image"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
+        return image;
+    }
+
+    public void setImage(String pictureData) {
+        this.image = imageToJson.getBitmapFromString(pictureData);
+    }
+
     public String getDescription() {
 
+      /**  try {
+            description = jsonObject.getString("description");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
         return description;
     }
 
@@ -63,6 +103,11 @@ public class Offres {
 
     public String getCategorie() {
 
+        try {
+            categorie = jsonObject.getString("categorie");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return categorie;
     }
 
@@ -72,6 +117,11 @@ public class Offres {
 
     public Date getDatePublication() {
 
+        try {
+            datePublication = OffresDao.LongToDate(jsonObject.getLong("datePublication"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return datePublication;
     }
 
@@ -81,6 +131,11 @@ public class Offres {
 
     public Date getDateFin() {
 
+        try {
+            dateFin = OffresDao.LongToDate(jsonObject.getLong("dateFin"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return dateFin;
     }
 
@@ -89,7 +144,12 @@ public class Offres {
     }
 
     public String getMagasin() {
-        return magasin;
+        try {
+            magasin = jsonObject.getString("magasin");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return titre;
     }
 
     public void setMagasin(String magasin) {
@@ -98,43 +158,36 @@ public class Offres {
 
     @Override
     public String toString() {
-        return "L'offre " +  titre+   "ayant  la description: "   +description+
-                  " est de la categorie " +  categorie+
-                  " a ete prise dans le magasin: "+   magasin+
-                  " le "+   datePublication+
-                  " et s'acheve le "+   dateFin;
+        return "L'offre " + titre + "ayant  la description: " + description +
+                " est de la categorie " + categorie +
+                " a ete prise dans le magasin: " + magasin +
+                " le " + datePublication +
+                " et s'acheve le " + dateFin;
     }
 
 
-    public void setImage(byte[] pictureData) {
-        image = byteToDrawable(pictureData);
-    }
+/**    public static byte[] drawableToByteArray(Drawable d) {
 
-    public byte[] getImage(){
-        return drawableToByteArray(image);
-    }
-    public static byte[] drawableToByteArray(Drawable d) {
+ if (d != null) {
+ Bitmap imageBitmap = ((BitmapDrawable) d).getBitmap();
+ ByteArrayOutputStream baos = new ByteArrayOutputStream();
+ imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+ byte[] byteData = baos.toByteArray();
 
-        if (d != null) {
-            Bitmap imageBitmap = ((BitmapDrawable) d).getBitmap();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] byteData = baos.toByteArray();
+ return byteData;
+ } else
+ return null;
 
-            return byteData;
-        } else
-            return null;
-
-    }
+ }
 
 
-    public static Drawable byteToDrawable(byte[] data) {
+ public static Drawable byteToDrawable(byte[] data) {
 
-        if (data == null)
-            return null;
-        else
-            return new BitmapDrawable(BitmapFactory.decodeByteArray(data, 0, data.length));
-    }
+ if (data == null)
+ return null;
+ else
+ return new BitmapDrawable(BitmapFactory.decodeByteArray(data, 0, data.length));
+ }*/
 }
 
 
