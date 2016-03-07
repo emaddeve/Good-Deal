@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * - * Created by stevo on 05/03/16.
  * Created by stevo on 02/03/16.
  * Class permettant de creer la base de donnee
  */
@@ -51,6 +50,7 @@ public class GoodDealHelper extends SQLiteOpenHelper {
      */
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_OFFRES + " ("
             + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_TITRE + " TEXT, "
             + COLUMN_IMAGE + " TEXT, "
             + COLUMN_DESCRIPTIOM + " TEXT, "
             + COLUMN_CATEGORIE + " TEXT,"

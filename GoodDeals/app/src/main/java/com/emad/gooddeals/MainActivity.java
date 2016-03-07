@@ -6,11 +6,17 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 
+<<<<<<< HEAD
 import android.graphics.Point;
+=======
+import android.net.Uri;
+>>>>>>> f458f4e1b2ca8decc4bfb0210e667d5f1ff4297d
 import android.os.Bundle;
 
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 
 import android.support.v4.app.ActivityCompat;
@@ -26,44 +32,46 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import data.stevo.SQlite.Offres;
 
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int CAMERA_REQUEST = 900;
     GPSTracker gps;
     Bitmap photo;
     Context context;
-
     JSONObject jsonObject = new JSONObject();
     String encodedImage;
     Bitmap image;
-    ImageToJson imageToJson;
+    ImageToJson imageToJson = new ImageToJson();
     Bitmap image2;
-
     String imageString;
     double longitude;
     double lit;
     String name;
     String desc;
+<<<<<<< HEAD
     TextView t3;
     TextView t4;
     TextView t8;
@@ -76,15 +84,35 @@ public class MainActivity extends AppCompatActivity
     String s2="descritpi about ;thies";
 
     private static final int CAMERA_REQUEST = 1888;
+=======
+    String s = "name of offer";
+    String s2 = "descritpi about ;thies";
+    private ListView listView;
+    private TextView t3;
+    private TextView t4;
+    private ImageView i2;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client2;
+>>>>>>> f458f4e1b2ca8decc4bfb0210e667d5f1ff4297d
     //TextView t = (TextView) findViewById(R.id.textView2);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        /**
+         * test de 'laffichage dans une listView
+         *
+         *
+         * */
+        listView = (ListView) findViewById(R.id.listviewperso);
+        String[] titre = new String[]{" Titre1", "Titre2",
+                "Titre3"};
 
+<<<<<<< HEAD
         t3=(TextView)findViewById(R.id.textView2);
         t4=(TextView)findViewById(R.id.textView7);
         t8=(TextView)findViewById(R.id.textView8);
@@ -92,9 +120,23 @@ public class MainActivity extends AppCompatActivity
         p1=new Point();
         i2=(ImageView)findViewById(R.id.i2);
         imageToJson = new ImageToJson();
+=======
+        String[] desc = {"salut a tous je m'appelle stevo", "ca marche", "ok cest bon"};
+>>>>>>> f458f4e1b2ca8decc4bfb0210e667d5f1ff4297d
 
+        int[] images = {R.drawable.android, R.drawable.android,
+                R.drawable.android};
 
+        ArrayList<Offres> myList = new ArrayList<Offres>();
 
+        for (int i = 0; i < titre.length; i++) {
+            myList.add(new Offres(titre[i], images[i], desc[i]));
+        }
+        CustomAdapter adapter = new CustomAdapter(this, myList);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(adapter);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +146,7 @@ public class MainActivity extends AppCompatActivity
                     ActivityCompat.requestPermissions(MainActivity.this,
                             new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST);
                 } else {
-                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraIntent, CAMERA_REQUEST);
                 }
 
@@ -112,13 +154,17 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-
         AsyncHttpClient client = new AsyncHttpClient();
+<<<<<<< HEAD
         client.get("http://10.0.2.2:8080/GoodDealsWS/webapi/offers/", new JsonHttpResponseHandler(){
+=======
+        client.get("http://10.0.2.2:8080/messenger/webapi/messages/1", new JsonHttpResponseHandler() {
+>>>>>>> f458f4e1b2ca8decc4bfb0210e667d5f1ff4297d
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
                 try {
+<<<<<<< HEAD
 
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject json = response.getJSONObject(i);
@@ -131,6 +177,12 @@ public class MainActivity extends AppCompatActivity
 
                     }
 
+=======
+                    Offres offres = new Offres(response);
+                    t3.setText(offres.getTitre());
+                    t4.setText(response.getString("message"));
+                    i2.setImageBitmap(imageToJson.getBitmapFromString(response.getString("image")));
+>>>>>>> f458f4e1b2ca8decc4bfb0210e667d5f1ff4297d
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -149,8 +201,11 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client2 = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // if the result is capturing Image
@@ -162,32 +217,31 @@ public class MainActivity extends AppCompatActivity
 
                 photo = (Bitmap) data.getExtras().get("data");
                 Intent i = new Intent(this, TakePhoto.class);
-                    try {
-                        String path = saveToInternalStorage(photo);
+                try {
+                    String path = saveToInternalStorage(photo);
 
-                      i.putExtra("image",photo);
+                    i.putExtra("image", photo);
                     //  i.putExtra("path",path);
-                      startActivity(i);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    // \n is for new line
-
+                    startActivity(i);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } else if (resultCode == RESULT_CANCELED) {
-                // user cancelled Image capture
-                Toast.makeText(this,
-                        "Cancelled", Toast.LENGTH_SHORT)
-                        .show();
-            } else {
-                // failed to capture image
-                Toast.makeText(this,
-                        "Error!", Toast.LENGTH_SHORT)
-                        .show();
+                // \n is for new line
+
             }
+        } else if (resultCode == RESULT_CANCELED) {
+            // user cancelled Image capture
+            Toast.makeText(this,
+                    "Cancelled", Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            // failed to capture image
+            Toast.makeText(this,
+                    "Error!", Toast.LENGTH_SHORT)
+                    .show();
+        }
 
     }
-
 
 
     @Override
@@ -252,7 +306,7 @@ public class MainActivity extends AppCompatActivity
         // path to /data/data/yourapp/app_data/imageDir
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         // Create imageDir
-        File mypath=new File(directory,"profile.jpg");
+        File mypath = new File(directory, "profile.jpg");
 
         FileOutputStream fos = null;
         try {
@@ -267,6 +321,45 @@ public class MainActivity extends AppCompatActivity
         return directory.getAbsolutePath();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client2.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.emad.gooddeals/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client2, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.emad.gooddeals/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client2, viewAction);
+        client2.disconnect();
+    }
 }
 
 
