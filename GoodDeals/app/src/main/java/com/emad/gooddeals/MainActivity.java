@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 
+import android.graphics.Point;
 import android.os.Bundle;
 
 import android.support.design.widget.FloatingActionButton;
@@ -65,9 +66,10 @@ public class MainActivity extends AppCompatActivity
     String desc;
     TextView t3;
     TextView t4;
-    TextView t5;
-    TextView t6;
+    TextView t8;
+    TextView t9;
     ImageView i2;
+    Point p1;
 
 
     String s="name of offer";
@@ -85,6 +87,9 @@ public class MainActivity extends AppCompatActivity
 
         t3=(TextView)findViewById(R.id.textView2);
         t4=(TextView)findViewById(R.id.textView7);
+        t8=(TextView)findViewById(R.id.textView8);
+        t9=(TextView)findViewById(R.id.textView9);
+        p1=new Point();
         i2=(ImageView)findViewById(R.id.i2);
         imageToJson = new ImageToJson();
 
@@ -120,7 +125,10 @@ public class MainActivity extends AppCompatActivity
                         // Offres offres = new Offres(response);
                         t3.setText(json.getString("category"));
                         t4.setText(json.getString("description"));
+
+                        t8.setText(json.getString("location"));
                         i2.setImageBitmap(imageToJson.getBitmapFromString(json.getString("imageString")));
+
                     }
 
                 } catch (JSONException e) {

@@ -1,6 +1,6 @@
 package org.unicaen.dnr2i.GoodDealsWS.service;
 
-import java.awt.Point;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.unicaen.dnr2i.GoodDealsWS.database.DatabaseClass;
 import org.unicaen.dnr2i.GoodDealsWS.model.Offers;
+
+import com.vividsolutions.jts.geom.Point;
 /**
  * 
  * @author emad
@@ -19,6 +21,8 @@ public class OffersService {
 
 	double longitude=300;
 	double latitude=500;
+	Point p1;
+	Point p2;
 
 	Map<Long, Offers> offers = DatabaseClass.getOffers();
 
@@ -26,9 +30,9 @@ public class OffersService {
 		try {
 
 			String encoded = Base64.encodeFromFile("/home/emad/Desktop/Desktop/img/emadooo.jpg");
-			offers.put(1l, new Offers("RedBull", "50% off", encoded, "Drinks",longitude,latitude));
+			offers.put(1l, new Offers("RedBull", "50% off", encoded, "Drinks",p1));
 
-			offers.put(3l, new Offers("orange", "20% off", encoded, "Fruits",longitude,latitude));
+			offers.put(3l, new Offers("orange", "20% off", encoded, "Fruits",p2));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,7 +57,7 @@ public class OffersService {
 		return offersByCategory;
 
 	}
-
+/*
 	public List<Offers> getAllOffersByLocation(double longitude,double latitude, double desiredLocation) {
 
 		Point mylocation = new Point();
@@ -73,6 +77,7 @@ public class OffersService {
 		}
 		return list;
 	}
+	*/
 	public void addOffer(Offers offer){
 		offer.setId(offers.size()+1);
 		offers.put(offer.getId(), offer);

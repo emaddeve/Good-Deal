@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
+import android.graphics.Point;
 import android.os.Bundle;
 
 
@@ -33,6 +34,7 @@ public class TakePhoto extends Activity {
     EditText offerName;
     EditText offerDisc;
     GPSTracker gps;
+
 
 
 

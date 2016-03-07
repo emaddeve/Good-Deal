@@ -1,11 +1,18 @@
 package org.unicaen.dnr2i.GoodDealsWS.model;
 
-import java.awt.Point;
 
 
-
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.vividsolutions.jts.geom.Point;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
+
+
+
 /**
  * 
  * @author emad
@@ -13,25 +20,39 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlAccessorType
 @XmlRootElement	
+@Entity
 public class Offers {
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+    @GenericGenerator(name="id", strategy = "increment")
 	private long id;
+	
+	@Type(type="org.hibernate.spatial.GeometryType")
+    private Point location;
+	
+	
+
+	@Column(name="name")
 	private String name;
+	@Column(name="description")
 	private String description;
+	@Column(name = "image")
 	private String imageString;
+	@Column(name = "category")
 	private String category;
+	
 	private double longitude;
 	private double latitude;
-	
 	public Offers(){}
 	
-	public Offers(String name, String description, String imageString,String category,double longitude,double latitude) {
+	public Offers(String name, String description, String imageString,String category,Point location) {
 		super();
+		
 		this.name = name;
 		this.description = description;
 		this.imageString = imageString;
-		this.longitude = longitude;
-		this.latitude = latitude;
+		this.location = location;
 		this.category = category;
 		
 	}
@@ -84,6 +105,13 @@ public class Offers {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+	public Point getLocation() {
+		return location;
+	}
+
+	public void setLocation(Point location) {
+		this.location = location;
 	}
 	
 	
