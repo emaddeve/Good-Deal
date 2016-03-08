@@ -18,9 +18,9 @@ import org.hibernate.annotations.Type;
  * @author emad
  *
  */
-@XmlAccessorType
-@XmlRootElement	
-@Entity
+//@XmlAccessorType
+//@XmlRootElement	
+@Entity 
 public class Offers {
 	
 	@Id
@@ -28,8 +28,8 @@ public class Offers {
     @GenericGenerator(name="id", strategy = "increment")
 	private long id;
 	
-	@Type(type="org.hibernate.spatial.GeometryType")
-    private Point location;
+	//@Type(type="org.hibernate.spatial.GeometryType")
+    //private Point location;
 	
 	
 
@@ -41,19 +41,23 @@ public class Offers {
 	private String imageString;
 	@Column(name = "category")
 	private String category;
-	
+	@Column(name="longitude")
 	private double longitude;
+	@Column(name = "latitude")
 	private double latitude;
 	public Offers(){}
 	
-	public Offers(String name, String description, String imageString,String category,Point location) {
+	public Offers(String name, String description, String imageString,String category,double longitude,double latitude) {
 		super();
 		
 		this.name = name;
 		this.description = description;
 		this.imageString = imageString;
-		this.location = location;
+	//	this.location = location;
 		this.category = category;
+		this.longitude=longitude;
+		this.latitude=latitude;
+	
 		
 	}
 	public String getName() {
@@ -106,13 +110,7 @@ public class Offers {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public Point getLocation() {
-		return location;
-	}
-
-	public void setLocation(Point location) {
-		this.location = location;
-	}
+	
 	
 	
 	

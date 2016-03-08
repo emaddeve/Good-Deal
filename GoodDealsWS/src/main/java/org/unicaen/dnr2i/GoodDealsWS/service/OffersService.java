@@ -21,8 +21,8 @@ public class OffersService {
 
 	double longitude=300;
 	double latitude=500;
-	Point p1;
-	Point p2;
+
+	
 
 	Map<Long, Offers> offers = DatabaseClass.getOffers();
 
@@ -30,9 +30,10 @@ public class OffersService {
 		try {
 
 			String encoded = Base64.encodeFromFile("/home/emad/Desktop/Desktop/img/emadooo.jpg");
-			offers.put(1l, new Offers("RedBull", "50% off", encoded, "Drinks",p1));
+			
+			offers.put(1l, new Offers("RedBull", "50% off", encoded, "Drinks",longitude,latitude));
 
-			offers.put(3l, new Offers("orange", "20% off", encoded, "Fruits",p2));
+			offers.put(3l, new Offers("orange", "20% off", encoded, "Fruits",longitude,latitude));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,6 +57,13 @@ public class OffersService {
 		}
 		return offersByCategory;
 
+	}
+	public Offers getOfferById(long id){
+		Offers offer = new Offers();
+		for(Offers of : offers.values())
+			if(of.getId()==id)
+				offer=of;
+		return offer;
 	}
 /*
 	public List<Offers> getAllOffersByLocation(double longitude,double latitude, double desiredLocation) {

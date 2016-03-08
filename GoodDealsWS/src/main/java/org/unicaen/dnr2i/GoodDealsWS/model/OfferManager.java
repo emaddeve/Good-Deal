@@ -18,22 +18,26 @@ import java.util.List;
 public class OfferManager {
 
     
-    public void createAndStoreOffer(String location) throws IOException {
+    public void createAndStoreOffer(Offers offers) throws IOException {
+    	/*
         Geometry geom = wktToGeometry(location);
 
         if (!geom.getGeometryType().equals("Point")) {
             throw new RuntimeException("Geometry must be a point. Got a " + geom.getGeometryType());
         }
+        */
 
         EntityManager em = JPAUtil.createEntityManager();
 
         em.getTransaction().begin();
 
         Offers offer = new Offers();
-        offer.setCategory("food");
-        offer.setDescription("for eat");
-        offer.setName("meat");
-        offer.setLocation((Point)geom);
+        offer.setCategory(offers.getCategory());
+        offer.setDescription(offers.getDescription());
+        offer.setName(offers.getName());
+    //    offer.setLocation((Point)geom);
+        offer.setLongitude(offers.getLongitude());
+        offer.setLatitude(offers.getLatitude());
         String encoded = Base64.encodeFromFile("/home/emad/Desktop/Desktop/img/emadooo.jpg");
         offer.setImageString(encoded);
         em.persist(offer);
