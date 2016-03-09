@@ -1,10 +1,10 @@
 package org.unicaen.dnr2i.GoodDealsWS.model;
-
+/*
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
-
+*/
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -44,7 +44,7 @@ public class OfferManager {
         em.getTransaction().commit();
         em.close();
     }
-
+/*
     private Geometry wktToGeometry(String wktPoint) {
         WKTReader fromText = new WKTReader();
         Geometry geom = null;

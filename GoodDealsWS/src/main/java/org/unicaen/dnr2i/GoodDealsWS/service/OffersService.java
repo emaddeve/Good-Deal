@@ -2,6 +2,7 @@ package org.unicaen.dnr2i.GoodDealsWS.service;
 
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 
 import java.util.List;
@@ -11,14 +12,22 @@ import java.util.Map;
 import org.unicaen.dnr2i.GoodDealsWS.database.DatabaseClass;
 import org.unicaen.dnr2i.GoodDealsWS.model.Offers;
 
-import com.vividsolutions.jts.geom.Point;
+//import com.vividsolutions.jts.geom.Point;
+
+
+import org.hibernate.HibernateException; 
+import org.hibernate.Session; 
+import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 /**
  * 
  * @author emad
  *
  */
 public class OffersService {
-
+	private static SessionFactory factory; 
 	double longitude=300;
 	double latitude=500;
 
@@ -28,7 +37,7 @@ public class OffersService {
 
 	public OffersService() {
 		try {
-
+			factory = new Configuration().configure().buildSessionFactory();
 			String encoded = Base64.encodeFromFile("/home/emad/Desktop/Desktop/img/emadooo.jpg");
 			
 			offers.put(1l, new Offers("RedBull", "50% off", encoded, "Drinks",longitude,latitude));
@@ -58,12 +67,41 @@ public class OffersService {
 		return offersByCategory;
 
 	}
-	public Offers getOfferById(long id){
+	public Offers getOfferById(){
+		Offers f = new Offers();
+	
+		Session session = factory.openSession();
+	      Transaction tx = null;
+	      try{
+	         tx = session.beginTransaction();
+	       List<Offers>   of= (List<Offers>) session.createQuery("FROM Offers").list(); 
+	       for(Offers s:of){
+	    	   if (true){
+	    		   f=s;
+	    	   }
+	       }
+	        
+	      
+	        	
+	          
+	         
+	          
+	      }catch (HibernateException e) {
+	          if (tx!=null) tx.rollback();
+	          e.printStackTrace(); 
+	       }finally {
+	          session.close(); 
+	       }
+	      return f;
+		
+	}
+		/*
 		Offers offer = new Offers();
 		for(Offers of : offers.values())
 			if(of.getId()==id)
 				offer=of;
 		return offer;
+		
 	}
 /*
 	public List<Offers> getAllOffersByLocation(double longitude,double latitude, double desiredLocation) {
@@ -86,9 +124,25 @@ public class OffersService {
 		return list;
 	}
 	*/
-	public void addOffer(Offers offer){
-		offer.setId(offers.size()+1);
-		offers.put(offer.getId(), offer);
+	public void  addOffer(){
+	
+		Offers f = new Offers("emad","sfsf","sfsff","sdfjsl",500.0,500.0);
+		 Session session = factory.openSession();
+	      Transaction tx = null;
+	      try{
+	          tx = session.beginTransaction();
+	          session.save(f); 
+	          tx.commit();
+	          
+	          
+	          
+	          
+	 }catch (HibernateException e) {
+        if (tx!=null) tx.rollback();
+        e.printStackTrace(); 
+     }finally {
+        session.close(); 
+     }
+	     
 	}
-
 }

@@ -6,10 +6,9 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.vividsolutions.jts.geom.Point;
+//import com.vividsolutions.jts.geom.Point;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-
 
 
 
@@ -20,30 +19,28 @@ import org.hibernate.annotations.Type;
  */
 //@XmlAccessorType
 //@XmlRootElement	
-@Entity 
+
 public class Offers {
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-    @GenericGenerator(name="id", strategy = "increment")
-	private long id;
+	
+	private int id;
 	
 	//@Type(type="org.hibernate.spatial.GeometryType")
     //private Point location;
 	
 	
 
-	@Column(name="name")
+	
 	private String name;
-	@Column(name="description")
+	
 	private String description;
-	@Column(name = "image")
+	
 	private String imageString;
-	@Column(name = "category")
+	
 	private String category;
-	@Column(name="longitude")
+	
 	private double longitude;
-	@Column(name = "latitude")
+	
 	private double latitude;
 	public Offers(){}
 	
@@ -107,7 +104,7 @@ public class Offers {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	

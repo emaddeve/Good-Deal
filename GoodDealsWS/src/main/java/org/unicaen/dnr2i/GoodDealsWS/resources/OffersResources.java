@@ -26,7 +26,7 @@ public class OffersResources {
 	OffersService offerService = new OffersService();
 	
 	
-	
+	/*
 	@GET
 	public List<Offers> getOffers(@QueryParam("category") String category,
 									@QueryParam("longitude") double longitude,
@@ -41,10 +41,14 @@ public class OffersResources {
 			
 		return offerService.getAllOffers();
 	}
+	*/
 	@GET
-	@Path("/{offerId}")
-	public Offers getOffer(@PathParam("offerId") long id){
-		return offerService.getOfferById(id);
+	//@Path("/{offerId}")
+	public Offers getOffer(){
+		
+		
+		
+		return offerService.getOfferById();
 	}
 	
 	
@@ -53,9 +57,10 @@ public class OffersResources {
 	
 	
 	@POST
-	public String addOffer(Offers offer) throws IOException {
-		of.createAndStoreOffer(offer);
-		return "done";
+	public void addOffer() throws IOException {
+		//of.createAndStoreOffer(offer);
+		 offerService.addOffer();
+		
 
 			
 
