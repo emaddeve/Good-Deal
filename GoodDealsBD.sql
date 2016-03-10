@@ -27,11 +27,13 @@ CREATE TABLE `offers` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
-  `image` varchar(255) NOT NULL,
-  `longitude` float(10,6) DEFAULT NULL,
-  `latitude` float(10,6) DEFAULT NULL,
+  `image` varchar(4000) NOT NULL,
+  `longitude` float(10,6) NOT NULL,
+  `latitude` float(10,6) NOT NULL,
+  `magasin` varchar(255) NOT NULL,
+  `datefin` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +42,7 @@ CREATE TABLE `offers` (
 
 LOCK TABLES `offers` WRITE;
 /*!40000 ALTER TABLE `offers` DISABLE KEYS */;
+INSERT INTO `offers` VALUES (1,'emad','refai','prof','jsdlfsdjfls',500.000000,500.000000,'',NULL),(2,'emad','sfsf','sdfjsl','sfsff',500.000000,500.000000,'',NULL),(3,'rifai','sfsf','sdfjsl','sfsff',500.000000,500.000000,'',NULL),(4,'rifai','sfsf','sdfjsl','sfsff',1000.000000,1000.000000,'',NULL),(5,'testlocation','sfsf','sdfjsl','sfsff',-0.441594,49.244179,'',NULL),(6,'testlocation2','sfsf','sdfjsl','sfsff',-0.533866,49.287205,'',NULL),(7,'testlocation3','sfsf','sdfjsl','sfsff',-0.316772,49.104652,'',NULL),(8,'testlocation4','sfsf','ttttt','sfsff',-0.093730,49.249897,'',NULL),(9,'testimage','sfsf','ttttt','g¹w§}',-0.093730,49.249897,'',NULL),(10,'test','send from android','android','§:óGú',3000.000000,4000.000000,'',NULL),(11,'EMAD','send from android','android','[B@b0a78a',3000.000000,4000.000000,'',NULL),(12,'testtttttttt','send from android','android','®wm|',3000.000000,4000.000000,'',NULL),(13,'ttttt','send from android','android','mxÑÇû',3000.000000,4000.000000,'',NULL),(14,'last test','send from android','android','android.graphics.Bitmap@c86f764',3000.000000,4000.000000,'',NULL),(15,'after last','send from android','android','iVBORw0KGgoAAAANSUhEUgAAAKAAAAB4CAIAAAD6wG44AAAAA3NCSVQICAjb4U/gAAABLElEQVR4\nnO3RAQkAIBDAwNea9u9hChHGXYLB1pwhbP8O4C2D4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD\n4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyO\nMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO\n4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD\n4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyOMzjO4DiD4wyO\nMzjO4DiD4wyOu8GQAUuXHXQaAAAAAElFTkSuQmCC\n',3000.000000,4000.000000,'',NULL);
 /*!40000 ALTER TABLE `offers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -53,6 +56,8 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `firstName` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -75,4 +80,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-08 12:21:29
+-- Dump completed on 2016-03-10 17:27:54

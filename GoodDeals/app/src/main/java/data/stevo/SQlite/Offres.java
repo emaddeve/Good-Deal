@@ -16,12 +16,11 @@ import java.util.Date;
 public class Offres {
     private int id;
     private String titre;
-    private Bitmap image;
-    private int imageId;//attribut de test de l'affichage dune image
+    private Bitmap bitmapImage;
+    private String image;
     private String description;
     private String categorie;
     private String magasin;
-    private Date datePublication;
     private Date dateFin;
     private JSONObject jsonObject;
     private ImageToJson imageToJson=new ImageToJson();
@@ -36,17 +35,15 @@ public class Offres {
     /**
      *constructeur de test
      */
-    public Offres(String titre, int image, String description) {
+    public Offres(String titre, String image, String description) {
         this.titre = titre;
-        this.imageId = image;
+        this.image = image;
         this.description = description;
 
     }
 
     //GETTERS et SETTERS
-    public int getImageId(){
-        return imageId;
-    }
+
     public int getId() throws JSONException {
         try {
             id = jsonObject.getInt("id");
@@ -61,11 +58,11 @@ public class Offres {
     }
 
     public String getTitre() {
-        /**try {
-            titre = jsonObject.getString("titre");
+        try {
+            titre = jsonObject.getString("name");
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
         return titre;
     }
 
@@ -74,26 +71,26 @@ public class Offres {
     }
 
     public Bitmap getImage() {
-       /** try {
-            image = imageToJson.getBitmapFromString(jsonObject.getString("image"));
+        try {
+            bitmapImage = imageToJson.getBitmapFromString(jsonObject.getString("imageString"));
 
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
-        return image;
+        }
+        return bitmapImage;
     }
 
     public void setImage(String pictureData) {
-        this.image = imageToJson.getBitmapFromString(pictureData);
+        this.bitmapImage = imageToJson.getBitmapFromString(pictureData);
     }
 
     public String getDescription() {
 
-      /**  try {
+       try {
             description = jsonObject.getString("description");
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
         return description;
     }
 
@@ -104,7 +101,7 @@ public class Offres {
     public String getCategorie() {
 
         try {
-            categorie = jsonObject.getString("categorie");
+            categorie = jsonObject.getString("category");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -113,20 +110,6 @@ public class Offres {
 
     public void setCategorie(String categorie) {
         this.categorie = categorie;
-    }
-
-    public Date getDatePublication() {
-
-        try {
-            datePublication = OffresDao.LongToDate(jsonObject.getLong("datePublication"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return datePublication;
-    }
-
-    public void setDatePublication(Date datePublication) {
-        this.datePublication = datePublication;
     }
 
     public Date getDateFin() {
@@ -160,8 +143,7 @@ public class Offres {
     public String toString() {
         return "L'offre " + titre + "ayant  la description: " + description +
                 " est de la categorie " + categorie +
-                " a ete prise dans le magasin: " + magasin +
-                " le " + datePublication +
+                " a ete prise dans le magasin: " + magasin  +
                 " et s'acheve le " + dateFin;
     }
 
