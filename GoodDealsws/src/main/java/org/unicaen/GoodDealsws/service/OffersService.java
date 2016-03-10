@@ -1,7 +1,14 @@
 package org.unicaen.GoodDealsws.service;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 //import com.vividsolutions.jts.geom.Point;
 import org.hibernate.HibernateException;
@@ -15,6 +22,8 @@ import org.hibernate.service.ServiceRegistry;
 
 import org.unicaen.GoodDealsws.model.Offers;
 
+import org.unicaen.GoodDealsws.model.Base64;
+
 /**
  * 
  * @author emad
@@ -23,12 +32,15 @@ import org.unicaen.GoodDealsws.model.Offers;
 public class OffersService {
 	private static SessionFactory sessionFactory;
 	private static ServiceRegistry serviceRegistry;
-	
+	byte[] bytearray;
 
 /**
  * static method for creating an Instance of SessionFactory
  * @return instance of SessionFactory
+ * @throws IOException 
  */
+	
+	
 	
 	public static SessionFactory createSessionFactory() {
 	    Configuration configuration = new Configuration();

@@ -31,6 +31,7 @@ public class Offers {
 	
 	private String imageString;
 	
+	
 	private String category;
 	
 	private double longitude;
@@ -101,8 +102,7 @@ public class Offers {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	
+
 	
 	
 }

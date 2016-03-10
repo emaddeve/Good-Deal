@@ -29,7 +29,7 @@ public class OffersResources {
 				return offerService.getOffersCD(prefDistance, longitude, latitude, category);
 			return offerService.getOfferByCategory(category);
 		}
-		
+
 		if (prefDistance > 0) {
 			return offerService.getNearOffers(prefDistance, longitude, latitude);
 		}
