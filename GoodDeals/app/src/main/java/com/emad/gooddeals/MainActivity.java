@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-   private Bitmap photo;
+    private Bitmap photo;
     private Context context;
     private ImageToJson imageToJson;
     private JSONArray jsonArray;
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 myList.add(new Offres(jsonObject));
-             //   myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
+                //   myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
 
 
             } catch (JSONException e) {
