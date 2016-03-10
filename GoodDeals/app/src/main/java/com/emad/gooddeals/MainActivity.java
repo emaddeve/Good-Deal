@@ -8,12 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-
-<<<<<<< HEAD
 import android.graphics.Point;
-=======
 import android.net.Uri;
->>>>>>> f458f4e1b2ca8decc4bfb0210e667d5f1ff4297d
 import android.os.Bundle;
 
 import android.provider.MediaStore;
@@ -42,6 +38,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -56,8 +53,6 @@ import data.stevo.SQlite.Offres;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    private static final int CAMERA_REQUEST = 900;
     GPSTracker gps;
     Bitmap photo;
     Context context;
@@ -71,20 +66,8 @@ public class MainActivity extends AppCompatActivity
     double lit;
     String name;
     String desc;
-<<<<<<< HEAD
-    TextView t3;
-    TextView t4;
-    TextView t8;
-    TextView t9;
-    ImageView i2;
     Point p1;
-
-
-    String s="name of offer";
-    String s2="descritpi about ;thies";
-
     private static final int CAMERA_REQUEST = 1888;
-=======
     String s = "name of offer";
     String s2 = "descritpi about ;thies";
     private ListView listView;
@@ -96,7 +79,7 @@ public class MainActivity extends AppCompatActivity
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client2;
->>>>>>> f458f4e1b2ca8decc4bfb0210e667d5f1ff4297d
+
     //TextView t = (TextView) findViewById(R.id.textView2);
 
     @Override
@@ -111,18 +94,10 @@ public class MainActivity extends AppCompatActivity
         listView = (ListView) findViewById(R.id.listviewperso);
         String[] titre = new String[]{" Titre1", "Titre2",
                 "Titre3"};
-
-<<<<<<< HEAD
-        t3=(TextView)findViewById(R.id.textView2);
-        t4=(TextView)findViewById(R.id.textView7);
-        t8=(TextView)findViewById(R.id.textView8);
-        t9=(TextView)findViewById(R.id.textView9);
         p1=new Point();
-        i2=(ImageView)findViewById(R.id.i2);
         imageToJson = new ImageToJson();
-=======
+
         String[] desc = {"salut a tous je m'appelle stevo", "ca marche", "ok cest bon"};
->>>>>>> f458f4e1b2ca8decc4bfb0210e667d5f1ff4297d
 
         int[] images = {R.drawable.android, R.drawable.android,
                 R.drawable.android};
@@ -155,16 +130,11 @@ public class MainActivity extends AppCompatActivity
 
 
         AsyncHttpClient client = new AsyncHttpClient();
-<<<<<<< HEAD
         client.get("http://10.0.2.2:8080/GoodDealsWS/webapi/offers/", new JsonHttpResponseHandler(){
-=======
-        client.get("http://10.0.2.2:8080/messenger/webapi/messages/1", new JsonHttpResponseHandler() {
->>>>>>> f458f4e1b2ca8decc4bfb0210e667d5f1ff4297d
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
                 try {
-<<<<<<< HEAD
 
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject json = response.getJSONObject(i);
@@ -172,17 +142,10 @@ public class MainActivity extends AppCompatActivity
                         t3.setText(json.getString("category"));
                         t4.setText(json.getString("description"));
 
-                        t8.setText(json.getString("location"));
+                       // t8.setText(json.getString("location"));
                         i2.setImageBitmap(imageToJson.getBitmapFromString(json.getString("imageString")));
 
                     }
-
-=======
-                    Offres offres = new Offres(response);
-                    t3.setText(offres.getTitre());
-                    t4.setText(response.getString("message"));
-                    i2.setImageBitmap(imageToJson.getBitmapFromString(response.getString("image")));
->>>>>>> f458f4e1b2ca8decc4bfb0210e667d5f1ff4297d
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -245,7 +208,7 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed(){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
