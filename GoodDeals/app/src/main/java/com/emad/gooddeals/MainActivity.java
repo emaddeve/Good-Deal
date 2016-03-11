@@ -1,23 +1,17 @@
 package com.emad.gooddeals;
 
 import android.Manifest;
-
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Base64;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,11 +21,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.emad.gooddeals.http.Receiver;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,9 +35,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
@@ -54,12 +44,9 @@ import data.stevo.SQlite.Offres;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     GPSTracker gps;
-    Bitmap photo;
-    Context context;
     JSONObject jsonObject = new JSONObject();
     String encodedImage;
     Bitmap image;
-    ImageToJson imageToJson = new ImageToJson();
     Bitmap image2;
     String imageString;
     double longitude;
@@ -67,13 +54,15 @@ public class MainActivity extends AppCompatActivity
     String name;
     String desc;
     Point p1;
-    private static final int CAMERA_REQUEST = 1888;
     String s = "name of offer";
     String s2 = "descritpi about ;thies";
+   private Bitmap photo;
+    private Context context;
+    private ImageToJson imageToJson;
+    private JSONArray jsonArray;
+    private Receiver receiver;
+    private static final int CAMERA_REQUEST = 1888;
     private ListView listView;
-    private TextView t3;
-    private TextView t4;
-    private ImageView i2;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -101,12 +90,27 @@ public class MainActivity extends AppCompatActivity
 
         int[] images = {R.drawable.android, R.drawable.android,
                 R.drawable.android};
+        jsonArray = new JSONArray();
+        receiver = new Receiver();
+        imageToJson = new ImageToJson();
 
+
+        jsonArray = receiver.receiver();
         ArrayList<Offres> myList = new ArrayList<Offres>();
 
-        for (int i = 0; i < titre.length; i++) {
-            myList.add(new Offres(titre[i], images[i], desc[i]));
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                myList.add(new Offres(jsonObject));
+             //   myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+
+
         CustomAdapter adapter = new CustomAdapter(this, myList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(adapter);
@@ -127,9 +131,7 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
-
-        AsyncHttpClient client = new AsyncHttpClient();
+        /**AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://10.0.2.2:8080/GoodDealsWS/webapi/offers/", new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -139,21 +141,18 @@ public class MainActivity extends AppCompatActivity
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject json = response.getJSONObject(i);
                         // Offres offres = new Offres(response);
-                        t3.setText(json.getString("category"));
-                        t4.setText(json.getString("description"));
+                        //t3.setText(json.getString("category"));
+                       // t4.setText(json.getString("description"));
 
                        // t8.setText(json.getString("location"));
-                        i2.setImageBitmap(imageToJson.getBitmapFromString(json.getString("imageString")));
+                        //i2.setImageBitmap(imageToJson.getBitmapFromString(json.getString("imageString")));
 
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            });
-
-
-
+            });*/
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -180,16 +179,9 @@ public class MainActivity extends AppCompatActivity
 
                 photo = (Bitmap) data.getExtras().get("data");
                 Intent i = new Intent(this, TakePhoto.class);
-                try {
-                    String path = saveToInternalStorage(photo);
+                i.putExtra("image", photo);
 
-                    i.putExtra("image", photo);
-                    //  i.putExtra("path",path);
-                    startActivity(i);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                // \n is for new line
+                startActivity(i);
 
             }
         } else if (resultCode == RESULT_CANCELED) {
@@ -239,7 +231,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -264,25 +256,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private String saveToInternalStorage(Bitmap bitmapImage) throws IOException {
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        // Create imageDir
-        File mypath = new File(directory, "profile.jpg");
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            fos.close();
-        }
-        return directory.getAbsolutePath();
-    }
 
     @Override
     public void onStart() {
@@ -323,7 +296,8 @@ public class MainActivity extends AppCompatActivity
         AppIndex.AppIndexApi.end(client2, viewAction);
         client2.disconnect();
     }
-}
 
+
+}
 
 

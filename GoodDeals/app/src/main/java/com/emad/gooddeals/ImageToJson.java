@@ -30,6 +30,17 @@ public class ImageToJson {
         encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
         return encodedImage;
     }
+    public byte[] getByteFromBitmap(Bitmap bitmapPicture) {
+
+        final int COMPRESSION_QUALITY = 100;
+        String encodedImage;
+        ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
+        bitmapPicture.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY,
+                byteArrayBitmapStream);
+        byte[] b = byteArrayBitmapStream.toByteArray();
+      //  encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        return b;
+    }
 
     /*
 * This Function converts the String back to Bitmap
@@ -41,6 +52,15 @@ public class ImageToJson {
         return decodedByte;
 
     }
+    public Bitmap getBitmapFromString(byte[] jsonString) {
+
+        //byte[] decodedString = Base64.decode(jsonString, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(jsonString, 0, jsonString.length);
+        return decodedByte;
+
+    }
+
+
 
 
 

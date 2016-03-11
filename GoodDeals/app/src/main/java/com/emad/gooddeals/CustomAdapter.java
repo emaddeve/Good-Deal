@@ -85,7 +85,7 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
         // nous pouvons attribuer à nos vues les valeurs de l'élément de la liste
         mViewHolder.textViewTitre.setText(offre.getTitre());
         mViewHolder.textViewDesc.setText(String.valueOf(offre.getDescription()));
-        mViewHolder.imageView.setImageResource(offre.getImageId());
+        mViewHolder.imageView.setImageBitmap(offre.getIBipmapImage());
 
         // nous retournos la vue de l'item demandé
         return convertView;

@@ -2,10 +2,8 @@ package com.emad.gooddeals;
 import android.app.Activity;
 
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 
-import android.graphics.Point;
 import android.os.Bundle;
 
 
@@ -13,6 +11,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.emad.gooddeals.http.Sender;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +30,7 @@ public class TakePhoto extends Activity {
     Bitmap image;
     Double latitude;
     Double longitude;
-
+    ImageView imageView3;
     EditText offerName;
     EditText offerDisc;
     GPSTracker gps;
@@ -46,9 +46,21 @@ public class TakePhoto extends Activity {
         offerName = (EditText)findViewById(R.id.OfferName);
         offerDisc = (EditText)findViewById(R.id.OfferDisc);
         imageToJson=new ImageToJson();
+        imageView3 = (ImageView)findViewById(R.id.imageView3);
         jsonObject=new JSONObject();
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            image = null;
+        } else {
+            image = (Bitmap) extras.get("image");
+            imageView.setImageBitmap(image);
 
-        setField();
+
+        }
+
+
+
+
 
 
     }
@@ -105,15 +117,19 @@ public class TakePhoto extends Activity {
      */
     public void sendOffer(View view){
         try {
-            encodedImage = imageToJson.getStringFromBitmap(image);
+            //encodedImage = imageToJson.getByteFromBitmap(image);
+                encodedImage = imageToJson.getStringFromBitmap(image);
+            jsonObject.put("category","android");
+            jsonObject.put("description","send from android");
             jsonObject.put("name",offerName.getText().toString());
-            jsonObject.put("Discription",offerDisc.getText().toString());
-            jsonObject.put("longitude",longitude);
-            jsonObject.put("latitude",latitude);
-            jsonObject.put("image", encodedImage);
 
-            getLocation();
 
+            jsonObject.put("longitude",3000.0);
+            jsonObject.put("latitude",4000.0);
+            jsonObject.put("imageString", encodedImage);
+            //getLocation();
+            Sender send = new Sender();
+            send.send(jsonObject);
           //  SendOffer asyncT = new SendOffer(jsonObject);
           //  asyncT.execute();
 
