@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity
     //test preference
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
+
         String categorytypeValue = SP.getString("categorytype", "toutes");
         Toast.makeText(this, "la categorie est "+categorytypeValue+" et la distance est de "+seekbarValue,
                 Toast.LENGTH_LONG).show();
