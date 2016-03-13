@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,12 +22,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.emad.gooddeals.http.Receiver;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,12 +38,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.Header;
 import data.stevo.SQlite.Offres;
-
+import com.facebook.FacebookSdk;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
 
     private Bitmap photo;
     private Context context;
@@ -47,7 +51,8 @@ public class MainActivity extends AppCompatActivity
     private JSONArray jsonArray;
     private Receiver receiver;
     private static final int CAMERA_REQUEST = 1888;
-    private ListView listView;
+    public ListView listView;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -65,30 +70,92 @@ public class MainActivity extends AppCompatActivity
          *
          *
          * */
+
+
+
+
         listView = (ListView) findViewById(R.id.listviewperso);
+
         jsonArray = new JSONArray();
         receiver = new Receiver();
         imageToJson = new ImageToJson();
 
-        jsonArray = receiver.receiver();
-        ArrayList<Offres> myList = new ArrayList<Offres>();
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                myList.add(new Offres(jsonObject));
-                //   myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
 
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+
+
+        final AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers/", new JsonHttpResponseHandler() {
+
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+
+                jsonArray = response;
+                Log.v("response", response.toString());
+
+                ArrayList<Offres> myList = new ArrayList<>();
+                try {
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        myList.add(new Offres(jsonObject));
+                        //  myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
+
+                    }
+
+                    Log.v("response", jsonArray.toString());
+                    CustomAdapter adapter = new CustomAdapter(MainActivity.this, myList);
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(adapter);
+                }catch(JSONException e){
+                    e.printStackTrace();
+                }
+
             }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
+
+
+
+        ArrayList<Offres> myList = new ArrayList<>();
+        try {
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                myList.add(new Offres(jsonObject));
+                //  myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
+
+            }
+
+            Log.v("response", jsonArray.toString());
+            CustomAdapter adapter = new CustomAdapter(MainActivity.this, myList);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(adapter);
+        }catch(JSONException e){
+            e.printStackTrace();
         }
 
 
-        CustomAdapter adapter = new CustomAdapter(this, myList);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(adapter);
+
+
+
+
+
+
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -250,6 +317,7 @@ public class MainActivity extends AppCompatActivity
         AppIndex.AppIndexApi.end(client2, viewAction);
         client2.disconnect();
     }
+
 
 
 }

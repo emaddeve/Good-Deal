@@ -19,7 +19,13 @@
         android:layout_height="fill_parent"
         />
 
-
+    <ProgressBar
+        android:id="@+id/secondBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
 
 
 

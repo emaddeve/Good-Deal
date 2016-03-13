@@ -3,12 +3,12 @@ import android.app.Activity;
 
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import android.os.Bundle;
 
-
-import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -53,7 +53,7 @@ public class TakePhoto extends Activity implements
     GPSTracker gps;
     Button btnDatePicker, btnTimePicker;
     TextView txtDate;
-
+    private SharedPreferences prefs;
     private int mYear, mMonth, mDay;
 
 
@@ -152,10 +152,17 @@ public class TakePhoto extends Activity implements
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.FRANCE);
             Date dateFin;
-           dateFin= df.parse(date);
-            offerName.setText(dateFin.toString());
-            jsonObject.put("datefin",dateFin);
+          // dateFin= df.parse(date);
+           // offerName.setText(dateFin.toString());
+           // jsonObject.put("datefin",dateFin);
             //getLocation();
+            prefs = getSharedPreferences("userPrefs", 0);
+            if(prefs.getString("user_token", null)==null) {
+                Intent intent = new Intent(getApplicationContext(),
+                        Login.class);
+                startActivity(intent);
+            }
+
             Sender send = new Sender();
             send.send(jsonObject);
           //  SendOffer asyncT = new SendOffer(jsonObject);
@@ -163,14 +170,16 @@ public class TakePhoto extends Activity implements
 
         } catch (JSONException e1) {
             e1.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
 
     }
 
     @Override
     public void onClick(View v) {
+
+
+
+
         // Get Current Date
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
