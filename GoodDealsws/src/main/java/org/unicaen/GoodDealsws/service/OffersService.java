@@ -1,6 +1,5 @@
 package org.unicaen.GoodDealsws.service;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.List;
 //import com.vividsolutions.jts.geom.Point;
@@ -12,11 +11,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
-
 import org.unicaen.GoodDealsws.model.Offers;
-
-
-
 /**
  * 
  * @author emad

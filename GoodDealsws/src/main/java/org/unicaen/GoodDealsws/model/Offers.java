@@ -1,9 +1,6 @@
 package org.unicaen.GoodDealsws.model;
 
-
-//import com.vividsolutions.jts.geom.Point;
-
-
+import java.util.Date;
 
 
 /**
@@ -11,44 +8,30 @@ package org.unicaen.GoodDealsws.model;
  * @author emad
  *
  */
-//@XmlAccessorType
-//@XmlRootElement	
-
 public class Offers {
-	
-	
-	private int id;
-	
-	//@Type(type="org.hibernate.spatial.GeometryType")
-    //private Point location;
-	
-	
-
-	
-	private String name;
-	
-	private String description;
-	
-	private String imageString;
-	
-	
-	private String category;
-	
-	private double longitude;
-	
+	private int id;	
+	private String name;	
+	private String description;	
+	private String imageString;	
+	private String category;	
+	private double longitude;	
 	private double latitude;
+	private String magasin;
+	private Date datefin;
+	
 	public Offers(){}
 	
-	public Offers(String name, String description, String imageString,String category,double longitude,double latitude) {
+	public Offers(String name, String description, String imageString,String category,double longitude,double latitude,String magasin,Date datefin) {
 		super();
 		
 		this.name = name;
 		this.description = description;
 		this.imageString = imageString;
-	//	this.location = location;
 		this.category = category;
 		this.longitude=longitude;
 		this.latitude=latitude;
+		this.datefin = datefin;
+		this.magasin = magasin;
 	
 		
 	}
@@ -103,6 +86,19 @@ public class Offers {
 		this.id = id;
 	}
 
-	
-	
+	public String getMagasin() {
+		return magasin;
+	}
+
+	public void setMagasin(String magasin) {
+		this.magasin = magasin;
+	}
+
+	public Date getDatefin() {
+		return datefin;
+	}
+
+	public void setDatefin(Date datefin) {
+		this.datefin = datefin;
+	}
 }
