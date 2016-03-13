@@ -70,7 +70,7 @@ public class Offres {
         this.titre = titre;
     }
 
-    public Bitmap getIBipmapImage() {
+    public Bitmap getBipmapImage() {
         try {
             bitmapImage = imageToJson.getBitmapFromString(jsonObject.getString("imageString"));
 

@@ -3,11 +3,13 @@ package com.emad.gooddeals;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -43,6 +45,7 @@ import data.stevo.SQlite.Offres;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final int CAMERA_REQUEST = 1888;
     GPSTracker gps;
     JSONObject jsonObject = new JSONObject();
     String encodedImage;
@@ -56,12 +59,11 @@ public class MainActivity extends AppCompatActivity
     Point p1;
     String s = "name of offer";
     String s2 = "descritpi about ;thies";
-   private Bitmap photo;
+    private Bitmap photo;
     private Context context;
     private ImageToJson imageToJson;
     private JSONArray jsonArray;
     private Receiver receiver;
-    private static final int CAMERA_REQUEST = 1888;
     private ListView listView;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity
         listView = (ListView) findViewById(R.id.listviewperso);
         String[] titre = new String[]{" Titre1", "Titre2",
                 "Titre3"};
-        p1=new Point();
+        p1 = new Point();
         imageToJson = new ImageToJson();
 
         String[] desc = {"salut a tous je m'appelle stevo", "ca marche", "ok cest bon"};
@@ -93,8 +95,17 @@ public class MainActivity extends AppCompatActivity
         jsonArray = new JSONArray();
         receiver = new Receiver();
         imageToJson = new ImageToJson();
-
-
+        /**
+         * initialisation des valeurs par defaut de nos preferences lors de la premiere arriver sur cette activite
+         *
+         * */
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
+    //test preference
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
+        String categorytypeValue = SP.getString("categorytype", "toutes");
+        Toast.makeText(this, "la categorie est "+categorytypeValue+" et la distance est de "+seekbarValue,
+                Toast.LENGTH_LONG).show();
         jsonArray = receiver.receiver();
         ArrayList<Offres> myList = new ArrayList<Offres>();
 
@@ -102,7 +113,7 @@ public class MainActivity extends AppCompatActivity
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 myList.add(new Offres(jsonObject));
-             //   myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
+                //   myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
 
 
             } catch (JSONException e) {
@@ -132,27 +143,26 @@ public class MainActivity extends AppCompatActivity
             }
         });
         /**AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://10.0.2.2:8080/GoodDealsWS/webapi/offers/", new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
-                try {
+         client.get("http://10.0.2.2:8080/GoodDealsWS/webapi/offers/", new JsonHttpResponseHandler(){
+        @Override public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+        super.onSuccess(statusCode, headers, response);
+        try {
 
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject json = response.getJSONObject(i);
-                        // Offres offres = new Offres(response);
-                        //t3.setText(json.getString("category"));
-                       // t4.setText(json.getString("description"));
+        for (int i = 0; i < response.length(); i++) {
+        JSONObject json = response.getJSONObject(i);
+        // Offres offres = new Offres(response);
+        //t3.setText(json.getString("category"));
+        // t4.setText(json.getString("description"));
 
-                       // t8.setText(json.getString("location"));
-                        //i2.setImageBitmap(imageToJson.getBitmapFromString(json.getString("imageString")));
+        // t8.setText(json.getString("location"));
+        //i2.setImageBitmap(imageToJson.getBitmapFromString(json.getString("imageString")));
 
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            });*/
+        }
+        } catch (JSONException e) {
+        e.printStackTrace();
+        }
+        }
+        });*/
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -200,7 +210,7 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -209,6 +219,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /***/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -236,23 +247,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_manage) {
+            Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(settings);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+       // drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
