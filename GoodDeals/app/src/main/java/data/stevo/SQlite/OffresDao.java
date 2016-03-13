@@ -130,11 +130,15 @@ public class OffresDao {
         //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
         offre.setId(cursor.getInt(NUM_COL_ID));
         offre.setTitre(cursor.getString(NUM_COL_TITRE));
-        offre.setImage(cursor.getString(NUM_COL_IMAGE));
+        offre.setBipmapImage(cursor.getString(NUM_COL_IMAGE));
         offre.setDescription(cursor.getString(NUM_COL_DESCRIPTION));
         offre.setCategorie(cursor.getString(NUM_COL_CATEGORIE));
         offre.setMagasin(cursor.getString(NUM_COL_MAGASIN));
+<<<<<<< HEAD
 
+=======
+       // offre.setDatePublication(loadDate(cursor, NUM_COL_DATE_PUBLICATION));
+>>>>>>> emad
         offre.setDateFin(loadDate(cursor, NUM_COL_DATE_FIN));
         //On ferme le cursor
         cursor.close();
@@ -150,10 +154,14 @@ public class OffresDao {
         ContentValues values = new ContentValues();
         //on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
         values.put(GoodDealHelper.COLUMN_TITRE, offre.getTitre());
-        values.put(GoodDealHelper.COLUMN_IMAGE, imageToJson.getStringFromBitmap(offre.getImage()));
+        values.put(GoodDealHelper.COLUMN_IMAGE, imageToJson.getStringFromBitmap(offre.getBipmapImage()));
         values.put(GoodDealHelper.COLUMN_DESCRIPTIOM, offre.getDescription());
         values.put(GoodDealHelper.COLUMN_CATEGORIE, offre.getCategorie());
         values.put(GoodDealHelper.COLUMN_MAGASIN, offre.getMagasin());
+<<<<<<< HEAD
+=======
+        //values.put(GoodDealHelper.COLUMN_DATE_PUBLICATION, persistDate(offre.getDatePublication()));
+>>>>>>> emad
         values.put(GoodDealHelper.COLUMN_DATE_FIN, persistDate(offre.getDateFin()));
         //on insère l'objet dans la BDD via le ContentValues
         return database.insert(GoodDealHelper.TABLE_OFFRES, null, values);
@@ -166,10 +174,14 @@ public class OffresDao {
         //il faut simple préciser quelle offre on doit mettre à jour grâce à l'ID
         ContentValues values = new ContentValues();
         values.put(GoodDealHelper.COLUMN_TITRE, offre.getTitre());
-        values.put(GoodDealHelper.COLUMN_IMAGE, imageToJson.getStringFromBitmap(offre.getImage()));
+        values.put(GoodDealHelper.COLUMN_IMAGE, imageToJson.getStringFromBitmap(offre.getBipmapImage()));
         values.put(GoodDealHelper.COLUMN_DESCRIPTIOM, offre.getDescription());
         values.put(GoodDealHelper.COLUMN_CATEGORIE, offre.getCategorie());
         values.put(GoodDealHelper.COLUMN_MAGASIN, offre.getMagasin());
+<<<<<<< HEAD
+=======
+       // values.put(GoodDealHelper.COLUMN_DATE_PUBLICATION, persistDate(offre.getDatePublication()));
+>>>>>>> emad
         values.put(GoodDealHelper.COLUMN_DATE_FIN, persistDate(offre.getDateFin()));
         return database.update(GoodDealHelper.TABLE_OFFRES, values, GoodDealHelper.COLUMN_ID + " = " + id, null);
     }

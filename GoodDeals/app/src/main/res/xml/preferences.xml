@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.emad.gooddeals.SeekBarPreference
+        android:defaultValue="50"
+        android:dialogMessage="@string/settings_dialog_message"
+        android:key="SEEKBAR_VALUE"
+        android:max="100"
+        android:summary="@string/settings_summary"
+        android:text="@string/settings_unit"
+        android:title="@string/settings_title" />
+    <ListPreference
+        android:title="Categories d\'offres"
+        android:summary="Selectionnez la categorie pour laquelle vous voulez recevoir des offres"
+        android:key="categorytype"
+        android:dialogTitle="@string/list_dialog_title"
+        android:defaultValue="@string/update_default"
+        android:entries="@array/options_names"
+        android:entryValues="@array/options_values" />
+</PreferenceScreen>

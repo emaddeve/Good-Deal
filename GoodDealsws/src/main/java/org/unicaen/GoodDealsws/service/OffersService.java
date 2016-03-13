@@ -1,10 +1,6 @@
 package org.unicaen.GoodDealsws.service;
-
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
+<<<<<<< HEAD
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +10,11 @@ import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
+=======
+
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> emad
 //import com.vividsolutions.jts.geom.Point;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -26,7 +27,7 @@ import org.hibernate.service.ServiceRegistry;
 
 import org.unicaen.GoodDealsws.model.Offers;
 
-import org.unicaen.GoodDealsws.model.Base64;
+
 
 /**
  * 
