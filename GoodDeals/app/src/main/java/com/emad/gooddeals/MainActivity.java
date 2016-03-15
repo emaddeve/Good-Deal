@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +25,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.emad.gooddeals.http.Receiver;
@@ -41,11 +43,14 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import data.stevo.SQlite.Offres;
-
+import com.facebook.FacebookSdk;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final int CAMERA_REQUEST = 1888;
+
+
+
+
     GPSTracker gps;
     JSONObject jsonObject = new JSONObject();
     String encodedImage;
@@ -59,12 +64,15 @@ public class MainActivity extends AppCompatActivity
     Point p1;
     String s = "name of offer";
     String s2 = "descritpi about ;thies";
+
     private Bitmap photo;
     private Context context;
     private ImageToJson imageToJson;
     private JSONArray jsonArray;
     private Receiver receiver;
-    private ListView listView;
+    private static final int CAMERA_REQUEST = 1888;
+    public ListView listView;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -82,7 +90,16 @@ public class MainActivity extends AppCompatActivity
          *
          *
          * */
+
+
+
+
         listView = (ListView) findViewById(R.id.listviewperso);
+
+
+
+
+
         String[] titre = new String[]{" Titre1", "Titre2",
                 "Titre3"};
         p1 = new Point();
@@ -93,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         int[] images = {R.drawable.android, R.drawable.android,
                 R.drawable.android};
         jsonArray = new JSONArray();
-        receiver = new Receiver();
+      //  receiver = new Receiver();
         imageToJson = new ImageToJson();
         /**
          * initialisation des valeurs par defaut de nos preferences lors de la premiere arriver sur cette activite
@@ -102,30 +119,77 @@ public class MainActivity extends AppCompatActivity
         PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
     //test preference
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
+        int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
 
-        String categorytypeValue = SP.getString("categorytype", "toutes");
-        Toast.makeText(this, "la categorie est "+categorytypeValue+" et la distance est de "+seekbarValue,
-                Toast.LENGTH_LONG).show();
-        jsonArray = receiver.receiver();
+        String category = SP.getString("categorytype", "all");
+
+
         ArrayList<Offres> myList = new ArrayList<Offres>();
 
-        for (int i = 0; i < jsonArray.length(); i++) {
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                myList.add(new Offres(jsonObject));
-                //   myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
 
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
+        double longitude=0;
+        double latitude=0;
+        gps = new GPSTracker(getApplicationContext());
+
+        // check if GPS enabled
+        if(gps.canGetLocation()){
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+            Log.v("location"," "+longitude+": "+latitude+" : "+category+" : "+prefDistance);
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
         }
+        final AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
+                        "&prefDistance="+prefDistance+"&category="+category,
+                new JsonHttpResponseHandler() {
 
 
-        CustomAdapter adapter = new CustomAdapter(this, myList);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(adapter);
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+
+                jsonArray = response;
+                Log.v("response", response.toString());
+
+                ArrayList<Offres> myList = new ArrayList<>();
+                try {
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        myList.add(new Offres(jsonObject));
+                        //  myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
+
+                    }
+
+                    Log.v("response", jsonArray.toString());
+                    CustomAdapter adapter = new CustomAdapter(MainActivity.this, myList);
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(adapter);
+                }catch(JSONException e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
+
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -191,7 +255,6 @@ public class MainActivity extends AppCompatActivity
                 photo = (Bitmap) data.getExtras().get("data");
                 Intent i = new Intent(this, TakePhoto.class);
                 i.putExtra("image", photo);
-
                 startActivity(i);
 
             }
@@ -298,6 +361,7 @@ public class MainActivity extends AppCompatActivity
         AppIndex.AppIndexApi.end(client2, viewAction);
         client2.disconnect();
     }
+
 
 
 }

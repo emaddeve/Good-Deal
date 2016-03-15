@@ -2,14 +2,21 @@ package com.emad.gooddeals;
 import android.app.Activity;
 
 
+import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import android.os.Bundle;
 
-
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.emad.gooddeals.http.Sender;
@@ -17,12 +24,20 @@ import com.emad.gooddeals.http.Sender;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * Created by emad on 18/02/16.
  *
  * Activity for setting up the Offer information
  */
-public class TakePhoto extends Activity {
+public class TakePhoto extends Activity implements
+        View.OnClickListener{
     ImageToJson imageToJson;
     ImageView imageView;
     JSONObject jsonObject;
@@ -30,10 +45,16 @@ public class TakePhoto extends Activity {
     Bitmap image;
     Double latitude;
     Double longitude;
-    ImageView imageView3;
+    EditText offerMagasin;
     EditText offerName;
     EditText offerDisc;
+    Spinner dropdown;
+    DatePicker datePicker;
     GPSTracker gps;
+    Button btnDatePicker, btnTimePicker;
+    TextView txtDate;
+    private SharedPreferences prefs;
+    private int mYear, mMonth, mDay;
 
 
 
@@ -42,11 +63,22 @@ public class TakePhoto extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        btnDatePicker=(Button)findViewById(R.id.button);
+        txtDate=(TextView)findViewById(R.id.selected_date);
+        btnDatePicker.setOnClickListener(this);
+
         imageView = (ImageView) findViewById(R.id.imageView);
-        offerName = (EditText)findViewById(R.id.OfferName);
-        offerDisc = (EditText)findViewById(R.id.OfferDisc);
+        offerName = (EditText)findViewById(R.id.editTextName);
+        offerDisc = (EditText)findViewById(R.id.edittextDes);
+        offerMagasin=(EditText)findViewById(R.id.edittextMag);
+      //  datePicker = (DatePicker)findViewById(R.id.datePicker);
         imageToJson=new ImageToJson();
-        imageView3 = (ImageView)findViewById(R.id.imageView3);
+         dropdown = (Spinner)findViewById(R.id.spinner1);
+        String[] items = new String[]{"clothes", "grocery", "other"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter);
+
+
         jsonObject=new JSONObject();
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -57,11 +89,22 @@ public class TakePhoto extends Activity {
 
 
         }
+        gps = new GPSTracker(TakePhoto.this);
 
+        // check if GPS enabled
+        if(gps.canGetLocation()){
 
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
 
-
-
+            // \n is for new line
+            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
 
     }
 
@@ -90,12 +133,6 @@ public class TakePhoto extends Activity {
 
     }
 
-
-
-
-
-
-
     /**
      * Method for setting the fields values
      */
@@ -119,15 +156,29 @@ public class TakePhoto extends Activity {
         try {
             //encodedImage = imageToJson.getByteFromBitmap(image);
                 encodedImage = imageToJson.getStringFromBitmap(image);
-            jsonObject.put("category","android");
-            jsonObject.put("description","send from android");
+            jsonObject.put("category",dropdown.getSelectedItem().toString());
+            jsonObject.put("description",offerDisc.getText().toString());
             jsonObject.put("name",offerName.getText().toString());
-
-
-            jsonObject.put("longitude",3000.0);
-            jsonObject.put("latitude",4000.0);
+            jsonObject.put("longitude",longitude);
+            jsonObject.put("latitude",latitude);
             jsonObject.put("imageString", encodedImage);
+            jsonObject.put("magasin",offerMagasin.getText().toString());
+            String date = (mMonth+1+"/"+mDay+"/"+mYear);
+            new SimpleDateFormat();
+
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.FRANCE);
+            Date dateFin;
+          // dateFin= df.parse(date);
+           // offerName.setText(dateFin.toString());
+           // jsonObject.put("datefin",dateFin);
             //getLocation();
+            prefs = getSharedPreferences("userPrefs", 0);
+            if(prefs.getString("user_token", null)==null) {
+                Intent intent = new Intent(getApplicationContext(),
+                        Login.class);
+                startActivity(intent);
+            }
+
             Sender send = new Sender();
             send.send(jsonObject);
           //  SendOffer asyncT = new SendOffer(jsonObject);
@@ -137,6 +188,36 @@ public class TakePhoto extends Activity {
             e1.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onClick(View v) {
+
+
+
+
+        // Get Current Date
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        mYear=year;
+                        mMonth=monthOfYear;
+                        mDay=dayOfMonth;
+                        offerDisc.setText(mMonth+"/"+mDay+"/"+mYear);
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
     }
 }
 
