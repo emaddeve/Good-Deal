@@ -29,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.emad.gooddeals.http.Receiver;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -43,10 +44,12 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import data.stevo.SQlite.Offres;
+
 import com.facebook.FacebookSdk;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final int CAMERA_REQUEST = 1888;
     GPSTracker gps;
     JSONObject jsonObject = new JSONObject();
     String encodedImage;
@@ -66,12 +69,12 @@ public class MainActivity extends AppCompatActivity
     private JSONArray jsonArray;
     private Receiver receiver;
     private ListView listView;
-    private static final int CAMERA_REQUEST = 1888;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,11 +97,11 @@ public class MainActivity extends AppCompatActivity
          *
          * */
         PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
-    //test preference
+        //test preference
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
         String categorytypeValue = SP.getString("categorytype", "toutes");
-        Toast.makeText(this, "la categorie est "+categorytypeValue+" et la distance est de "+seekbarValue,
+        Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue,
                 Toast.LENGTH_LONG).show();
         ArrayList<Offres> myList = new ArrayList<Offres>();
         jsonArray = new JSONArray();
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity
                     CustomAdapter adapter = new CustomAdapter(MainActivity.this, myList);
                     listView.setAdapter(adapter);
                     listView.setOnItemClickListener(adapter);
-                }catch(JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
@@ -250,7 +253,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-       // drawer.closeDrawer(GravityCompat.START);
+        // drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -295,8 +298,23 @@ public class MainActivity extends AppCompatActivity
         client2.disconnect();
     }
 
-
-
+    /**
+     * nous permet de savoir qui a installe notre application
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Logs' install 'and' activate app App Events
+        AppEventsLogger.activateApp(this);
+    }
+    /**
+     * nous permet de savoir le temps que les users passent sur l'apllication.A voir dans le dashboard sur facebook developper
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
+    }
 }
 
 
