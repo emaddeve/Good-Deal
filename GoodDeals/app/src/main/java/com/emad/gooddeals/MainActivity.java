@@ -47,10 +47,10 @@ import com.facebook.FacebookSdk;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-<<<<<<< HEAD
 
-=======
-    private static final int CAMERA_REQUEST = 1888;
+
+
+
     GPSTracker gps;
     JSONObject jsonObject = new JSONObject();
     String encodedImage;
@@ -64,19 +64,15 @@ public class MainActivity extends AppCompatActivity
     Point p1;
     String s = "name of offer";
     String s2 = "descritpi about ;thies";
->>>>>>> emad
+
     private Bitmap photo;
     private Context context;
     private ImageToJson imageToJson;
     private JSONArray jsonArray;
     private Receiver receiver;
-<<<<<<< HEAD
     private static final int CAMERA_REQUEST = 1888;
     public ListView listView;
 
-=======
-    private ListView listView;
->>>>>>> emad
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -99,13 +95,11 @@ public class MainActivity extends AppCompatActivity
 
 
         listView = (ListView) findViewById(R.id.listviewperso);
-<<<<<<< HEAD
 
-        jsonArray = new JSONArray();
-        receiver = new Receiver();
-        imageToJson = new ImageToJson();
 
-=======
+
+
+
         String[] titre = new String[]{" Titre1", "Titre2",
                 "Titre3"};
         p1 = new Point();
@@ -116,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         int[] images = {R.drawable.android, R.drawable.android,
                 R.drawable.android};
         jsonArray = new JSONArray();
-        receiver = new Receiver();
+      //  receiver = new Receiver();
         imageToJson = new ImageToJson();
         /**
          * initialisation des valeurs par defaut de nos preferences lors de la premiere arriver sur cette activite
@@ -125,21 +119,37 @@ public class MainActivity extends AppCompatActivity
         PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
     //test preference
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
+        int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
 
-        String categorytypeValue = SP.getString("categorytype", "toutes");
-        Toast.makeText(this, "la categorie est "+categorytypeValue+" et la distance est de "+seekbarValue,
-                Toast.LENGTH_LONG).show();
-        jsonArray = receiver.receiver();
+        String category = SP.getString("categorytype", "all");
+
+
         ArrayList<Offres> myList = new ArrayList<Offres>();
->>>>>>> emad
 
 
 
 
+        double longitude=0;
+        double latitude=0;
+        gps = new GPSTracker(getApplicationContext());
+
+        // check if GPS enabled
+        if(gps.canGetLocation()){
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+            Log.v("location"," "+longitude+": "+latitude+" : "+category+" : "+prefDistance);
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
         final AsyncHttpClient client = new AsyncHttpClient();
 
-        client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers/", new JsonHttpResponseHandler() {
+        client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
+                        "&prefDistance="+prefDistance+"&category="+category,
+                new JsonHttpResponseHandler() {
 
 
             @Override
@@ -176,40 +186,6 @@ public class MainActivity extends AppCompatActivity
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
         });
-
-
-
-        ArrayList<Offres> myList = new ArrayList<>();
-        try {
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-<<<<<<< HEAD
-=======
-                myList.add(new Offres(jsonObject));
-                //   myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
->>>>>>> emad
-
-                myList.add(new Offres(jsonObject));
-                //  myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
-
-            }
-
-            Log.v("response", jsonArray.toString());
-            CustomAdapter adapter = new CustomAdapter(MainActivity.this, myList);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener(adapter);
-        }catch(JSONException e){
-            e.printStackTrace();
-        }
-
-
-
-
-
-
-
 
 
 
@@ -279,7 +255,6 @@ public class MainActivity extends AppCompatActivity
                 photo = (Bitmap) data.getExtras().get("data");
                 Intent i = new Intent(this, TakePhoto.class);
                 i.putExtra("image", photo);
-
                 startActivity(i);
 
             }

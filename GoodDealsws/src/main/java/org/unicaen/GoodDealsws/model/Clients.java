@@ -1,21 +1,29 @@
 package org.unicaen.GoodDealsws.model;
-
+/**
+ * the client entity
+ * @author emad
+ *
+ */
 public class Clients {
 
 	
 	private int id;
 	private String name;
 	private String Password;
+	private String email;
 	private String Token;
-	
-	public Clients(int id, String name, String password, String token) {
+	//default constructor 
+	public Clients(){}
+	public Clients(int id, String name, String password, String token,String email) {
 		super();
 		this.id = id;
 		this.name = name;
 		Password = password;
 		Token = token;
+		this.setEmail(email);
 	}
 	
+	//getters and setters
 	public int getId() {
 		return id;
 	}
@@ -39,6 +47,12 @@ public class Clients {
 	}
 	public void setToken(String token) {
 		Token = token;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 	

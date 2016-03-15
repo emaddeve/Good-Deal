@@ -1,8 +1,14 @@
 package com.emad.gooddeals.http;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.emad.gooddeals.GPSTracker;
 import com.emad.gooddeals.MainActivity;
+import com.emad.gooddeals.TakePhoto;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -16,15 +22,38 @@ import cz.msebera.android.httpclient.Header;
  * Created by emad on 10/03/16.
  */
 public class Receiver {
-
+Context context;
 private JSONArray jsonArray = new JSONArray();
+    SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
+    int prefDistance = SP.getInt("SEEKBAR_VALUE", 50);
+
+    String category = SP.getString("categorytype", "toutes");
+
+
+    GPSTracker gps;
+
 
     public   void receiver() throws InterruptedException {
+        double longitude=0;
+        double latitude=0;
+        gps = new GPSTracker(context);
 
+        // check if GPS enabled
+        if(gps.canGetLocation()){
 
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
         final AsyncHttpClient client = new AsyncHttpClient();
-
-        client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers/", new JsonHttpResponseHandler() {
+        client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
+                        "&prefDistance="+prefDistance+"&category="+category,
+                new JsonHttpResponseHandler() {
 
 
             @Override

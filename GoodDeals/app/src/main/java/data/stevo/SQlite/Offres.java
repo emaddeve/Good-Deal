@@ -22,6 +22,7 @@ public class Offres {
     private String categorie;
     private String magasin;
     private Date dateFin;
+    private int userid;
     private JSONObject jsonObject;
     private ImageToJson imageToJson=new ImageToJson();
 
@@ -145,6 +146,14 @@ public class Offres {
                 " est de la categorie " + categorie +
                 " a ete prise dans le magasin: " + magasin  +
                 " et s'acheve le " + dateFin;
+    }
+
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 
 

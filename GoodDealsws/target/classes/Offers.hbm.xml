@@ -17,6 +17,7 @@
          <property name="latitude" column="latitude" type="double" />
          <property name="magasin" column="magasin" type="string" />
          <property name="datefin" column="datefin" type="date" />
+         <property name="userid" column="userid" type="int" />
       </class>
         
   

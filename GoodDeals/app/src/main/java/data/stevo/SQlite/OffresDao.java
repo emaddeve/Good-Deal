@@ -134,11 +134,10 @@ public class OffresDao {
         offre.setDescription(cursor.getString(NUM_COL_DESCRIPTION));
         offre.setCategorie(cursor.getString(NUM_COL_CATEGORIE));
         offre.setMagasin(cursor.getString(NUM_COL_MAGASIN));
-<<<<<<< HEAD
 
-=======
+
+
        // offre.setDatePublication(loadDate(cursor, NUM_COL_DATE_PUBLICATION));
->>>>>>> emad
         offre.setDateFin(loadDate(cursor, NUM_COL_DATE_FIN));
         //On ferme le cursor
         cursor.close();
@@ -158,10 +157,9 @@ public class OffresDao {
         values.put(GoodDealHelper.COLUMN_DESCRIPTIOM, offre.getDescription());
         values.put(GoodDealHelper.COLUMN_CATEGORIE, offre.getCategorie());
         values.put(GoodDealHelper.COLUMN_MAGASIN, offre.getMagasin());
-<<<<<<< HEAD
-=======
+
         //values.put(GoodDealHelper.COLUMN_DATE_PUBLICATION, persistDate(offre.getDatePublication()));
->>>>>>> emad
+
         values.put(GoodDealHelper.COLUMN_DATE_FIN, persistDate(offre.getDateFin()));
         //on insère l'objet dans la BDD via le ContentValues
         return database.insert(GoodDealHelper.TABLE_OFFRES, null, values);
@@ -178,10 +176,9 @@ public class OffresDao {
         values.put(GoodDealHelper.COLUMN_DESCRIPTIOM, offre.getDescription());
         values.put(GoodDealHelper.COLUMN_CATEGORIE, offre.getCategorie());
         values.put(GoodDealHelper.COLUMN_MAGASIN, offre.getMagasin());
-<<<<<<< HEAD
-=======
+
        // values.put(GoodDealHelper.COLUMN_DATE_PUBLICATION, persistDate(offre.getDatePublication()));
->>>>>>> emad
+
         values.put(GoodDealHelper.COLUMN_DATE_FIN, persistDate(offre.getDateFin()));
         return database.update(GoodDealHelper.TABLE_OFFRES, values, GoodDealHelper.COLUMN_ID + " = " + id, null);
     }
