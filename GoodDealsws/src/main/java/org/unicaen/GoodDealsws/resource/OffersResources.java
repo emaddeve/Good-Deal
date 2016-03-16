@@ -1,6 +1,8 @@
 package org.unicaen.GoodDealsws.resource;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -14,6 +16,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.unicaen.GoodDealsws.model.Base64;
+import org.unicaen.GoodDealsws.model.Friends;
+import org.unicaen.GoodDealsws.model.FriendsOffers;
 import org.unicaen.GoodDealsws.model.Offers;
 import org.unicaen.GoodDealsws.service.ClientsService;
 import org.unicaen.GoodDealsws.service.OffersService;
@@ -66,6 +70,13 @@ public class OffersResources {
 	public Offers getOfferById(@PathParam("offerId") int id) {
 
 		return offerService.getOfferById(id);
+	}
+	
+	@POST
+	@Path("/friends")
+	public List<FriendsOffers> getFriendsOffers(ArrayList<Friends> f) {
+
+		return offerService.getface(f);
 	}
 /**
  * method to be called when making a Post request to the path /offers/add

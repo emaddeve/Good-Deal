@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,7 +25,9 @@ import com.emad.gooddeals.http.Sender;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -162,23 +165,30 @@ public class TakePhoto extends Activity implements
             jsonObject.put("longitude",longitude);
             jsonObject.put("latitude",latitude);
             jsonObject.put("imageString", encodedImage);
-            jsonObject.put("magasin",offerMagasin.getText().toString());
-            String date = (mMonth+1+"/"+mDay+"/"+mYear);
-            new SimpleDateFormat();
+            jsonObject.put("magasin", offerMagasin.getText().toString());
+            DecimalFormat mFormat= new DecimalFormat("00");
 
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.FRANCE);
+            mFormat.setRoundingMode(RoundingMode.DOWN);
+            String date =  mFormat.format(Double.valueOf(mYear)) + "-" +  mFormat.format(Double.valueOf(mMonth+1)) + "-" +  mFormat.format(Double.valueOf(mDay)
+                    )+" "+00+":"+00+":"+00;
+
+
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date dateFin;
-          // dateFin= df.parse(date);
+            dateFin= df.parse(date);
+            txtDate.setText(date);
            // offerName.setText(dateFin.toString());
-           // jsonObject.put("datefin",dateFin);
+            jsonObject.put("datefin",dateFin);
             //getLocation();
+            /*
             prefs = getSharedPreferences("userPrefs", 0);
             if(prefs.getString("user_token", null)==null) {
                 Intent intent = new Intent(getApplicationContext(),
                         Login.class);
                 startActivity(intent);
             }
-
+*/
+            Log.v("json",jsonObject.toString());
             Sender send = new Sender();
             send.send(jsonObject);
           //  SendOffer asyncT = new SendOffer(jsonObject);
@@ -186,6 +196,8 @@ public class TakePhoto extends Activity implements
 
         } catch (JSONException e1) {
             e1.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
     }
@@ -210,7 +222,7 @@ public class TakePhoto extends Activity implements
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
-                        txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        txtDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                         mYear=year;
                         mMonth=monthOfYear;
                         mDay=dayOfMonth;
