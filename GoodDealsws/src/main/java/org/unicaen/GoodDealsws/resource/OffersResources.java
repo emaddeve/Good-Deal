@@ -2,6 +2,7 @@ package org.unicaen.GoodDealsws.resource;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -88,7 +89,7 @@ public class OffersResources {
 	@POST
 	@Path("/add")
 	public Response addOffer(@Context HttpServletRequest request, Offers offer) throws IOException {
-
+		String d="false";
 		String s = request.getHeader(AUTHENTICATION_HEADER);
 
 		final String encodedUserPassword = s.replaceFirst("Basic" + " ", "");
@@ -104,10 +105,9 @@ public class OffersResources {
 		final String password = tokenizer.nextToken();
 		offer.setUserid(clientsService.getClientId(email, password));
 		offerService.addOffer(offer);
-		return Response.status(Status.CREATED).entity(offer).build();
+		 return Response.status(Status.CREATED).entity(offer).build();
 
 	}
 	
-
 
 }
