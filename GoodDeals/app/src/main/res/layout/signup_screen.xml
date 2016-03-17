@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.emad.gooddeals.MainActivity"
+    tools:context="com.emad.gooddeals.SignUPActivity"
     tools:showIn="@layout/activity_signup"
     android:padding="16dp">
     <TextView
@@ -23,11 +23,26 @@
         android:id="@+id/editTextUserName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="User Name"
+        android:hint="Email"
         android:gravity="center" >
         <requestFocus />
     </EditText>
-
+    <EditText
+        android:id="@+id/editFirstName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="First name"
+        android:gravity="center" >
+        <requestFocus />
+    </EditText>
+    <EditText
+        android:id="@+id/editLastName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Last name"
+        android:gravity="center" >
+        <requestFocus />
+    </EditText>
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="fill_parent"
@@ -49,10 +64,30 @@
         android:id="@+id/buttonCreateAccount"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="60dp"
         android:layout_gravity="center_horizontal"
         android:background="#d28f35"
         android:gravity="center"
-        android:text="Create Account" />
+        android:text="Create Account"
+        android:layout_marginTop="10dp" />
+    <Button android:layout_width="fill_parent"
+        android:id="@+id/buttonCreateAccountwithfacebook"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="Register with facebook"
+        android:textColor="#fff"
+        android:textSize="13dp"
+        android:background="#2683c2"/>
+
+    <TextView android:id="@+id/link_login"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:textStyle="bold"
+        android:text="Already a member? Login"
+        android:gravity="center"
+        android:textSize="16dip"
+        android:layout_marginTop="20dp"
+        android:textColor="#032b80" />
 
 </LinearLayout>
