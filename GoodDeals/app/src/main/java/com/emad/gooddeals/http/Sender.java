@@ -35,8 +35,8 @@ public class Sender  {
         try {
             StringEntity entity = new StringEntity(parameters.toString());
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-
-            client.post(context, "http://10.0.2.2:8080/GoodDealsws/webapi/offers/", entity, "application/json",
+            client.setBasicAuth("emad@gmail.com","emad");
+            client.post(context, "http://10.0.2.2:8080/GoodDealsws/webapi/offers/add", entity, "application/json",
                     new AsyncHttpResponseHandler() {
 
 

@@ -49,7 +49,6 @@ import com.facebook.FacebookSdk;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final int CAMERA_REQUEST = 1888;
     GPSTracker gps;
     JSONObject jsonObject = new JSONObject();
     String encodedImage;
@@ -68,7 +67,8 @@ public class MainActivity extends AppCompatActivity
     private ImageToJson imageToJson;
     private JSONArray jsonArray;
     private Receiver receiver;
-    private ListView listView;
+    private static final int CAMERA_REQUEST = 1888;
+    public ListView listView;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity
         p1 = new Point();
         imageToJson = new ImageToJson();
         jsonArray = new JSONArray();
-        receiver = new Receiver();
+      //  receiver = new Receiver();
         imageToJson = new ImageToJson();
         /**
          * initialisation des valeurs par defaut de nos preferences lors de la premiere arriver sur cette activite
@@ -105,11 +105,31 @@ public class MainActivity extends AppCompatActivity
                 Toast.LENGTH_LONG).show();
         ArrayList<Offres> myList = new ArrayList<Offres>();
         jsonArray = new JSONArray();
-        receiver = new Receiver();
+        //receiver = new Receiver();
         imageToJson = new ImageToJson();
+        int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
+        String category = SP.getString("categorytype", "all");
+        double longitude=0;
+        double latitude=0;
+        gps = new GPSTracker(getApplicationContext());
+
+        // check if GPS enabled
+        if(gps.canGetLocation()){
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+            Log.v("location"," "+longitude+": "+latitude+" : "+category+" : "+prefDistance);
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
         final AsyncHttpClient client = new AsyncHttpClient();
 
-        client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers/", new JsonHttpResponseHandler() {
+        client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
+                        "&prefDistance="+prefDistance+"&category="+category,
+                new JsonHttpResponseHandler() {
 
 
             @Override
@@ -190,7 +210,6 @@ public class MainActivity extends AppCompatActivity
                 photo = (Bitmap) data.getExtras().get("data");
                 Intent i = new Intent(this, TakePhoto.class);
                 i.putExtra("image", photo);
-
                 startActivity(i);
 
             }

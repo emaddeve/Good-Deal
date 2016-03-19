@@ -12,6 +12,7 @@
         <property name="name" column="firstName" type="string" />
         <property name="Token" column="token" type="string" />
         <property name="password" column="password" type="string" />
+        <property name="email" column="email" type="string" />
 
       </class>
 </hibernate-mapping>

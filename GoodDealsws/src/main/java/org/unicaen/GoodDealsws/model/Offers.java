@@ -4,7 +4,7 @@ import java.util.Date;
 
 
 /**
- * 
+ * the offer entity
  * @author emad
  *
  */
@@ -17,11 +17,16 @@ public class Offers {
 	private double longitude;	
 	private double latitude;
 	private String magasin;
+	//the end date of the offer
 	private Date datefin;
+	//the id of the user who post the offer
+	private int userid;
 	
+	//default contractor 
 	public Offers(){}
 	
-	public Offers(String name, String description, String imageString,String category,double longitude,double latitude,String magasin,Date datefin) {
+	public Offers(String name, String description, String imageString,String category,
+			double longitude,double latitude,String magasin,Date datefin,int userid) {
 		super();
 		
 		this.name = name;
@@ -32,9 +37,12 @@ public class Offers {
 		this.latitude=latitude;
 		this.datefin = datefin;
 		this.magasin = magasin;
-	
+		this.setUserid(userid);
 		
 	}
+	
+	//getters and setters
+	
 	public String getName() {
 		return name;
 	}
@@ -101,4 +109,12 @@ public class Offers {
 	public void setDatefin(Date datefin) {
 		this.datefin = datefin;
 	}
+	public int getUserid() {
+		return userid;
+	}
+
+	public void setUserid(int userid) {
+		this.userid = userid;
+	}
+
 }

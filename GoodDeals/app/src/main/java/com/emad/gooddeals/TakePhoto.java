@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,7 +25,9 @@ import com.emad.gooddeals.http.Sender;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -49,9 +52,8 @@ public class TakePhoto extends Activity implements
     EditText offerName;
     EditText offerDisc;
     Spinner dropdown;
-    DatePicker datePicker;
     GPSTracker gps;
-    Button btnDatePicker, btnTimePicker;
+    Button btnDatePicker;
     TextView txtDate;
     private SharedPreferences prefs;
     private int mYear, mMonth, mDay;
@@ -89,22 +91,13 @@ public class TakePhoto extends Activity implements
 
 
         }
-
-    }
-
-    /**
-     * method for getting the location using the class GPSTracker
-     */
-    public void getLocation(){
-
-
         gps = new GPSTracker(TakePhoto.this);
 
         // check if GPS enabled
         if(gps.canGetLocation()){
 
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
+             latitude = gps.getLatitude();
+             longitude = gps.getLongitude();
 
             // \n is for new line
             Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
@@ -116,6 +109,8 @@ public class TakePhoto extends Activity implements
         }
 
     }
+
+
 
     /**
      * Method for setting the fields values
@@ -138,38 +133,46 @@ public class TakePhoto extends Activity implements
      */
     public void sendOffer(View view){
         try {
-            //encodedImage = imageToJson.getByteFromBitmap(image);
-                encodedImage = imageToJson.getStringFromBitmap(image);
-            jsonObject.put("category",dropdown.getSelectedItem().toString());
-            jsonObject.put("description",offerDisc.getText().toString());
-            jsonObject.put("name",offerName.getText().toString());
-            jsonObject.put("longitude",longitude);
-            jsonObject.put("latitude",latitude);
+            encodedImage = imageToJson.getStringFromBitmap(image);
+            jsonObject.put("category", dropdown.getSelectedItem().toString());
+            jsonObject.put("description", offerDisc.getText().toString());
+            jsonObject.put("name", offerName.getText().toString());
+            jsonObject.put("longitude", longitude);
+            jsonObject.put("latitude", latitude);
             jsonObject.put("imageString", encodedImage);
-            jsonObject.put("magasin",offerMagasin.getText().toString());
-            String date = (mMonth+1+"/"+mDay+"/"+mYear);
-            new SimpleDateFormat();
+            jsonObject.put("magasin", offerMagasin.getText().toString());
+            DecimalFormat mFormat= new DecimalFormat("00");
 
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.FRANCE);
-            Date dateFin;
-          // dateFin= df.parse(date);
-           // offerName.setText(dateFin.toString());
-           // jsonObject.put("datefin",dateFin);
-            //getLocation();
+            mFormat.setRoundingMode(RoundingMode.DOWN);
+            String date =  mFormat.format(Double.valueOf(mYear)) + "-" +  mFormat.format(Double.valueOf(mMonth+1)) + "-" +  mFormat.format(Double.valueOf(mDay)
+                    )+"T00:00:00+01:00";
+
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.FRANCE);
+           Date dateFin;
+            dateFin= df.parse(date);
+
+            txtDate.setText(date);
+            offerName.setText(dateFin.toString());
+            jsonObject.put("datefin", date);
+
+
+            /*
             prefs = getSharedPreferences("userPrefs", 0);
             if(prefs.getString("user_token", null)==null) {
                 Intent intent = new Intent(getApplicationContext(),
                         Login.class);
                 startActivity(intent);
             }
+*/
 
             Sender send = new Sender();
             send.send(jsonObject);
-          //  SendOffer asyncT = new SendOffer(jsonObject);
-          //  asyncT.execute();
+
 
         } catch (JSONException e1) {
             e1.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
     }
@@ -194,7 +197,7 @@ public class TakePhoto extends Activity implements
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
-                        txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        txtDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                         mYear=year;
                         mMonth=monthOfYear;
                         mDay=dayOfMonth;
