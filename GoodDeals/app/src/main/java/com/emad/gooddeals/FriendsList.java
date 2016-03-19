@@ -39,12 +39,12 @@ String[]tab=new String[]{"stevo","jean","ivan"};
         try {
             friendslist = new JSONArray(jsondata);
             for (int l=0; l < friendslist.length(); l++) {
-                friends.add(friendslist.getJSONObject(l).getString("name"));
+                friends.add(friendslist.getJSONObject(l).getString("first_name"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Toast.makeText(this, "profil " + Profile.getCurrentProfile().getFirstName(),
+        Toast.makeText(this, "profil " + Profile.getCurrentProfile(),
                 Toast.LENGTH_LONG).show();
         ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.activity_listview, friends);
         ListView listView = (ListView) findViewById(R.id.listView_friend);

@@ -32,6 +32,8 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import java.util.Arrays;
+
 
 public class Login extends AppCompatActivity {
     private static final String TAG = "Login";
@@ -54,7 +56,7 @@ public class Login extends AppCompatActivity {
         register = (TextView) findViewById(R.id.reg);
         loginButton = (LoginButton) findViewById(R.id.login_button);
         // Permet d'accéder à la liste d'amis qui utilisent l'application
-        loginButton.setReadPermissions("user_friends");
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends", "email"));
         //permet de savoir si un user est deja connecte
         //AccessToken.getCurrentAccessToken();
         getLoginDetails(loginButton);
@@ -170,10 +172,12 @@ public class Login extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 //startActivity(intent);
+                Bundle parameters = new Bundle();
+               parameters.putString("fields", "email,first_name,last_name,name");
                 GraphRequestAsyncTask graphRequestAsyncTask = new GraphRequest(
                         loginResult.getAccessToken(),
                         "/me/friends",
-                        null,
+                        parameters,
                         HttpMethod.GET,
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {

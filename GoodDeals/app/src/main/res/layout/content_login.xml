@@ -75,7 +75,8 @@
                 android:paddingLeft="5dp"
                 android:textColor="#040404"
                 android:layout_marginTop="15dp"
-                android:id="@+id/input_password"/>
+                android:id="@+id/input_password"
+                android:inputType="textPassword"    />
 
 
             <LinearLayout

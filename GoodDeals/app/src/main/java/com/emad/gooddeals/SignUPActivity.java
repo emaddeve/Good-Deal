@@ -121,7 +121,7 @@ public class SignUPActivity extends Activity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Register failed", Toast.LENGTH_LONG).show();
 
         btnCreateAccount.setEnabled(true);
     }
