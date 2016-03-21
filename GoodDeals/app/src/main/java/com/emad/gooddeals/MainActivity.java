@@ -2,6 +2,7 @@ package com.emad.gooddeals;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -96,12 +98,14 @@ public class MainActivity extends AppCompatActivity
          * initialisation des valeurs par defaut de nos preferences lors de la premiere arriver sur cette activite
          *
          * */
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //test preference
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
         String categorytypeValue = SP.getString("categorytype", "toutes");
-        Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue,
+        Boolean activeVue = SP.getBoolean("offre_ami", false);
+        Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue
+                +"display offer to my friend "+activeVue,
                 Toast.LENGTH_LONG).show();
         ArrayList<Offres> myList = new ArrayList<Offres>();
         jsonArray = new JSONArray();
@@ -269,6 +273,28 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_manage) {
             Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(settings);
+        }
+        if (id == R.id.send_offer) {
+            //Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
+            //startActivity(settings);
+        }
+        if (id == R.id.deconnexion) {
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Closing Application")
+                    .setMessage("Are you sure you want to close this Application ?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(MainActivity.this, HomeScreenActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
         }
 
         //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 /**
  * Created by stevo on 12/03/16.
@@ -38,7 +39,6 @@ public class SettingsActivity extends PreferenceActivity {
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
-
 
             // Get widgets :
             _seekBarPref = (SeekBarPreference) this.findPreference("SEEKBAR_VALUE");

@@ -27,6 +27,7 @@ import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -38,7 +39,6 @@ public class SignUPActivity extends Activity {
     private CallbackManager callbackManager;
     EditText editTextUserName, editTextPassword, editTextConfirmPassword, editFirstName, editLastName;
     Button btnCreateAccount, btnCreateAccountWithFacebook;
-    TextView linkLogin;
     Context context = this;
 
     @Override
@@ -54,18 +54,10 @@ public class SignUPActivity extends Activity {
         editTextConfirmPassword = (EditText) findViewById(R.id.editTextConfirmPassword);
         btnCreateAccount = (Button) findViewById(R.id.buttonCreateAccount);
         btnCreateAccountWithFacebook = (Button) findViewById(R.id.buttonCreateAccountwithfacebook);
-        linkLogin = (TextView) findViewById(R.id.link_login);
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signup();
-            }
-        });
-        linkLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Finish the registration screen and return to the Login activity
-                finish();
             }
         });
         btnCreateAccountWithFacebook.setOnClickListener(new View.OnClickListener() {
@@ -216,16 +208,13 @@ public class SignUPActivity extends Activity {
                                 HttpMethod.GET,
                                 new GraphRequest.Callback() {
                                     public void onCompleted(GraphResponse response) {
-                                        //Intent intent = new Intent(Login.this, FriendsList.class);
-                                        try {
-                                        //  intent.putExtra("jsondata", rawName.toString());
-                                        //  startActivity(intent);
-                                            editTextUserName.setText( response.getJSONObject().getString("email"));
+                                        Intent intent = new Intent(SignUPActivity.this, SignUpFacebook.class);
+                                            String infoUser = response.getJSONObject().toString();
+                                            intent.putExtra("jsondata", infoUser);
+                                            startActivity(intent);
+                                            /**editTextUserName.setText( response.getJSONObject().getString("email"));
                                             editFirstName.setText( response.getJSONObject().getString("first_name"));
-                                            editLastName.setText( response.getJSONObject().getString("last_name"));;
-                                    } catch (JSONException e) {
-                                     e.printStackTrace();
-                                    }
+                                            editLastName.setText( response.getJSONObject().getString("last_name"));*/
                                     }
                                 }).executeAsync();
                         LoginManager.getInstance().logOut();

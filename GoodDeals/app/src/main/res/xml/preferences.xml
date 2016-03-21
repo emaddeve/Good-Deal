@@ -9,9 +9,14 @@
         android:summary="@string/settings_summary"
         android:text="@string/settings_unit"
         android:title="@string/settings_title" />
+    <SwitchPreference
+        android:key="offre_ami"
+        android:title="Display Offers to my friends"
+        android:summary="Enable display of offers to my friends on facebook"
+        android:defaultValue="false" />
     <ListPreference
-        android:title="Categories d\'offres"
-        android:summary="Selectionnez la categorie pour laquelle vous voulez recevoir des offres"
+        android:title="Categories deals"
+        android:summary="Select the category for which you want to post offers"
         android:key="categorytype"
         android:dialogTitle="@string/list_dialog_title"
         android:defaultValue="@string/update_default"
