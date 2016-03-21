@@ -22,12 +22,16 @@ import cz.msebera.android.httpclient.Header;
  * Created by emad on 10/03/16.
  */
 public class Receiver {
-Context context;
-private JSONArray jsonArray = new JSONArray();
-    SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
-    int prefDistance = SP.getInt("SEEKBAR_VALUE", 50);
 
-    String category = SP.getString("categorytype", "toutes");
+    String category;
+    int prefDistance;
+    Context context;
+public Receiver(String category,int prefDistance,Context context){
+this.category= category;
+    this.prefDistance=prefDistance;
+    this.context=context;
+}
+private JSONArray jsonArray = new JSONArray();
 
 
     GPSTracker gps;
@@ -61,7 +65,9 @@ private JSONArray jsonArray = new JSONArray();
                 super.onSuccess(statusCode, headers, response);
 
                 jsonArray = response;
-                Log.v("response", response.toString());
+                MainActivity m = new MainActivity();
+                m.setlistview(jsonArray);
+                Log.v("reciver", response.toString());
 
 
 

@@ -28,10 +28,10 @@ public class ClientsResources {
 	
 	@POST
 	@Path("/add")
-	public Response addOffer(Clients client) {
+	public Response addClient(Clients client) {
 
 		clientsService.signup(client);
-		return Response.status(Status.CREATED).entity(client).build();
+		return Response.status(Status.CREATED).build();
 
 	}
 	@GET

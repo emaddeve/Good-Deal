@@ -29,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.emad.gooddeals.http.Receiver;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -43,13 +44,13 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import data.stevo.SQlite.Offres;
+
 import com.facebook.FacebookSdk;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
-
+    private static final int CAMERA_REQUEST = 1888;
 
     GPSTracker gps;
     JSONObject jsonObject = new JSONObject();
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity
     private ImageToJson imageToJson;
     private JSONArray jsonArray;
     private Receiver receiver;
-    private static final int CAMERA_REQUEST = 1888;
+
     public ListView listView;
 
     /**
@@ -78,8 +79,6 @@ public class MainActivity extends AppCompatActivity
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client2;
-
-    //TextView t = (TextView) findViewById(R.id.textView2);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,25 +89,12 @@ public class MainActivity extends AppCompatActivity
          *
          *
          * */
-
-
-
-
         listView = (ListView) findViewById(R.id.listviewperso);
-
-
-
-
 
         String[] titre = new String[]{" Titre1", "Titre2",
                 "Titre3"};
         p1 = new Point();
         imageToJson = new ImageToJson();
-
-        String[] desc = {"salut a tous je m'appelle stevo", "ca marche", "ok cest bon"};
-
-        int[] images = {R.drawable.android, R.drawable.android,
-                R.drawable.android};
         jsonArray = new JSONArray();
       //  receiver = new Receiver();
         imageToJson = new ImageToJson();
@@ -117,14 +103,15 @@ public class MainActivity extends AppCompatActivity
          *
          * */
         PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
-    //test preference
+        //test preference
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
         int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
 
         String category = SP.getString("categorytype", "all");
+        receiver = new Receiver(category,prefDistance,this);
 
 
-        ArrayList<Offres> myList = new ArrayList<Offres>();
 
 
 
@@ -145,6 +132,18 @@ public class MainActivity extends AppCompatActivity
             // Ask user to enable GPS/network in settings
             gps.showSettingsAlert();
         }
+
+        int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
+        String categorytypeValue = SP.getString("categorytype", "toutes");
+        Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue,
+                Toast.LENGTH_LONG).show();
+
+        try {
+            receiver.receiver();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+/*
         final AsyncHttpClient client = new AsyncHttpClient();
 
         client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
@@ -175,7 +174,7 @@ public class MainActivity extends AppCompatActivity
                     CustomAdapter adapter = new CustomAdapter(MainActivity.this, myList);
                     listView.setAdapter(adapter);
                     listView.setOnItemClickListener(adapter);
-                }catch(JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
@@ -186,10 +185,7 @@ public class MainActivity extends AppCompatActivity
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
         });
-
-
-
-
+*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -207,27 +203,6 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-        /**AsyncHttpClient client = new AsyncHttpClient();
-         client.get("http://10.0.2.2:8080/GoodDealsWS/webapi/offers/", new JsonHttpResponseHandler(){
-        @Override public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-        super.onSuccess(statusCode, headers, response);
-        try {
-
-        for (int i = 0; i < response.length(); i++) {
-        JSONObject json = response.getJSONObject(i);
-        // Offres offres = new Offres(response);
-        //t3.setText(json.getString("category"));
-        // t4.setText(json.getString("description"));
-
-        // t8.setText(json.getString("location"));
-        //i2.setImageBitmap(imageToJson.getBitmapFromString(json.getString("imageString")));
-
-        }
-        } catch (JSONException e) {
-        e.printStackTrace();
-        }
-        }
-        });*/
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -317,7 +292,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-       // drawer.closeDrawer(GravityCompat.START);
+        // drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -362,8 +337,48 @@ public class MainActivity extends AppCompatActivity
         client2.disconnect();
     }
 
+    /**
+     * nous permet de savoir qui a installe notre application
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Logs' install 'and' activate app App Events
+        AppEventsLogger.activateApp(this);
+    }
+    /**
+     * nous permet de savoir le temps que les users passent sur l'apllication.A voir dans le dashboard sur facebook developper
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
+    }
 
+    public void setlistview(JSONArray jsonArray){
+
+
+        ArrayList<Offres> myList = new ArrayList<>();
+        try {
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                myList.add(new Offres(jsonObject));
+                //  myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
+
+            }
+            Log.v("mylist"," "+myList.size());
+            Log.v("response", jsonArray.toString());
+            CustomAdapter adapter = new CustomAdapter(getApplicationContext(), myList);
+            this.listView.setAdapter(adapter);
+            this.listView.setOnItemClickListener(adapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
-
 

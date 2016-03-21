@@ -65,4 +65,42 @@ public class Sender  {
         }
 
     }
+
+
+    public void signup(JSONObject parameters){
+        try {
+            StringEntity entity = new StringEntity(parameters.toString());
+            entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            client.setBasicAuth("emad@gmail.com","emad");
+            client.post(context, "http://10.0.2.2:8080/GoodDealsws/webapi/clients/add", entity, "application/json",
+                    new AsyncHttpResponseHandler() {
+
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                            try {
+                                JSONObject json = new JSONObject(
+                                        new String(responseBody));
+
+                            } catch (JSONException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                        }
+                    });
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 }

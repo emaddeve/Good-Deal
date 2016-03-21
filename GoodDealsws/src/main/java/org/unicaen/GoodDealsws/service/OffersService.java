@@ -2,21 +2,22 @@ package org.unicaen.GoodDealsws.service;
 
 import java.io.IOException;
 
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
 import javax.ws.rs.client.Client;
 
-import java.util.ArrayList;
-import java.util.List;
 
 //import com.vividsolutions.jts.geom.Point;
 import org.hibernate.HibernateException;
@@ -27,10 +28,12 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+
 import org.unicaen.GoodDealsws.model.Clients;
 import org.unicaen.GoodDealsws.model.Friends;
 import org.unicaen.GoodDealsws.model.FriendsOffers;
 import org.unicaen.GoodDealsws.model.Offers;
+
 
 /**
  * OffersService class determine all the method needed to make operation on the
