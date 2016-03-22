@@ -38,10 +38,6 @@ public class GoodDealHelper extends SQLiteOpenHelper {
      */
     public static final String COLUMN_MAGASIN = "magasin";
     /**
-     * Constante representant le nom de la colonne datePublication dans notre table
-     */
-    public static final String COLUMN_DATE_PUBLICATION = "datePublication";
-    /**
      * Constante representant le nom de la colonne dateFin dans notre table
      */
     public static final String COLUMN_DATE_FIN = "dateFin";
@@ -55,8 +51,7 @@ public class GoodDealHelper extends SQLiteOpenHelper {
             + COLUMN_DESCRIPTIOM + " TEXT, "
             + COLUMN_CATEGORIE + " TEXT,"
             + COLUMN_MAGASIN + " TEXT,"
-            + COLUMN_DATE_PUBLICATION + " INTEGER,"
-            + COLUMN_DATE_FIN + " INTEGER); ";
+            + COLUMN_DATE_FIN + " TEXT); ";
     /**
      * Commande sql de suppression de notre table si elle existe
      */

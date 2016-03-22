@@ -17,12 +17,10 @@ public class Offres {
     private int id;
     private String titre;
     private Bitmap bitmapImage;
-    private String image;
     private String description;
     private String categorie;
     private String magasin;
     private Date dateFin;
-    private int userid;
     private JSONObject jsonObject;
     private ImageToJson imageToJson=new ImageToJson();
 
@@ -38,7 +36,6 @@ public class Offres {
      */
     public Offres(String titre, String image, String description) {
         this.titre = titre;
-        this.image = image;
         this.description = description;
 
     }
@@ -73,7 +70,7 @@ public class Offres {
 
     public Bitmap getBipmapImage() {
         try {
-            bitmapImage = imageToJson.getBitmapFromString(jsonObject.getString("imageString"));
+            bitmapImage = imageToJson.getBitmapFromString(jsonObject.getString("image"));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -116,7 +113,7 @@ public class Offres {
     public Date getDateFin() {
 
         try {
-            dateFin = OffresDao.LongToDate(jsonObject.getLong("dateFin"));
+            dateFin = OffresDao.LongToDate(jsonObject.getLong("datefin"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -147,15 +144,6 @@ public class Offres {
                 " a ete prise dans le magasin: " + magasin  +
                 " et s'acheve le " + dateFin;
     }
-
-    public int getUserid() {
-        return userid;
-    }
-
-    public void setUserid(int userid) {
-        this.userid = userid;
-    }
-
 
 /**    public static byte[] drawableToByteArray(Drawable d) {
 

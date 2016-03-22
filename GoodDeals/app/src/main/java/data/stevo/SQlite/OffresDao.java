@@ -26,8 +26,7 @@ public class OffresDao {
     private static final int NUM_COL_DESCRIPTION = 3;
     private static final int NUM_COL_CATEGORIE = 4;
     private static final int NUM_COL_MAGASIN = 5;
-    private static final int NUM_COL_DATE_PUBLICATION = 6;
-    private static final int NUM_COL_DATE_FIN = 7;
+    private static final int NUM_COL_DATE_FIN = 6;
     private ImageToJson imageToJson;
     private JSONObject jsonObject;
     // Champs de la base de données
@@ -40,7 +39,6 @@ public class OffresDao {
             GoodDealHelper.COLUMN_DESCRIPTIOM,
             GoodDealHelper.COLUMN_CATEGORIE,
             GoodDealHelper.COLUMN_MAGASIN,
-            GoodDealHelper.COLUMN_DATE_PUBLICATION,
             GoodDealHelper.COLUMN_DATE_FIN
     };
 
@@ -134,7 +132,6 @@ public class OffresDao {
         offre.setDescription(cursor.getString(NUM_COL_DESCRIPTION));
         offre.setCategorie(cursor.getString(NUM_COL_CATEGORIE));
         offre.setMagasin(cursor.getString(NUM_COL_MAGASIN));
-       // offre.setDatePublication(loadDate(cursor, NUM_COL_DATE_PUBLICATION));
         offre.setDateFin(loadDate(cursor, NUM_COL_DATE_FIN));
         //On ferme le cursor
         cursor.close();
