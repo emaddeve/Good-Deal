@@ -9,6 +9,7 @@ import com.emad.gooddeals.registration.SignUPActivity;
 import com.emad.gooddeals.registration.SignUpFacebook;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,29 +103,23 @@ public class Sender  {
 
     }
 
-    public void signupfacebook(JSONObject parameters){
+    public void signupfacebook(JSONObject parameters,final Callback<Integer> callback){
         final SignUpFacebook signUpFacebook = new SignUpFacebook();
         try {
 
             StringEntity entity = new StringEntity(parameters.toString());
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            client.setBasicAuth("emad@gmail.com","emad");
+            client.setBasicAuth("emad@gmail.com", "emad");
             client.post(context, "http://10.0.2.2:8080/GoodDealsws/webapi/clients/add", entity, "application/json",
                     new AsyncHttpResponseHandler() {
 
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                            try {
-                                JSONObject json = new JSONObject(
-                                        new String(responseBody));
-                                signUpFacebook.onSignupSuccess();
 
-                            } catch (JSONException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
+                            if (callback != null) {
+                                callback.onResponse(statusCode);
                             }
-
                         }
 
                         @Override
@@ -160,14 +155,45 @@ public class Sender  {
                             }
 
 
-
-
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
                         }
+                    });
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void loginFacebook(String token, final Callback<JSONObject> callback){
+        final Login login = new Login();
+        try {
+            StringEntity entity = new StringEntity(token);
+            entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+
+
+            client.get(context, "http://10.0.2.2:8080/GoodDealsws/webapi/clients/loginInfo", entity, "application/json",
+                    new JsonHttpResponseHandler() {
+
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+
+
+
+                            if (callback != null) {
+                                callback.onResponse(response);
+                            }
+                        }
+
+
+
                     });
 
 

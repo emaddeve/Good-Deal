@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.emad.gooddeals.Callback;
 import com.emad.gooddeals.MainActivity;
 import com.emad.gooddeals.R;
 import com.emad.gooddeals.http.Sender;
@@ -101,16 +102,17 @@ public class SignUpFacebook extends AppCompatActivity {
 
             //Toast.makeText(this,"info :"+infoUser.getString("email")+" "+infoUser.getString("first_name"),Toast.LENGTH_LONG).show();
 
-            new Handler().postDelayed(
-                    new Runnable() {
-                        public void run() {
-                            // On complete call either onSignupSuccess or onSignupFailed
-                            // depending on success
-                            sender.signupfacebook(jsonObject);
-                            // onSignupFailed();
-                            progressDialog.dismiss();
-                        }
-                    }, 3000);
+            sender.signupfacebook(jsonObject, new Callback<Integer>() {
+                @Override
+                public void onResponse(Integer integer) {
+                    if (integer == 201)
+                        onSignupSuccess();
+                    else
+                        onSignupFailed();
+                }
+
+
+            });
 
         } catch (JSONException e) {
             e.printStackTrace();

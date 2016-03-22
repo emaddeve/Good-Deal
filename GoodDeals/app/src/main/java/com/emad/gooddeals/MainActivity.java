@@ -132,23 +132,7 @@ public class MainActivity extends AppCompatActivity
         receiver = new Receiver(category, prefDistance, this);
 
 
-        // Lookup the swipe container view
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
-                showOffers();
-            }
-        });
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+       showOffers();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -364,7 +348,6 @@ public class MainActivity extends AppCompatActivity
                         adapter = new CustomAdapter(MainActivity.this, myList);
                         listView.setAdapter(adapter);
                         listView.setOnItemClickListener(adapter);
-                        swipeContainer.setRefreshing(false);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -379,45 +362,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void fetchTimelineAsync(int page) {
 
-        try {
-            receiver.receiver(new Callback<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray jsonArray) {
-                    ArrayList<Offres> myList = new ArrayList<>();
-
-                    try {
-                        for (int i = 0; i < jsonArray.length(); i++) {
-
-
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-
-                            myList.add(new Offres(jsonObject));
-
-                        }
-
-
-                        Log.v("response", jsonArray.toString());
-                        adapter = new CustomAdapter(MainActivity.this, myList);
-                        adapter.clear();
-                        adapter.addAll(myList);
-                        listView.setAdapter(adapter);
-                        listView.setOnItemClickListener(adapter);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                }
-            });
-
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
 }
 

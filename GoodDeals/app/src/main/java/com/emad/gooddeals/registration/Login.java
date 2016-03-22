@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphRequestAsyncTask;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -110,13 +112,13 @@ public class Login extends AppCompatActivity {
 
         // TODO: Implement your own authentication logic here.
 
-        sender.login(username,password, new Callback<Integer>() {
+        sender.login(username, password, new Callback<Integer>() {
             @Override
             public void onResponse(Integer integer) {
                 if (integer == 200)
                     onLoginSuccess();
                 else
-                   onLoginFailed();
+                    onLoginFailed();
             }
 
 
@@ -198,13 +200,37 @@ public class Login extends AppCompatActivity {
                         HttpMethod.GET,
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
-                                Intent intent = new Intent(Login.this, MainActivity.class);
+                               final Intent intent1 = new Intent(Login.this, MainActivity.class);
+                                final Intent intent2 = new Intent(Login.this, SignUPActivity.class);
                                 try {
 
                                     Log.v("friends", response.toString());
                                     JSONArray rawName = response.getJSONObject().getJSONArray("data");
+                                    Log.v("dataidfac", rawName.toString());
                                     editor.putString("FriendList", rawName.toString());
-                                    startActivity(intent);
+                                    FacebookSdk.sdkInitialize(getApplicationContext());
+                                    String token = Profile.getCurrentProfile().getId();
+                                    sender.loginFacebook(token, new Callback<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject jsonObject) {
+                                            String email, password;
+
+                                            try {
+                                                if (jsonObject.getString("email") != null && jsonObject.getString("password") != null) {
+                                                    email = jsonObject.getString("email");
+                                                    password = jsonObject.getString("password");
+                                                    setpreference(email, password);
+                                                    startActivity(intent1);
+                                                } else
+                                                    startActivity(intent2);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+
+                                    });
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -264,6 +290,14 @@ public class Login extends AppCompatActivity {
 
         // Logs 'app deactivate' App Event.
         AppEventsLogger.deactivateApp(this);
+    }
+    public void setpreference(String email,String password){
+        SharedPreferences sp= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        Log.v("sharedpref",""+email+": "+password);
+        editor.putString("email", email);
+        editor.putString("pass", password);
+        editor.commit();
     }
 
 

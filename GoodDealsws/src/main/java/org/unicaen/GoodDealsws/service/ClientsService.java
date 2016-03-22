@@ -143,4 +143,33 @@ public class ClientsService {
 	       }
 		return list;
 	}
+	
+	public List<String> getclientinfo(String token){
+		Session session = createSessionFactory().openSession();
+		String email;
+		String password;
+		List<Clients> list=null;
+		List<String> info=null;
+	      Transaction tx = null;
+	      try{
+	         tx = session.beginTransaction();
+	       
+	          list = (List<Clients>)session.createQuery("FROM Clients").list();
+	          for(Clients c : list){
+	        	  if(c.getToken().equalsIgnoreCase(token)){
+	        		  email= c.getEmail();
+	        		  password = c.getPassword();
+	        		  info.add(email);
+	        		  info.add(password);
+	        	  }
+	          }
+	          
+	      }catch (HibernateException e) {
+	          if (tx!=null) tx.rollback();
+	          e.printStackTrace(); 
+	       }finally {
+	          session.close(); 
+	       }
+		return info;
+	}
 }

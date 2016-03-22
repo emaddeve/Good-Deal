@@ -46,6 +46,7 @@ public class SignUPActivity extends Activity {
     JSONObject jsonObject;
     String email;
     String password;
+
     public static final String MyPREFERENCES = "MyPrefs" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
