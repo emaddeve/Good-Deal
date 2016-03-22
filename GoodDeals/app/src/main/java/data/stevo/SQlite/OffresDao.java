@@ -157,6 +157,7 @@ public class OffresDao {
         values.put(GoodDealHelper.COLUMN_MAGASIN, offre.getMagasin());
 
 
+
         //values.put(GoodDealHelper.COLUMN_DATE_PUBLICATION, persistDate(offre.getDatePublication()));
         //values.put(GoodDealHelper.COLUMN_DATE_PUBLICATION, persistDate(offre.getDatePublication()));
 
@@ -176,6 +177,7 @@ public class OffresDao {
         values.put(GoodDealHelper.COLUMN_DESCRIPTIOM, offre.getDescription());
         values.put(GoodDealHelper.COLUMN_CATEGORIE, offre.getCategorie());
         values.put(GoodDealHelper.COLUMN_MAGASIN, offre.getMagasin());
+
 
 
        // values.put(GoodDealHelper.COLUMN_DATE_PUBLICATION, persistDate(offre.getDatePublication()));

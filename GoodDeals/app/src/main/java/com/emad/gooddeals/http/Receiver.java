@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.emad.gooddeals.Callback;
 import com.emad.gooddeals.GPSTracker;
 import com.emad.gooddeals.MainActivity;
 import com.emad.gooddeals.TakePhoto;
@@ -37,7 +38,7 @@ private JSONArray jsonArray = new JSONArray();
     GPSTracker gps;
 
 
-    public   void receiver() throws InterruptedException {
+    public   void receiver(final Callback<JSONArray> callback) throws InterruptedException {
         double longitude=0;
         double latitude=0;
         gps = new GPSTracker(context);
@@ -64,11 +65,8 @@ private JSONArray jsonArray = new JSONArray();
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
 
-                jsonArray = response;
-                MainActivity m = new MainActivity();
-                m.setlistview(jsonArray);
-                Log.v("reciver", response.toString());
-
+                if(callback!=null)
+                    callback.onResponse(response);
 
 
             }

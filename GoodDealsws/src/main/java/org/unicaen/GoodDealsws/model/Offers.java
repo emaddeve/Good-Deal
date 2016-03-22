@@ -118,5 +118,4 @@ public class Offers {
 		this.userid = userid;
 	}
 
-
 }

@@ -8,7 +8,7 @@ public class Clients {
 
 	
 	private int id;
-	private String name;
+
 	private String firstName;
 	private String lastName;
 	private String Password;
@@ -18,10 +18,10 @@ public class Clients {
 	public Clients(){}
 
 	
-	public Clients(int id, String name, String firstName, String password, String email, String token,String lastName) {
+	public Clients(int id, String firstName, String password, String email, String token,String lastName) {
 		super();
 		this.id = id;
-		this.name = name;
+	
 		this.firstName = firstName;
 		Password = password;
 		this.email = email;
@@ -43,12 +43,7 @@ public class Clients {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+	
 	public String getPassword() {
 		return Password;
 	}

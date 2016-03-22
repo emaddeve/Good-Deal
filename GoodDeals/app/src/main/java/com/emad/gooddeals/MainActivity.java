@@ -2,6 +2,7 @@ package com.emad.gooddeals;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,6 +15,8 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -47,10 +50,11 @@ import data.stevo.SQlite.Offres;
 
 import com.facebook.FacebookSdk;
 
+/**
+ * Created by emad on 23/02/16.
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    private static final int CAMERA_REQUEST = 1888;
 
     GPSTracker gps;
     JSONObject jsonObject = new JSONObject();
@@ -71,8 +75,14 @@ public class MainActivity extends AppCompatActivity
     private ImageToJson imageToJson;
     private JSONArray jsonArray;
     private Receiver receiver;
+    public static final String MyPREFERENCES = "MyPrefs";
 
+    private static final int CAMERA_REQUEST = 1888;
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
     public ListView listView;
+    private SwipeRefreshLayout swipeContainer;
+    CustomAdapter adapter;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -91,101 +101,56 @@ public class MainActivity extends AppCompatActivity
          * */
         listView = (ListView) findViewById(R.id.listviewperso);
 
-        String[] titre = new String[]{" Titre1", "Titre2",
-                "Titre3"};
-        p1 = new Point();
-        imageToJson = new ImageToJson();
+
+        sp = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        editor = sp.edit();
+
         jsonArray = new JSONArray();
-      //  receiver = new Receiver();
         imageToJson = new ImageToJson();
         /**
          * initialisation des valeurs par defaut de nos preferences lors de la premiere arriver sur cette activite
          *
          * */
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //test preference
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-        int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
-
-        String category = SP.getString("categorytype", "all");
-        receiver = new Receiver(category,prefDistance,this);
-
-
-
-
-
-
-        double longitude=0;
-        double latitude=0;
-        gps = new GPSTracker(getApplicationContext());
-
-        // check if GPS enabled
-        if(gps.canGetLocation()){
-
-            latitude = gps.getLatitude();
-            longitude = gps.getLongitude();
-            Log.v("location"," "+longitude+": "+latitude+" : "+category+" : "+prefDistance);
-        }else{
-            // can't get location
-            // GPS or Network is not enabled
-            // Ask user to enable GPS/network in settings
-            gps.showSettingsAlert();
-        }
-
         int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
         String categorytypeValue = SP.getString("categorytype", "toutes");
-        Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue,
+        Boolean activeVue = SP.getBoolean("offre_ami", false);
+        Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue
+                        + "display offer to my friend " + activeVue,
                 Toast.LENGTH_LONG).show();
-
-        try {
-            receiver.receiver();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-/*
-        final AsyncHttpClient client = new AsyncHttpClient();
-
-        client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
-                        "&prefDistance="+prefDistance+"&category="+category,
-                new JsonHttpResponseHandler() {
+        ArrayList<Offres> myList = new ArrayList<Offres>();
+        jsonArray = new JSONArray();
+        //receiver = new Receiver();
 
 
+        int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
+        String category = SP.getString("categorytype", "all");
+
+        receiver = new Receiver(category, prefDistance, this);
+
+
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
-
-                jsonArray = response;
-                Log.v("response", response.toString());
-
-                ArrayList<Offres> myList = new ArrayList<>();
-                try {
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                        myList.add(new Offres(jsonObject));
-                        //  myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
-
-                    }
-
-                    Log.v("response", jsonArray.toString());
-                    CustomAdapter adapter = new CustomAdapter(MainActivity.this, myList);
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(adapter);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                showOffers();
             }
         });
-*/
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -290,6 +255,30 @@ public class MainActivity extends AppCompatActivity
             Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(settings);
         }
+        if (id == R.id.send_offer) {
+            //Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
+            //startActivity(settings);
+        }
+        if (id == R.id.deconnexion) {
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Log out")
+                    .setMessage("Are you sure you want to Log out ?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            editor.clear();
+                            editor.apply();
+                            Intent intent = new Intent(MainActivity.this, HomeScreenActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        }
 
         //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         // drawer.closeDrawer(GravityCompat.START);
@@ -337,47 +326,97 @@ public class MainActivity extends AppCompatActivity
         client2.disconnect();
     }
 
-    /**
-     * nous permet de savoir qui a installe notre application
-     */
+
     @Override
     public void onResume() {
         super.onResume();
         // Logs' install 'and' activate app App Events
         AppEventsLogger.activateApp(this);
     }
-    /**
-     * nous permet de savoir le temps que les users passent sur l'apllication.A voir dans le dashboard sur facebook developper
-     */
+
     @Override
     public void onPause() {
         super.onPause();
         AppEventsLogger.deactivateApp(this);
     }
 
-    public void setlistview(JSONArray jsonArray){
 
-
-        ArrayList<Offres> myList = new ArrayList<>();
+    public void showOffers() {
         try {
+            receiver.receiver(new Callback<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray jsonArray) {
+                    ArrayList<Offres> myList = new ArrayList<>();
 
-            for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        for (int i = 0; i < jsonArray.length(); i++) {
 
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                myList.add(new Offres(jsonObject));
-                //  myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-            }
-            Log.v("mylist"," "+myList.size());
-            Log.v("response", jsonArray.toString());
-            CustomAdapter adapter = new CustomAdapter(getApplicationContext(), myList);
-            this.listView.setAdapter(adapter);
-            this.listView.setOnItemClickListener(adapter);
-        } catch (JSONException e) {
+
+                            myList.add(new Offres(jsonObject));
+
+                        }
+
+
+                        Log.v("response", jsonArray.toString());
+                        adapter = new CustomAdapter(MainActivity.this, myList);
+                        listView.setAdapter(adapter);
+                        listView.setOnItemClickListener(adapter);
+                        swipeContainer.setRefreshing(false);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            });
+
+
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
 
+    public void fetchTimelineAsync(int page) {
+
+        try {
+            receiver.receiver(new Callback<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray jsonArray) {
+                    ArrayList<Offres> myList = new ArrayList<>();
+
+                    try {
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+
+                            myList.add(new Offres(jsonObject));
+
+                        }
+
+
+                        Log.v("response", jsonArray.toString());
+                        adapter = new CustomAdapter(MainActivity.this, myList);
+                        adapter.clear();
+                        adapter.addAll(myList);
+                        listView.setAdapter(adapter);
+                        listView.setOnItemClickListener(adapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            });
+
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

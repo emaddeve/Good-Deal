@@ -109,4 +109,16 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
 
     }
 
+    // Clean all elements of the recycler
+    public void clear() {
+        myList.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items
+    public void addAll(ArrayList<Offres> List ) {
+        myList.addAll(List);
+        notifyDataSetChanged();
+    }
+
 }
