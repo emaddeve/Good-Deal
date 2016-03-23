@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.Color;
 
 import java.util.ArrayList;
 
@@ -23,13 +24,17 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
 
     ArrayList<Offres> myList = new ArrayList<Offres>();
     Context context;
+    private Activity activity;
+    private String[] bgColors;
 
     // on passe le context afin d'obtenir un LayoutInflater pour utiliser notre
     // row_layout.xml
     // on passe les valeurs de notre à l'adapter
-    public CustomAdapter(Context context, ArrayList<Offres> myList) {
+    public CustomAdapter(Context context, ArrayList<Offres> myList,Activity activity) {
         this.myList = myList;
         this.context = context;
+        this.activity=activity;
+        bgColors = activity.getBaseContext().getResources().getStringArray(R.array.offerscolor);
     }
 
     // retourne le nombre d'objet présent dans notre liste
@@ -64,10 +69,13 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
 
             // nous plaçons dans notre MyViewHolder les vues de notre layout
             mViewHolder = new MyViewHolder();
+
             mViewHolder.textViewTitre = (TextView) convertView
                     .findViewById(R.id.textViewTitre);
             mViewHolder.textViewDesc = (TextView) convertView
                     .findViewById(R.id.textViewDesc);
+            mViewHolder.textViewDate = (TextView) convertView
+                    .findViewById(R.id.textViewDate);
             mViewHolder.imageView = (ImageView) convertView
                     .findViewById(R.id.imageViewItem);
 
@@ -86,16 +94,21 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
         mViewHolder.textViewTitre.setText(offre.getTitre());
         mViewHolder.textViewDesc.setText(String.valueOf(offre.getDescription()));
         mViewHolder.imageView.setImageBitmap(offre.getBipmapImage());
+      //  mViewHolder.textViewDate.setText(offre.getDateFin().toString());
 
         // nous retournos la vue de l'item demandé
+        String color = bgColors[position % bgColors.length];
+        mViewHolder.textViewDesc.setBackgroundColor(Color.parseColor(color));
         return convertView;
     }
 
     // MyViewHolder va nous permettre de ne pas devoir rechercher
     // les vues à chaque appel de getView, nous gagnons ainsi en performance
     private class MyViewHolder {
-        TextView textViewTitre, textViewDesc;
+        TextView textViewTitre, textViewDesc,textViewDate;
         ImageView imageView;
+
+
     }
 
     // nous affichons un Toast à chaque clic sur un item de la liste

@@ -5,12 +5,11 @@
     android:weightSum="1">
     <ImageView
         android:id="@+id/imageViewItem"
-        android:layout_width="wrap_content"
-        android:layout_height="163dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:paddingRight="10sp"
         android:paddingLeft="10sp"
-        android:src="@drawable/android"
-        android:layout_weight="0.50" />
+        android:src="@drawable/android" />
 
 
     <LinearLayout
@@ -19,7 +18,7 @@
         android:orientation="vertical"
         android:paddingTop="24sp"
         android:layout_marginLeft="30dp"
-        >
+        android:layout_weight="0.54">
 
         <TextView
             android:id="@+id/textViewTitre"
@@ -33,7 +32,7 @@
             android:id="@+id/textViewDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="10dp"
             android:textColor="#404040"
             android:text="description" />
 
@@ -41,8 +40,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="publie le "
-            android:id="@+id/textViewDate" />
+            android:text="End date "
+            android:id="@+id/textViewDate"
+            android:textSize="10dp" />
 
 
     </LinearLayout>

@@ -36,10 +36,11 @@ public class Offres {
     /**
      *constructeur de test
      */
-    public Offres(String titre, String image, String description) {
+    public Offres(String titre, String image, String description,Date date) {
         this.titre = titre;
         this.image = image;
         this.description = description;
+        this.dateFin=date;
 
     }
 

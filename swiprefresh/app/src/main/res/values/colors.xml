@@ -3,7 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <string-array name="offerscolor">
+    <string-array name="movie_serial_bg">
         <item>#24c6d5</item>
         <item>#57dd86</item>
         <item>#ad7dcf</item>

@@ -54,7 +54,7 @@ import com.facebook.FacebookSdk;
  * Created by emad on 23/02/16.
  */
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener ,SwipeRefreshLayout.OnRefreshListener {
 
     GPSTracker gps;
     JSONObject jsonObject = new JSONObject();
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
     Point p1;
     String s = "name of offer";
     String s2 = "descritpi about ;thies";
-
+    private SwipeRefreshLayout swipeRefreshLayout;
     private Bitmap photo;
     private Context context;
     private ImageToJson imageToJson;
@@ -83,23 +83,30 @@ public class MainActivity extends AppCompatActivity
     public ListView listView;
     private SwipeRefreshLayout swipeContainer;
     CustomAdapter adapter;
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+    ArrayList<Offres> myList;
     private GoogleApiClient client2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /**
-         * test de 'laffichage dans une listView
-         *
-         *
-         * */
+        myList = new ArrayList<Offres>();
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         listView = (ListView) findViewById(R.id.listviewperso);
+        adapter = new CustomAdapter(this,myList,this);
+        listView.setAdapter(adapter);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        swipeRefreshLayout.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        swipeRefreshLayout.setRefreshing(true);
+
+                                        fetch();
+                                    }
+                                }
+        );
 
 
         sp = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -121,9 +128,9 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue
                         + "display offer to my friend " + activeVue,
                 Toast.LENGTH_LONG).show();
-        ArrayList<Offres> myList = new ArrayList<Offres>();
+
         jsonArray = new JSONArray();
-        //receiver = new Receiver();
+
 
 
         int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
@@ -131,8 +138,6 @@ public class MainActivity extends AppCompatActivity
 
         receiver = new Receiver(category, prefDistance, this);
 
-
-       showOffers();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -161,9 +166,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client2 = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
@@ -325,12 +327,20 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void showOffers() {
+    @Override
+    public void onRefresh() {
+        fetch();
+    }
+
+
+    private void fetch() {
+        swipeRefreshLayout.setRefreshing(true);
+
         try {
             receiver.receiver(new Callback<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray jsonArray) {
-                    ArrayList<Offres> myList = new ArrayList<>();
+                    myList.clear();
 
                     try {
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -343,11 +353,8 @@ public class MainActivity extends AppCompatActivity
 
                         }
 
-
-                        Log.v("response", jsonArray.toString());
-                        adapter = new CustomAdapter(MainActivity.this, myList);
-                        listView.setAdapter(adapter);
-                        listView.setOnItemClickListener(adapter);
+                        adapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -360,9 +367,9 @@ public class MainActivity extends AppCompatActivity
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+
+
     }
 
-
-
 }
-
