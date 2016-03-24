@@ -44,7 +44,8 @@ public class Offres {
 
     public int getId() throws JSONException {
         if (jsonObject==null){
-            return id;
+            return id
+                    ;
         }
         else{
         try {

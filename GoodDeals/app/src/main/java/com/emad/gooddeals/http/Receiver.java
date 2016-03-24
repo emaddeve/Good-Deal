@@ -56,7 +56,7 @@ private JSONArray jsonArray = new JSONArray();
             gps.showSettingsAlert();
         }
         final AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://10.241.68.68:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
+        client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
                         "&prefDistance="+prefDistance+"&category="+category,
                 new JsonHttpResponseHandler() {
 

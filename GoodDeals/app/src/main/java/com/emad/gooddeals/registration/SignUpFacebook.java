@@ -43,6 +43,7 @@ public class SignUpFacebook extends AppCompatActivity {
     public static final String MyPREFERENCES = "MyPrefs" ;
     String email;
     String password;
+    ProgressDialog progressDialog;
     private GoogleApiClient client;
 
     @Override
@@ -80,7 +81,7 @@ public class SignUpFacebook extends AppCompatActivity {
         JSONObject infoUser;
         createAccount.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignUpFacebook.this,
+          progressDialog = new ProgressDialog(SignUpFacebook.this,
                 R.style.com_facebook_auth_dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
@@ -105,6 +106,7 @@ public class SignUpFacebook extends AppCompatActivity {
             sender.signupfacebook(jsonObject, new Callback<Integer>() {
                 @Override
                 public void onResponse(Integer integer) {
+                    progressDialog.dismiss();
                     if (integer == 201)
                         onSignupSuccess();
                     else

@@ -54,6 +54,7 @@ public class Login extends AppCompatActivity {
      String password;
     SharedPreferences sp;
     SharedPreferences.Editor editor;
+    ProgressDialog progressDialog;
     public static final String MyPREFERENCES = "MyPrefs" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +103,7 @@ public class Login extends AppCompatActivity {
 
         submit.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(Login.this,
+        progressDialog = new ProgressDialog(Login.this,
                 R.style.com_facebook_auth_dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
@@ -116,6 +117,7 @@ public class Login extends AppCompatActivity {
         sender.login(username, password, new Callback<Integer>() {
             @Override
             public void onResponse(Integer integer) {
+                progressDialog.dismiss();
                 if (integer == 200)
                     onLoginSuccess();
                 else
@@ -142,6 +144,7 @@ public class Login extends AppCompatActivity {
         editor.putString("email", username);
         editor.putString("pass",password);
         editor.commit();
+
         submit.setEnabled(true);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
@@ -211,6 +214,8 @@ public class Login extends AppCompatActivity {
                                     Log.v("dataidfac", rawName.toString());
                                     editor.putString("FriendList", rawName.toString());
                                     String token = Profile.getCurrentProfile().getId();
+                                    Log.v("token", token
+                                    );
                                     sender.loginFacebook(token, new Callback<JSONObject>() {
                                         @Override
                                         public void onResponse(JSONObject jsonObject) {

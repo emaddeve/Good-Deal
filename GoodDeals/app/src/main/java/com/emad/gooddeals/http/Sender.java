@@ -41,7 +41,7 @@ public class Sender  {
             StringEntity entity = new StringEntity(parameters.toString());
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             client.setBasicAuth(email,password);
-            client.post(context, "http://10.241.68.68:8080/GoodDealsws/webapi/offers/add", entity, "application/json",
+            client.post(context, "http://10.0.2.2:8080/GoodDealsws/webapi/offers/add", entity, "application/json",
                     new AsyncHttpResponseHandler() {
 
 
@@ -76,7 +76,7 @@ public class Sender  {
                             StringEntity entity = new StringEntity(parameters.toString());
                             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
 
-            client.post(context, "http://10.241.68.68:8080/GoodDealsws/webapi/clients/add", entity, "application/json",
+            client.post(context, "http://10.0.2.2:8080/GoodDealsws/webapi/clients/add", entity, "application/json",
                     new AsyncHttpResponseHandler() {
 
 
@@ -109,8 +109,7 @@ public class Sender  {
 
             StringEntity entity = new StringEntity(parameters.toString());
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            client.setBasicAuth("emad@gmail.com", "emad");
-            client.post(context, "http://10.241.68.68:8080/GoodDealsws/webapi/clients/add", entity, "application/json",
+            client.post(context, "http://10.0.2.2:8080/GoodDealsws/webapi/clients/add", entity, "application/json",
                     new AsyncHttpResponseHandler() {
 
 
@@ -142,7 +141,7 @@ public class Sender  {
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             client.setBasicAuth(name,pass);
 
-            client.get(context, "http://10.241.68.68:8080/GoodDealsws/webapi/clients/verify", entity, "application/json",
+            client.get(context, "http://10.0.2.2:8080/GoodDealsws/webapi/clients/verify", entity, "application/json",
                     new AsyncHttpResponseHandler() {
 
 
@@ -178,7 +177,7 @@ public class Sender  {
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
 
 
-            client.get(context, "http://10.241.68.68:8080/GoodDealsws/webapi/clients/loginInfo", entity, "application/json",
+            client.get(context, "http://10.0.2.2:8080/GoodDealsws/webapi/clients/loginInfo", entity, "application/json",
                     new JsonHttpResponseHandler() {
 
 

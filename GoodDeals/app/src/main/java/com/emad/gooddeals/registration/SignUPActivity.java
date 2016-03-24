@@ -46,7 +46,7 @@ public class SignUPActivity extends Activity {
     JSONObject jsonObject;
     String email;
     String password;
-
+    ProgressDialog progressDialog;
     public static final String MyPREFERENCES = "MyPrefs" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +86,7 @@ public class SignUPActivity extends Activity {
         }
 
         btnCreateAccount.setEnabled(false);
-
-        final ProgressDialog progressDialog = new ProgressDialog(SignUPActivity.this,
+        progressDialog = new ProgressDialog(SignUPActivity.this,
                 R.style.com_facebook_auth_dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
@@ -108,6 +107,7 @@ public class SignUPActivity extends Activity {
             sender.signup(jsonObject, new Callback<Integer>() {
                 @Override
                 public void onResponse(Integer integer) {
+                    progressDialog.dismiss();
                     if (integer == 201)
                         onSignupSuccess();
                     else
