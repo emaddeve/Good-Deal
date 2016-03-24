@@ -61,11 +61,7 @@ import com.facebook.FacebookSdk;
  * Created by emad on 23/02/16.
  */
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
-    public static final String MyPREFERENCES = "MyPrefs";
-    private static final int CAMERA_REQUEST = 1888;
-    public ListView listView;
+        implements NavigationView.OnNavigationItemSelectedListener ,SwipeRefreshLayout.OnRefreshListener {
     GPSTracker gps;
     JSONObject jsonObject = new JSONObject();
     String encodedImage;
@@ -79,41 +75,31 @@ public class MainActivity extends AppCompatActivity
     Point p1;
     String s = "name of offer";
     String s2 = "descritpi about ;thies";
-    SharedPreferences sp;
-    SharedPreferences.Editor editor;
-    CustomAdapter adapter;
-    private SQLiteDatabase database;
-    private GoodDealHelper goodDealHelperHelper;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private Bitmap photo;
-    private Context context;
-    private ImageToJson imageToJson;
-    private JSONArray jsonArray;
     private Receiver receiver;
-    private SwipeRefreshLayout swipeContainer;
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+    public static final String MyPREFERENCES = "MyPrefs";
+    private static final int CAMERA_REQUEST = 8;
+    SharedPreferences SP;
+    SharedPreferences.Editor editor;
+    public ListView listView;
+    CustomAdapter adapter;
+    ArrayList<Offres> myList;
     private GoogleApiClient client2;
     OffresDao offreDao2 = new OffresDao(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /**
-         * test de 'laffichage dans une listView
-         *
-         *
-         * */
+        myList = new ArrayList<Offres>();
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         listView = (ListView) findViewById(R.id.listviewperso);
+        adapter = new CustomAdapter(this,myList,this);
+        listView.setAdapter(adapter);
 
-
-        sp = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        editor = sp.edit();
-
-        jsonArray = new JSONArray();
-        imageToJson = new ImageToJson();
+        swipeRefreshLayout.setOnRefreshListener(this);
+        SP = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        editor = SP.edit();
         /**
          * initialisation des valeurs par defaut de nos preferences lors de la premiere arriver sur cette activite
          *
@@ -121,14 +107,12 @@ public class MainActivity extends AppCompatActivity
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //test preference
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
         int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
         String categorytypeValue = SP.getString("categorytype", "toutes");
         Boolean activeVue = SP.getBoolean("offre_ami", false);
         Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue
                         + "display offer to my friend " + activeVue,
                 Toast.LENGTH_LONG).show();
-        jsonArray = new JSONArray();
         int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
         String category = SP.getString("categorytype", "toutes");
 
@@ -137,31 +121,34 @@ public class MainActivity extends AppCompatActivity
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        receiver = new Receiver(category, prefDistance, this);
         /**
          * Verification de la connexion a internet
          */
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            //we are connected to a network
-            showOffers();
+            swipeRefreshLayout.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            swipeRefreshLayout.setRefreshing(true);
+                                            fetch();
+                                        }
+                                    }
+            );
         } else {
             //s'il ya pas de connexion alors on recupere les offres dans sqlite database et on les affiche
-            ArrayList<Offres> list =offreDao2.getAllOffres();
-            if(list.size()==0){
+             myList =offreDao2.getAllOffres();
+            if(myList.size()==0){
                 Toast.makeText(MainActivity.this, "Acune offre retourne", Toast.LENGTH_LONG).show();
             }else{
-            Log.e("test",""+list);
-                adapter = new CustomAdapter(MainActivity.this, list);
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(adapter);
+               adapter.notifyDataSetChanged();
+               // listView.setOnItemClickListener(adapter);
 
             offreDao2.close();
             Toast.makeText(MainActivity.this, "Reseau indisponible.Affichage des donnees de sqlite ", Toast.LENGTH_LONG).show();
             }
         }
-
+         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -188,9 +175,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client2 = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
@@ -352,12 +336,24 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void showOffers() {
+    @Override
+    public void onRefresh() {
+        fetch();
+    }
+
+
+    private void fetch() {
+        int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
+        String category = SP.getString("categorytype", "all");
+
+        receiver = new Receiver(category, prefDistance, this,this);
+        swipeRefreshLayout.setRefreshing(true);
+
         try {
             receiver.receiver(new Callback<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray jsonArray) {
-
+                    myList.clear();
                     try {
                         ArrayList<Offres>  myList=new ArrayList<Offres>();
 
@@ -366,7 +362,7 @@ public class MainActivity extends AppCompatActivity
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             myList.add(new Offres(jsonObject));
                         }
-                        Log.e("response",""+myList);
+                        Log.e("response", "" + myList);
                         for (Offres offre :myList){
                             if ( offreDao2.insertOffre(offre)!=-1){
                                 Toast.makeText(MainActivity.this,"Données sauvegardées dans sqlite avec succes",Toast.LENGTH_LONG).show();
@@ -374,10 +370,8 @@ public class MainActivity extends AppCompatActivity
                             else
                                 Toast.makeText(MainActivity.this,"Erreur!!!Données non sauvegardées dans sqlite.",Toast.LENGTH_LONG).show();
                         }
-                        adapter = new CustomAdapter(MainActivity.this,myList );
-                        listView.setAdapter(adapter);
-                        listView.setOnItemClickListener(adapter);
-
+                        adapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
                         offreDao2.close();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -389,9 +383,9 @@ public class MainActivity extends AppCompatActivity
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+
+
     }
 
-
-
 }
-

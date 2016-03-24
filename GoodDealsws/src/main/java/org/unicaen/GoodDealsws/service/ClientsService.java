@@ -54,6 +54,8 @@ public class ClientsService {
 	          for(Clients c :list){
 	        	  if(c.getEmail().equalsIgnoreCase(email) && c.getPassword().equals(pass)){
 	        		  b=true;
+	        	  }else{
+	        		  b=false;
 	        	  }
 	          }
 	          

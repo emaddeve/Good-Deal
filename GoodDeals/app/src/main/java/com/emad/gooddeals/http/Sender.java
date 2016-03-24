@@ -134,7 +134,7 @@ public class Sender  {
 
     }
 
-    public void login(String name, String pass, final Callback<Integer> callback){
+    public void login(String name, String pass, final Callback<String> callback){
         final Login login = new Login();
         try {
             StringEntity entity = new StringEntity("null");
@@ -150,7 +150,8 @@ public class Sender  {
 
 
                             if (callback != null) {
-                                callback.onResponse(statusCode);
+                                callback.onResponse(responseBody.toString());
+
                             }
 
 
@@ -159,7 +160,7 @@ public class Sender  {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                             if (callback != null) {
-                                callback.onResponse(statusCode);
+                                callback.onResponse(responseBody.toString());
                             }
                         }
                     });

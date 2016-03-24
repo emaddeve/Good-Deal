@@ -28,6 +28,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/edittextDes"
+        android:hint="desciption"
         android:layout_above="@+id/btnSendOffer"
         android:layout_centerHorizontal="true" />
 
@@ -35,12 +36,14 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/edittextMag"
+        android:hint="Magasin Name"
         android:layout_above="@+id/editTextName"
         android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:hint="Offer Name"
         android:id="@+id/editTextName"
         android:layout_above="@+id/edittextDes"
         android:layout_centerHorizontal="true" />

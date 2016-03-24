@@ -1,6 +1,7 @@
 package com.emad.gooddeals;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -35,6 +36,7 @@ public class GPSTracker extends Service implements LocationListener {
     Location location; // Location
     double latitude; // Latitude
     double longitude; // Longitude
+    private  Activity activity;
 
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
@@ -45,8 +47,9 @@ public class GPSTracker extends Service implements LocationListener {
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
-    public GPSTracker(Context context) {
+    public GPSTracker(Context context,Activity activity) {
         this.mContext = context;
+        this.activity=activity;
         getLocation();
     }
 
@@ -61,6 +64,7 @@ public class GPSTracker extends Service implements LocationListener {
                     .getSystemService(LOCATION_SERVICE);
 
 
+
             // Getting GPS status
             isGPSEnabled = locationManager
                     .isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -72,17 +76,21 @@ public class GPSTracker extends Service implements LocationListener {
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // No network provider is enabled
             } else {
+                Log.v("firstlog","firstlog");
                 this.canGetLocation = true;
                 if (isNetworkEnabled) {
+                    Log.v("second","firstlog");
                     locationManager.requestLocationUpdates(
                             LocationManager.NETWORK_PROVIDER,
                             MIN_TIME_BW_UPDATES,
                             MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                     Log.d("Network", "Network");
                     if (locationManager != null) {
+                        Log.v("thired","firstlog");
                         location = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {
+                            Log.v("fourth","firstlog");
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
                         }
@@ -91,8 +99,11 @@ public class GPSTracker extends Service implements LocationListener {
                 // If GPS enabled, get latitude/longitude using GPS Services
                 if (isGPSEnabled) {
                     if (location == null) {
-                        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
+                       if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                       //     // TODO: Consider calling
+                         //   ActivityCompat.requestPermissions(activity,
+                           //         new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},199);
+
                             //    ActivityCompat#requestPermissions
                             // here to request the missing permissions, and then overriding
                             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -217,6 +228,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        this.location = location;
     }
 
 

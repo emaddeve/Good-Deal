@@ -103,7 +103,7 @@ public class Login extends AppCompatActivity {
 
         submit.setEnabled(false);
 
-        progressDialog = new ProgressDialog(Login.this,
+         progressDialog = new ProgressDialog(Login.this,
                 R.style.com_facebook_auth_dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
@@ -114,14 +114,16 @@ public class Login extends AppCompatActivity {
 
         // TODO: Implement your own authentication logic here.
 
-        sender.login(username, password, new Callback<Integer>() {
+        sender.login(username, password, new Callback<String>() {
             @Override
-            public void onResponse(Integer integer) {
+            public void onResponse(String response) {
                 progressDialog.dismiss();
-                if (integer == 200)
+                if (response.equalsIgnoreCase("true")) {
                     onLoginSuccess();
-                else
+                } else {
+                    Log.v("loginfaild", "true");
                     onLoginFailed();
+                }
             }
 
 
@@ -153,8 +155,9 @@ public class Login extends AppCompatActivity {
 
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
+        Log.v("loginfaild2", "true");
         submit.setEnabled(true);
+
     }
 
     public boolean validate() {
@@ -204,9 +207,9 @@ public class Login extends AppCompatActivity {
                         parameters,
                         HttpMethod.GET,
                         new GraphRequest.Callback() {
-                            public void onCompleted(GraphResponse response) {
+                            public void onCompleted(final GraphResponse response) {
                                final Intent intent1 = new Intent(Login.this, MainActivity.class);
-                                final Intent intent2 = new Intent(Login.this, SignUPActivity.class);
+                                final Intent intent2 = new Intent(Login.this, SignUpFacebook.class);
                                 try {
 
                                     Log.v("friends", response.toString());
@@ -228,6 +231,11 @@ public class Login extends AppCompatActivity {
                                                     setpreference(email, password);
                                                     startActivity(intent1);
                                                 } else
+                                                    intent2.putExtra("lastName", response.getJSONObject().getString("last_name"));
+                                                intent2.putExtra("firstName",response.getJSONObject().getString("first_name"));
+                                                intent2.putExtra("token",response.getJSONObject().getString("id"));
+                                                intent2.putExtra("email",response.getJSONObject().getString("email"));
+
                                                     startActivity(intent2);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
