@@ -53,8 +53,8 @@ public class ClientsResources {
 	
 	@GET
 	@Path("/verify")
-	public Response login(@Context HttpServletRequest request){
-		int res=0;
+	public String login(@Context HttpServletRequest request){
+		String res="false";
 	
 		String s = request.getHeader(AUTHENTICATION_HEADER);
 
@@ -70,8 +70,8 @@ public class ClientsResources {
 		final String email = tokenizer.nextToken();
 		final String password = tokenizer.nextToken();
 		 if(clientsService.auth(email,password))
-			res=200;
+			res="true";
 			
-		 return Response.status(res).build();
+		 return res;
 	}
 }

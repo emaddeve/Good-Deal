@@ -272,7 +272,7 @@ public class OffersService {
 	
 	
 
-	public List<FriendsOffers> getface(ArrayList<Friends> emails) {
+	public List<FriendsOffers> getface(ArrayList<Friends> friends) {
 		
 		List<FriendsOffers> friendsOffersList = new ArrayList<FriendsOffers>();
 		Session session = createSessionFactory().openSession();
@@ -282,7 +282,7 @@ public class OffersService {
 
 			List<Clients> clients = (List<Clients>) session.createQuery("From Clients").list();
 			for (Clients c : clients) {
-				for (Friends f : emails) {
+				for (Friends f : friends) {
 					if (c.getToken().equalsIgnoreCase(f.getToken())) {
 						
 						
@@ -291,7 +291,7 @@ public class OffersService {
 						List<Offers> offers = query.list();
 						if(offers.size()>0){
 						FriendsOffers friendsoffers = new FriendsOffers();
-						friendsoffers.setName(c.getName());
+						friendsoffers.setName(c.getFirstName());
 						friendsoffers.setOffers(offers);
 						friendsOffersList.add(friendsoffers);
 						}

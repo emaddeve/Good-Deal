@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity
     private Receiver receiver;
     public static final String MyPREFERENCES = "MyPrefs";
 
-    private static final int CAMERA_REQUEST = 1888;
-    SharedPreferences sp;
+    private static final int CAMERA_REQUEST = 8;
+    SharedPreferences SP;
     SharedPreferences.Editor editor;
     public ListView listView;
     private SwipeRefreshLayout swipeContainer;
@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity
         );
 
 
-        sp = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        editor = sp.edit();
+        SP = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        editor = SP.edit();
 
         jsonArray = new JSONArray();
         imageToJson = new ImageToJson();
@@ -120,23 +120,14 @@ public class MainActivity extends AppCompatActivity
          * */
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //test preference
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-        int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
-        String categorytypeValue = SP.getString("categorytype", "toutes");
-        Boolean activeVue = SP.getBoolean("offre_ami", false);
-        Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue
-                        + "display offer to my friend " + activeVue,
-                Toast.LENGTH_LONG).show();
 
         jsonArray = new JSONArray();
 
 
 
-        int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
-        String category = SP.getString("categorytype", "all");
 
-        receiver = new Receiver(category, prefDistance, this);
 
 
 
@@ -334,6 +325,10 @@ public class MainActivity extends AppCompatActivity
 
 
     private void fetch() {
+        int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
+        String category = SP.getString("categorytype", "all");
+
+        receiver = new Receiver(category, prefDistance, this,this);
         swipeRefreshLayout.setRefreshing(true);
 
         try {

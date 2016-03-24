@@ -1,5 +1,6 @@
 package com.emad.gooddeals.http;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -27,10 +28,12 @@ public class Receiver {
     String category;
     int prefDistance;
     Context context;
-public Receiver(String category,int prefDistance,Context context){
+    Activity activity;
+public Receiver(String category,int prefDistance,Context context,Activity activity){
 this.category= category;
     this.prefDistance=prefDistance;
     this.context=context;
+    this.activity=activity;
 }
 private JSONArray jsonArray = new JSONArray();
 
@@ -41,7 +44,8 @@ private JSONArray jsonArray = new JSONArray();
     public   void receiver(final Callback<JSONArray> callback) throws InterruptedException {
         double longitude=0;
         double latitude=0;
-        gps = new GPSTracker(context);
+
+        gps = new GPSTracker(context,activity);
 
         // check if GPS enabled
         if(gps.canGetLocation()){
@@ -55,6 +59,7 @@ private JSONArray jsonArray = new JSONArray();
             // Ask user to enable GPS/network in settings
             gps.showSettingsAlert();
         }
+        Log.v("loca",": "+longitude+" : "+prefDistance);
         final AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
                         "&prefDistance="+prefDistance+"&category="+category,

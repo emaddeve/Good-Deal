@@ -10,6 +10,8 @@ import android.graphics.Bitmap;
 
 import android.os.Bundle;
 
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -39,7 +41,7 @@ import java.util.Locale;
  *
  * Activity for setting up the Offer information
  */
-public class TakePhoto extends Activity implements
+public class TakePhoto extends AppCompatActivity implements
         View.OnClickListener{
     ImageToJson imageToJson;
     ImageView imageView;
@@ -92,17 +94,19 @@ public class TakePhoto extends Activity implements
 
 
         }
-        gps = new GPSTracker(TakePhoto.this);
+
+        gps = new GPSTracker(TakePhoto.this,this);
 
         // check if GPS enabled
         if(gps.canGetLocation()){
-
+            Log.v("gpslocation","true");
              latitude = gps.getLatitude();
              longitude = gps.getLongitude();
 
             // \n is for new line
             Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
         }else{
+            Log.v("cantgps","true");
             // can't get location
             // GPS or Network is not enabled
             // Ask user to enable GPS/network in settings

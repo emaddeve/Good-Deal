@@ -109,7 +109,7 @@ public class Sender  {
 
             StringEntity entity = new StringEntity(parameters.toString());
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            client.setBasicAuth("emad@gmail.com", "emad");
+          //  client.setBasicAuth("emad@gmail.com", "emad");
             client.post(context, "http://10.0.2.2:8080/GoodDealsws/webapi/clients/add", entity, "application/json",
                     new AsyncHttpResponseHandler() {
 
@@ -135,7 +135,7 @@ public class Sender  {
 
     }
 
-    public void login(String name, String pass, final Callback<Integer> callback){
+    public void login(String name, String pass, final Callback<String> callback){
         final Login login = new Login();
         try {
             StringEntity entity = new StringEntity("null");
@@ -151,7 +151,8 @@ public class Sender  {
 
 
                             if (callback != null) {
-                                callback.onResponse(statusCode);
+                                callback.onResponse(responseBody.toString());
+
                             }
 
 
