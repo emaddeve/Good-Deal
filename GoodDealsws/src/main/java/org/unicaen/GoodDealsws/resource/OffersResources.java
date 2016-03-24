@@ -59,10 +59,10 @@ public class OffersResources {
 			return offerService.getOfferByCategory(category);
 		}
 
-		if (prefDistance > 0) {
+		else if (prefDistance > 0) {
 			return offerService.getNearOffers(prefDistance, longitude, latitude);
 		}
-
+		else
 		return offerService.getAllOffers();
 	}
 

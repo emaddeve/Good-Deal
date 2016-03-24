@@ -1,17 +1,21 @@
-package com.emad.gooddeals;
+package com.emad.gooddeals.registration;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.emad.gooddeals.Callback;
+import com.emad.gooddeals.MainActivity;
+import com.emad.gooddeals.R;
+import com.emad.gooddeals.http.Sender;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -23,9 +27,7 @@ import com.facebook.HttpMethod;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,13 +42,20 @@ public class SignUPActivity extends Activity {
     EditText editTextUserName, editTextPassword, editTextConfirmPassword, editFirstName, editLastName;
     Button btnCreateAccount, btnCreateAccountWithFacebook;
     Context context = this;
+    Sender sender;
+    JSONObject jsonObject;
+    String email;
+    String password;
 
+    public static final String MyPREFERENCES = "MyPrefs" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         facebookSDKInitialize();
        // LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
         setContentView(R.layout.activity_signup);
+        jsonObject= new JSONObject();
+        sender = new Sender();
         editTextUserName = (EditText) findViewById(R.id.editTextUserName);
         editFirstName = (EditText) findViewById(R.id.editFirstName);
         editLastName = (EditText) findViewById(R.id.editLastName);
@@ -86,30 +95,47 @@ public class SignUPActivity extends Activity {
 
         String firstName = editFirstName.getText().toString();
         String lastName = editLastName.getText().toString();
-        String email = editTextUserName.getText().toString();
-        String password = editTextPassword.getText().toString();
+         email = editTextUserName.getText().toString();
+         password = editTextPassword.getText().toString();
         String passwordConfirm = editTextConfirmPassword.getText().toString();
 
-        // TODO: Implement your own signup logic here.
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
+        try {
+            jsonObject.put("lastName", lastName);
+            jsonObject.put("firstName", firstName);
+            jsonObject.put("email", email);
+            jsonObject.put("password", password);
+            sender.signup(jsonObject, new Callback<Integer>() {
+                @Override
+                public void onResponse(Integer integer) {
+                    if (integer == 201)
                         onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+                    else
+                        onSignupFailed();
+                }
+
+
+            });
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void onSignupSuccess() {
         btnCreateAccount.setEnabled(true);
         setResult(RESULT_OK, null);
-        Intent intent = new Intent(getApplicationContext(), Login.class);
+        SharedPreferences sp= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        Log.v("sharedpref",""+email+": "+password);
+        editor.putString("email", email);
+        editor.putString("pass", password);
+        editor.commit();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
-        Toast.makeText(this, "Compte creer.Vous pouvez vous connecter !", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "you account has been created !", Toast.LENGTH_LONG).show();
     }
 
     public void onSignupFailed() {

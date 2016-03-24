@@ -10,6 +10,8 @@ import com.emad.gooddeals.ImageToJson;
 import org.json.JSONObject;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +29,7 @@ public class OffresDao {
     private static final int NUM_COL_CATEGORIE = 4;
     private static final int NUM_COL_MAGASIN = 5;
     private static final int NUM_COL_DATE_FIN = 6;
-    private ImageToJson imageToJson;
+    private ImageToJson imageToJson = new ImageToJson();
     private JSONObject jsonObject;
     // Champs de la base de données
     private SQLiteDatabase database;
@@ -48,30 +50,39 @@ public class OffresDao {
     }
 
     /**
-     * Methode Utilitaire permettant de convertir une date en entier
+     * Methode Utilitaire permettant de convertir un string en date
      */
-    public static Long persistDate(Date date) {
-        if (date != null) {
-            return date.getTime();
-        } else {
-            return null;
+    public static Date convertStringToDate(String dateString) {
+        Date date = null;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            date = df.parse(dateString);
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
+        return date;
+    }
+
+    /**
+     * Methode Utilitaire permettant de convertir une date en String
+     */
+    public static String convertDateToString(Date date) {
+        SimpleDateFormat dateformatJava = new SimpleDateFormat("yyyy-MM-dd");
+        String date_to_string = dateformatJava.format(date);
+
+        return date_to_string;
     }
 
     /**
      * Methode Utilitaire permettant de charger notre date.
      */
     public static Date loadDate(Cursor cursor, int index) {//index ici est lidentifiant de la colonne a laquelle on accede
+        Date date;
+        date = convertStringToDate(cursor.getString(index));
         if (cursor.isNull(index)) {
             return null;
         }
-        return new Date(cursor.getLong(index));
-    }
-    /**
-     * Methode Utilitaire permettant de charger notre date et prend en parametre un entier
-     */
-    public static Date LongToDate( long index) {//index ici est lidentifiant de la colonne a laquelle on accede
-        return new Date(index);
+        return date;
     }
 
     /**
@@ -122,7 +133,7 @@ public class OffresDao {
         if (cursor.getCount() == 0)
             return null;
         //Sinon on se place sur le premier élément
-        cursor.moveToFirst();
+
         //On créé une offre
         Offres offre = new Offres();
         //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
@@ -134,7 +145,6 @@ public class OffresDao {
         offre.setMagasin(cursor.getString(NUM_COL_MAGASIN));
         offre.setDateFin(loadDate(cursor, NUM_COL_DATE_FIN));
         //On ferme le cursor
-        cursor.close();
         //On retourne l'offre
         return offre;
     }
@@ -151,7 +161,7 @@ public class OffresDao {
         values.put(GoodDealHelper.COLUMN_DESCRIPTIOM, offre.getDescription());
         values.put(GoodDealHelper.COLUMN_CATEGORIE, offre.getCategorie());
         values.put(GoodDealHelper.COLUMN_MAGASIN, offre.getMagasin());
-        values.put(GoodDealHelper.COLUMN_DATE_FIN, persistDate(offre.getDateFin()));
+        values.put(GoodDealHelper.COLUMN_DATE_FIN, convertDateToString(offre.getDateFin()));
         //on insère l'objet dans la BDD via le ContentValues
         return database.insert(GoodDealHelper.TABLE_OFFRES, null, values);
     }
@@ -167,7 +177,7 @@ public class OffresDao {
         values.put(GoodDealHelper.COLUMN_DESCRIPTIOM, offre.getDescription());
         values.put(GoodDealHelper.COLUMN_CATEGORIE, offre.getCategorie());
         values.put(GoodDealHelper.COLUMN_MAGASIN, offre.getMagasin());
-        values.put(GoodDealHelper.COLUMN_DATE_FIN, persistDate(offre.getDateFin()));
+        values.put(GoodDealHelper.COLUMN_DATE_FIN, convertDateToString(offre.getDateFin()));
         return database.update(GoodDealHelper.TABLE_OFFRES, values, GoodDealHelper.COLUMN_ID + " = " + id, null);
     }
 
@@ -182,8 +192,8 @@ public class OffresDao {
     /**
      * Cette méthode permet de recuperer toutes offres presentes en BDD
      */
-    public List<Offres> getAllOffres() {
-        List<Offres> offres = new ArrayList<Offres>();
+    public ArrayList<Offres> getAllOffres() {
+        ArrayList<Offres> offres = new ArrayList<Offres>();
 
         Cursor cursor = database.query(GoodDealHelper.TABLE_OFFRES,
                 allColumns, null, null, null, null, null);
@@ -194,7 +204,6 @@ public class OffresDao {
             offres.add(offre);
             cursor.moveToNext();
         }
-        // assurez-vous de la fermeture du curseur
         cursor.close();
         return offres;
     }

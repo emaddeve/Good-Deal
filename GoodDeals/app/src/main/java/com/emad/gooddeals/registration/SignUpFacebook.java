@@ -1,31 +1,31 @@
-package com.emad.gooddeals;
+package com.emad.gooddeals.registration;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.emad.gooddeals.Callback;
+import com.emad.gooddeals.MainActivity;
+import com.emad.gooddeals.R;
+import com.emad.gooddeals.http.Sender;
 import com.facebook.FacebookSdk;
-import com.facebook.Profile;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by stevo on 21/03/16.
@@ -34,17 +34,22 @@ public class SignUpFacebook extends AppCompatActivity {
     Button createAccount;
     EditText editTextPassword2, editTextConfirmPassword2;
     TextView result;
+    Sender sender ;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
+     *
      */
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    String email;
+    String password;
     private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_facebook);
-
+        sender = new Sender();
         editTextPassword2 = (EditText) findViewById(R.id.editTextPassword2);
         editTextConfirmPassword2 = (EditText) findViewById(R.id.editTextConfirmPassword2);
         createAccount = (Button) findViewById(R.id.createAccount);
@@ -70,7 +75,7 @@ public class SignUpFacebook extends AppCompatActivity {
             return;
         }
         Intent intent = getIntent();
-        String jsondata = intent.getStringExtra("jsondata");
+        final String jsondata = intent.getStringExtra("jsondata");
         FacebookSdk.sdkInitialize(getApplicationContext());
         JSONObject infoUser;
         createAccount.setEnabled(false);
@@ -84,25 +89,37 @@ public class SignUpFacebook extends AppCompatActivity {
             infoUser = new JSONObject(jsondata);
             String firstName = infoUser.getString("first_name");
             String lastName = infoUser.getString("last_name");
-            String email = infoUser.getString("email");
-            String password = editTextPassword2.getText().toString();
+             email = infoUser.getString("email");
+            String token = infoUser.getString("id");
+             password = editTextPassword2.getText().toString();
             String passwordConfirm = editTextConfirmPassword2.getText().toString();
+            final JSONObject jsonObject = new JSONObject();
+            jsonObject.put("lastName",lastName);
+            jsonObject.put("firstName",firstName);
+            jsonObject.put("email",email);
+            jsonObject.put("password",password);
+            jsonObject.put("token",token);
+
             //Toast.makeText(this,"info :"+infoUser.getString("email")+" "+infoUser.getString("first_name"),Toast.LENGTH_LONG).show();
+
+            sender.signupfacebook(jsonObject, new Callback<Integer>() {
+                @Override
+                public void onResponse(Integer integer) {
+                    if (integer == 201)
+                        onSignupSuccess();
+                    else
+                        onSignupFailed();
+                }
+
+
+            });
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
         // TODO: Implement your own signup logic here.
 
-        new Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+
     }
 
     public void onSignupSuccess() {
@@ -110,6 +127,12 @@ public class SignUpFacebook extends AppCompatActivity {
         setResult(RESULT_OK, null);
         // Intent intent = new Intent(getApplicationContext(), Login.class);
         //startActivity(intent);
+        SharedPreferences sp= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        Log.v("sharedpref",""+email+": "+password);
+        editor.putString("email", email);
+        editor.putString("pass",password);
+        editor.commit();
         result.setVisibility(View.VISIBLE);
         result.setOnClickListener(new View.OnClickListener() {
             @Override

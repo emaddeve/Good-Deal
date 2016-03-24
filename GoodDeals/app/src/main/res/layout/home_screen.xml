@@ -42,7 +42,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp" />
-        <TextView android:id="@+id/link"
+        <Button android:id="@+id/link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"

@@ -109,6 +109,7 @@ public class Offers {
 	public void setDatefin(Date datefin) {
 		this.datefin = datefin;
 	}
+
 	public int getUserid() {
 		return userid;
 	}

@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.emad.gooddeals.Callback;
 import com.emad.gooddeals.GPSTracker;
 import com.emad.gooddeals.MainActivity;
 import com.emad.gooddeals.TakePhoto;
@@ -22,18 +23,22 @@ import cz.msebera.android.httpclient.Header;
  * Created by emad on 10/03/16.
  */
 public class Receiver {
-Context context;
-private JSONArray jsonArray = new JSONArray();
-    SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
-    int prefDistance = SP.getInt("SEEKBAR_VALUE", 50);
 
-    String category = SP.getString("categorytype", "toutes");
+    String category;
+    int prefDistance;
+    Context context;
+public Receiver(String category,int prefDistance,Context context){
+this.category= category;
+    this.prefDistance=prefDistance;
+    this.context=context;
+}
+private JSONArray jsonArray = new JSONArray();
 
 
     GPSTracker gps;
 
 
-    public   void receiver() throws InterruptedException {
+    public   void receiver(final Callback<JSONArray> callback) throws InterruptedException {
         double longitude=0;
         double latitude=0;
         gps = new GPSTracker(context);
@@ -51,18 +56,18 @@ private JSONArray jsonArray = new JSONArray();
             gps.showSettingsAlert();
         }
         final AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
+        client.get("http://10.241.68.68:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
                         "&prefDistance="+prefDistance+"&category="+category,
                 new JsonHttpResponseHandler() {
 
-
+/**http://10.241.68.68:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
+ "&prefDistance="+prefDistance+"&category="+category*/
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
 
-                jsonArray = response;
-                Log.v("response", response.toString());
-
+                if(callback!=null)
+                    callback.onResponse(response);
 
 
             }

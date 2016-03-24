@@ -3,13 +3,13 @@ import android.app.Activity;
 
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,12 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.emad.gooddeals.http.Sender;
+import com.emad.gooddeals.registration.Login;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.RoundingMode;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,7 +55,8 @@ public class TakePhoto extends Activity implements
     GPSTracker gps;
     Button btnDatePicker;
     TextView txtDate;
-    private SharedPreferences prefs;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+
     private int mYear, mMonth, mDay;
 
 
@@ -152,7 +153,7 @@ public class TakePhoto extends Activity implements
             dateFin= df.parse(date);
 
             txtDate.setText(date);
-            offerName.setText(dateFin.toString());
+
             jsonObject.put("datefin", date);
 
 
@@ -164,9 +165,25 @@ public class TakePhoto extends Activity implements
                 startActivity(intent);
             }
 */
+            SharedPreferences sp= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
-            Sender send = new Sender();
-            send.send(jsonObject);
+
+                String email = sp.getString("email", "Empty");
+
+                String pass = sp.getString("pass", "Empty");
+            if(!email.equalsIgnoreCase("Empty") && !pass.equalsIgnoreCase("Empty")){
+                Sender send = new Sender();
+                send.send(jsonObject, email, pass);
+                Toast.makeText(this, "Your offer has been sent",
+                        Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+            else{
+                Intent i = new Intent(this,Login.class);
+                startActivity(i);
+            }
+
 
 
         } catch (JSONException e1) {
@@ -201,7 +218,7 @@ public class TakePhoto extends Activity implements
                         mYear=year;
                         mMonth=monthOfYear;
                         mDay=dayOfMonth;
-                        offerDisc.setText(mMonth+"/"+mDay+"/"+mYear);
+
                     }
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();

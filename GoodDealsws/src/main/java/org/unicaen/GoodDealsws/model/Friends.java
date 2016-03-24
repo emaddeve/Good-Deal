@@ -2,19 +2,19 @@ package org.unicaen.GoodDealsws.model;
 
 public class Friends {
 	
-	String email;
-	public String getEmail() {
-		return email;
+	String token;
+	public String getToken() {
+		return token;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	public Friends(){}
 	
-	public Friends(String email){
-		this.email=email;
+	public Friends(String token){
+		this.token=token;
 		
 	}
 	

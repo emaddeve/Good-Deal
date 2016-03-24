@@ -1,23 +1,28 @@
-package com.emad.gooddeals;
+package com.emad.gooddeals.registration;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.serialization.SoapObject;
-import com.facebook.AccessToken;
+
+import android.widget.Toast;
+
+import com.emad.gooddeals.Callback;
+import com.emad.gooddeals.MainActivity;
+import com.emad.gooddeals.R;
+import com.emad.gooddeals.http.Sender;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -28,6 +33,7 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -43,11 +49,19 @@ public class Login extends AppCompatActivity {
     private EditText editPassword;
     private Button submit;
     private TextView register;
-
+    private Sender sender;
+     String username;
+     String password;
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+    public static final String MyPREFERENCES = "MyPrefs" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         facebookSDKInitialize();
+        sp= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        sender = new Sender();
         setContentView(R.layout.activity_login);
         editUsername = (EditText) findViewById(R.id.input_username);
         editPassword = (EditText) findViewById(R.id.input_password);
@@ -94,20 +108,22 @@ public class Login extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String username = editUsername.getText().toString();
-        String password = editPassword.getText().toString();
+      username = editUsername.getText().toString();
+        password = editPassword.getText().toString();
 
         // TODO: Implement your own authentication logic here.
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        sender.login(username, password, new Callback<Integer>() {
+            @Override
+            public void onResponse(Integer integer) {
+                if (integer == 200)
+                    onLoginSuccess();
+                else
+                    onLoginFailed();
+            }
+
+
+        });
     }
 
     @Override
@@ -121,9 +137,15 @@ public class Login extends AppCompatActivity {
      *Methode dans laquelle on va definir les instructions a faire pendant que le progress dialog est entrain de charger.
      * */
     public void onLoginSuccess() {
+
+        Log.v("sharedpref",""+username+": "+password);
+        editor.putString("email", username);
+        editor.putString("pass",password);
+        editor.commit();
         submit.setEnabled(true);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
+
     }
 
     public void onLoginFailed() {
@@ -180,16 +202,42 @@ public class Login extends AppCompatActivity {
                         HttpMethod.GET,
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
-                                Intent intent = new Intent(Login.this, FriendsList.class);
+                               final Intent intent1 = new Intent(Login.this, MainActivity.class);
+                                final Intent intent2 = new Intent(Login.this, SignUPActivity.class);
                                 try {
+
+                                    Log.v("friends", response.toString());
                                     JSONArray rawName = response.getJSONObject().getJSONArray("data");
-                                    intent.putExtra("jsondata", rawName.toString());
-                                    startActivity(intent);
+                                    Log.v("dataidfac", rawName.toString());
+                                    editor.putString("FriendList", rawName.toString());
+                                    String token = Profile.getCurrentProfile().getId();
+                                    sender.loginFacebook(token, new Callback<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject jsonObject) {
+                                            String email, password;
+
+                                            try {
+                                                if (jsonObject.getString("email") != null && jsonObject.getString("password") != null) {
+                                                    email = jsonObject.getString("email");
+                                                    password = jsonObject.getString("password");
+                                                    setpreference(email, password);
+                                                    startActivity(intent1);
+                                                } else
+                                                    startActivity(intent2);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+
+                                    });
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
                         }).executeAsync();
+                LoginManager.getInstance().logOut();
 
             }
 
@@ -244,6 +292,14 @@ public class Login extends AppCompatActivity {
 
         // Logs 'app deactivate' App Event.
         AppEventsLogger.deactivateApp(this);
+    }
+    public void setpreference(String email,String password){
+        SharedPreferences sp= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        Log.v("sharedpref",""+email+": "+password);
+        editor.putString("email", email);
+        editor.putString("pass", password);
+        editor.commit();
     }
 
 

@@ -1,14 +1,16 @@
 package com.emad.gooddeals;
 
 import android.app.Activity;
-import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.emad.gooddeals.registration.SignUPActivity;
 
 /**
  * Created by stevo on 15/03/16.
@@ -16,8 +18,20 @@ import android.widget.Toast;
 public class HomeScreenActivity extends Activity {
     Button btnSignUp;
     TextView link;
+    public static final String MyPREFERENCES = "MyPrefs";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sp= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+
+        String email = sp.getString("email", "Empty");
+
+        String pass = sp.getString("pass", "Empty");
+        Toast.makeText(this," "+email+" "+pass,Toast.LENGTH_LONG).show();
+       /** if(!email.equalsIgnoreCase("Empty") && !pass.equalsIgnoreCase("Empty")){
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen);
         btnSignUp = (Button) findViewById(R.id.buttonSignUP);

@@ -43,10 +43,15 @@ public class Offres {
     //GETTERS et SETTERS
 
     public int getId() throws JSONException {
+        if (jsonObject==null){
+            return id;
+        }
+        else{
         try {
             id = jsonObject.getInt("id");
         } catch (JSONException e) {
             e.printStackTrace();
+        }
         }
         return id;
     }
@@ -56,10 +61,16 @@ public class Offres {
     }
 
     public String getTitre() {
+        if (jsonObject==null){
+            return titre;
+        }
+        else{
         try {
-            titre = jsonObject.getString("name");
+                titre = jsonObject.getString("name");
+
         } catch (JSONException e) {
             e.printStackTrace();
+        }
         }
         return titre;
     }
@@ -69,11 +80,15 @@ public class Offres {
     }
 
     public Bitmap getBipmapImage() {
+        if (jsonObject==null){
+            return bitmapImage;
+        }else{
         try {
-            bitmapImage = imageToJson.getBitmapFromString(jsonObject.getString("image"));
+            bitmapImage = imageToJson.getBitmapFromString(jsonObject.getString("imageString"));
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
         }
         return bitmapImage;
     }
@@ -83,11 +98,15 @@ public class Offres {
     }
 
     public String getDescription() {
-
+        if (jsonObject==null){
+            return description;
+        }
+        else{
        try {
             description = jsonObject.getString("description");
         } catch (JSONException e) {
             e.printStackTrace();
+        }
         }
         return description;
     }
@@ -97,11 +116,15 @@ public class Offres {
     }
 
     public String getCategorie() {
-
+        if (jsonObject==null){
+            return categorie;
+        }
+        else{
         try {
             categorie = jsonObject.getString("category");
         } catch (JSONException e) {
             e.printStackTrace();
+        }
         }
         return categorie;
     }
@@ -111,11 +134,15 @@ public class Offres {
     }
 
     public Date getDateFin() {
-
+        if (jsonObject==null){
+            return dateFin;
+        }
+        else{
         try {
-            dateFin = OffresDao.LongToDate(jsonObject.getLong("datefin"));
+            dateFin = OffresDao.convertStringToDate(jsonObject.getString("datefin"));
         } catch (JSONException e) {
             e.printStackTrace();
+        }
         }
         return dateFin;
     }
@@ -125,10 +152,15 @@ public class Offres {
     }
 
     public String getMagasin() {
+        if (jsonObject==null){
+            return magasin;
+        }
+        else{
         try {
             magasin = jsonObject.getString("magasin");
         } catch (JSONException e) {
             e.printStackTrace();
+        }
         }
         return titre;
     }
@@ -144,29 +176,6 @@ public class Offres {
                 " a ete prise dans le magasin: " + magasin  +
                 " et s'acheve le " + dateFin;
     }
-
-/**    public static byte[] drawableToByteArray(Drawable d) {
-
- if (d != null) {
- Bitmap imageBitmap = ((BitmapDrawable) d).getBitmap();
- ByteArrayOutputStream baos = new ByteArrayOutputStream();
- imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
- byte[] byteData = baos.toByteArray();
-
- return byteData;
- } else
- return null;
-
- }
-
-
- public static Drawable byteToDrawable(byte[] data) {
-
- if (data == null)
- return null;
- else
- return new BitmapDrawable(BitmapFactory.decodeByteArray(data, 0, data.length));
- }*/
 }
 
 

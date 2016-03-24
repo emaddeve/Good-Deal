@@ -6,8 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -42,15 +46,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import data.stevo.SQlite.GoodDealHelper;
 import data.stevo.SQlite.Offres;
+import data.stevo.SQlite.OffresDao;
 
 import com.facebook.FacebookSdk;
 
+/**
+ * Created by emad on 23/02/16.
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static final String MyPREFERENCES = "MyPrefs";
+    private static final int CAMERA_REQUEST = 1888;
+    public ListView listView;
     GPSTracker gps;
     JSONObject jsonObject = new JSONObject();
     String encodedImage;
@@ -64,19 +79,24 @@ public class MainActivity extends AppCompatActivity
     Point p1;
     String s = "name of offer";
     String s2 = "descritpi about ;thies";
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+    CustomAdapter adapter;
+    private SQLiteDatabase database;
+    private GoodDealHelper goodDealHelperHelper;
     private Bitmap photo;
     private Context context;
     private ImageToJson imageToJson;
     private JSONArray jsonArray;
     private Receiver receiver;
-    private static final int CAMERA_REQUEST = 1888;
-    public ListView listView;
+    private SwipeRefreshLayout swipeContainer;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client2;
-
+    OffresDao offreDao2 = new OffresDao(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,12 +107,12 @@ public class MainActivity extends AppCompatActivity
          *
          * */
         listView = (ListView) findViewById(R.id.listviewperso);
-        String[] titre = new String[]{" Titre1", "Titre2",
-                "Titre3"};
-        p1 = new Point();
-        imageToJson = new ImageToJson();
+
+
+        sp = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        editor = sp.edit();
+
         jsonArray = new JSONArray();
-      //  receiver = new Receiver();
         imageToJson = new ImageToJson();
         /**
          * initialisation des valeurs par defaut de nos preferences lors de la premiere arriver sur cette activite
@@ -101,75 +121,47 @@ public class MainActivity extends AppCompatActivity
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //test preference
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
         int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
         String categorytypeValue = SP.getString("categorytype", "toutes");
         Boolean activeVue = SP.getBoolean("offre_ami", false);
         Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue
-                +"display offer to my friend "+activeVue,
+                        + "display offer to my friend " + activeVue,
                 Toast.LENGTH_LONG).show();
-        ArrayList<Offres> myList = new ArrayList<Offres>();
         jsonArray = new JSONArray();
-        //receiver = new Receiver();
-        imageToJson = new ImageToJson();
         int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
-        String category = SP.getString("categorytype", "all");
-        double longitude=0;
-        double latitude=0;
-        gps = new GPSTracker(getApplicationContext());
+        String category = SP.getString("categorytype", "toutes");
 
-        // check if GPS enabled
-        if(gps.canGetLocation()){
-
-            latitude = gps.getLatitude();
-            longitude = gps.getLongitude();
-            Log.v("location"," "+longitude+": "+latitude+" : "+category+" : "+prefDistance);
-        }else{
-            // can't get location
-            // GPS or Network is not enabled
-            // Ask user to enable GPS/network in settings
-            gps.showSettingsAlert();
+        try {
+            offreDao2.openWrite();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        final AsyncHttpClient client = new AsyncHttpClient();
+        receiver = new Receiver(category, prefDistance, this);
+        /**
+         * Verification de la connexion a internet
+         */
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            showOffers();
+        } else {
+            //s'il ya pas de connexion alors on recupere les offres dans sqlite database et on les affiche
+            ArrayList<Offres> list =offreDao2.getAllOffres();
+            if(list.size()==0){
+                Toast.makeText(MainActivity.this, "Acune offre retourne", Toast.LENGTH_LONG).show();
+            }else{
+            Log.e("test",""+list);
+                adapter = new CustomAdapter(MainActivity.this, list);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(adapter);
 
-        client.get("http://10.0.2.2:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
-                        "&prefDistance="+prefDistance+"&category="+category,
-                new JsonHttpResponseHandler() {
-
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
-
-                jsonArray = response;
-                Log.v("response", response.toString());
-
-                ArrayList<Offres> myList = new ArrayList<>();
-                try {
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                        myList.add(new Offres(jsonObject));
-                        //  myList.add(new Offres(jsonObject.getString("name"), jsonObject.getString("imageString"), jsonObject.getString("description")));
-
-                    }
-
-                    Log.v("response", jsonArray.toString());
-                    CustomAdapter adapter = new CustomAdapter(MainActivity.this, myList);
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(adapter);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+            offreDao2.close();
+            Toast.makeText(MainActivity.this, "Reseau indisponible.Affichage des donnees de sqlite ", Toast.LENGTH_LONG).show();
             }
+        }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-            }
-        });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -281,12 +273,14 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.deconnexion) {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle("Closing Application")
-                    .setMessage("Are you sure you want to close this Application ?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                    {
+                    .setTitle("Log out")
+                    .setMessage("Are you sure you want to Log out ?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            editor.clear();
+                            editor.apply();
                             Intent intent = new Intent(MainActivity.this, HomeScreenActivity.class);
                             startActivity(intent);
                             finish();
@@ -343,23 +337,61 @@ public class MainActivity extends AppCompatActivity
         client2.disconnect();
     }
 
-    /**
-     * nous permet de savoir qui a installe notre application
-     */
+
     @Override
     public void onResume() {
         super.onResume();
         // Logs' install 'and' activate app App Events
         AppEventsLogger.activateApp(this);
     }
-    /**
-     * nous permet de savoir le temps que les users passent sur l'apllication.A voir dans le dashboard sur facebook developper
-     */
+
     @Override
     public void onPause() {
         super.onPause();
         AppEventsLogger.deactivateApp(this);
     }
-}
 
+
+    public void showOffers() {
+        try {
+            receiver.receiver(new Callback<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray jsonArray) {
+
+                    try {
+                        ArrayList<Offres>  myList=new ArrayList<Offres>();
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            myList.add(new Offres(jsonObject));
+                        }
+                        Log.e("response",""+myList);
+                        for (Offres offre :myList){
+                            if ( offreDao2.insertOffre(offre)!=-1){
+                                Toast.makeText(MainActivity.this,"Données sauvegardées dans sqlite avec succes",Toast.LENGTH_LONG).show();
+                            }
+                            else
+                                Toast.makeText(MainActivity.this,"Erreur!!!Données non sauvegardées dans sqlite.",Toast.LENGTH_LONG).show();
+                        }
+                        adapter = new CustomAdapter(MainActivity.this,myList );
+                        listView.setAdapter(adapter);
+                        listView.setOnItemClickListener(adapter);
+
+                        offreDao2.close();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+}
 

@@ -58,7 +58,7 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
         // au premier appel ConvertView est null, on inflate notre layout
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) context
-                    .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             convertView = mInflater.inflate(R.layout.affichageitem, parent, false);
 
@@ -84,7 +84,7 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
 
         // nous pouvons attribuer à nos vues les valeurs de l'élément de la liste
         mViewHolder.textViewTitre.setText(offre.getTitre());
-        mViewHolder.textViewDesc.setText(String.valueOf(offre.getDescription()));
+        mViewHolder.textViewDesc.setText(offre.getDescription());
         mViewHolder.imageView.setImageBitmap(offre.getBipmapImage());
 
         // nous retournos la vue de l'item demandé
@@ -107,6 +107,18 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
                 + this.myList.get(position), Toast.LENGTH_SHORT);
         toast.show();
 
+    }
+
+    // Clean all elements of the recycler
+    public void clear() {
+        myList.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items
+    public void addAll(ArrayList<Offres> List ) {
+        myList.addAll(List);
+        notifyDataSetChanged();
     }
 
 }
