@@ -45,7 +45,7 @@ public class GoodDealHelper extends SQLiteOpenHelper {
      * Commande sql pour la création de la base de données
      */
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_OFFRES + " ("
-            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_ID + " INTEGER PRIMARY KEY UNIQUE, "
             + COLUMN_TITRE + " TEXT, "
             + COLUMN_IMAGE + " TEXT, "
             + COLUMN_DESCRIPTIOM + " TEXT, "
@@ -63,7 +63,7 @@ public class GoodDealHelper extends SQLiteOpenHelper {
     /**
      * Constante representant la version de notre base de donnée
      */
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     /**
      * Constructeur prenant un context en parametre et permettant de creer notre base de donnée via le constructeur de la classe mere SQLiteOpenHelper
@@ -87,6 +87,10 @@ public class GoodDealHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(OFFRES_TABLE_DROP);
         onCreate(db);
+    }
+
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        onUpgrade(db, oldVersion, newVersion);
     }
 
 }

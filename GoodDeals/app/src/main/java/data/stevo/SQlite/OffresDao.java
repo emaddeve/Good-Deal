@@ -4,9 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.emad.gooddeals.ImageToJson;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.SQLException;
@@ -156,6 +158,11 @@ public class OffresDao {
         //Création d'un ContentValues
         ContentValues values = new ContentValues();
         //on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
+        try {
+            values.put(GoodDealHelper.COLUMN_ID, offre.getId());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         values.put(GoodDealHelper.COLUMN_TITRE, offre.getTitre());
         values.put(GoodDealHelper.COLUMN_IMAGE, imageToJson.getStringFromBitmap(offre.getBipmapImage()));
         values.put(GoodDealHelper.COLUMN_DESCRIPTIOM, offre.getDescription());

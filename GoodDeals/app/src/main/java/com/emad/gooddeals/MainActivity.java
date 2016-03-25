@@ -30,11 +30,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.emad.gooddeals.http.Receiver;
+import com.emad.gooddeals.registration.Login;
 import com.emad.gooddeals.settings.SettingsActivity;
+import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -73,12 +77,15 @@ public class MainActivity extends AppCompatActivity
     public static final String MyPREFERENCES = "MyPrefs";
     private static final int CAMERA_REQUEST = 8;
     SharedPreferences SP;
+    SharedPreferences sp;
     SharedPreferences.Editor editor;
+    SharedPreferences.Editor editor1;
     public ListView listView;
     CustomAdapter adapter;
     ArrayList<Offres> myList;
     private GoogleApiClient client2;
-    OffresDao offreDao2 = new OffresDao(this);
+    private TextView nameview;
+    private TextView emailview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,34 +95,25 @@ public class MainActivity extends AppCompatActivity
         listView = (ListView) findViewById(R.id.listviewperso);
         adapter = new CustomAdapter(this,myList,this);
         listView.setAdapter(adapter);
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
         swipeRefreshLayout.setOnRefreshListener(this);
-        SP = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        editor = SP.edit();
+
+
+
         /**
          * initialisation des valeurs par defaut de nos preferences lors de la premiere arriver sur cette activite
          *
          * */
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+      //  PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //test preference
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
-        String categorytypeValue = SP.getString("categorytype", "toutes");
-        Boolean activeVue = SP.getBoolean("offre_ami", false);
-        Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue
-                        + "display offer to my friend " + activeVue,
-                Toast.LENGTH_LONG).show();
-        int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
-        String category = SP.getString("categorytype", "toutes");
+       //  SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        SP= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+         editor = SP.edit();
+         sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        editor1 = sp.edit();
 
-        try {
-            offreDao2.openWrite();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        /**
-         * Verification de la connexion a internet
-         */
+
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
@@ -129,18 +127,25 @@ public class MainActivity extends AppCompatActivity
             );
         } else {
             //s'il ya pas de connexion alors on recupere les offres dans sqlite database et on les affiche
-             myList =offreDao2.getAllOffres();
-            if(myList.size()==0){
+            OffresDao offreDao2 = new OffresDao(this);
+            try {
+                offreDao2.openWrite();
+                swipeRefreshLayout.setRefreshing(false);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+             ArrayList<Offres>list =offreDao2.getAllOffres();
+            Log.e("test", "" + list.size());
+            if(list.size()==0){
                 Toast.makeText(MainActivity.this, "Acune offre retourne", Toast.LENGTH_LONG).show();
             }else{
-               adapter.notifyDataSetChanged();
-               // listView.setOnItemClickListener(adapter);
-
-            offreDao2.close();
+               adapter=new CustomAdapter(this,list,this);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(adapter);
             Toast.makeText(MainActivity.this, "Reseau indisponible.Affichage des donnees de sqlite ", Toast.LENGTH_LONG).show();
             }
+            offreDao2.close();
         }
-         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -166,6 +171,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
         client2 = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
@@ -242,9 +248,9 @@ public class MainActivity extends AppCompatActivity
             Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(settings);
         }
-        if (id == R.id.send_offer) {
-            //Intent settings = new Intent(getApplicationContext(), SettingsActivity.class);
-            //startActivity(settings);
+        if (id == R.id.Login) {
+            Intent i = new Intent(getApplicationContext(), Login.class);
+            startActivity(i);
         }
         if (id == R.id.deconnexion) {
             new AlertDialog.Builder(this)
@@ -255,8 +261,12 @@ public class MainActivity extends AppCompatActivity
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            editor.clear();
+                            editor.remove("email");
+                            editor.remove("pass");
                             editor.apply();
+                            editor1.clear();
+                            editor1.apply();
+                            LoginManager.getInstance().logOut();
                             Intent intent = new Intent(MainActivity.this, HomeScreenActivity.class);
                             startActivity(intent);
                             finish();
@@ -335,45 +345,86 @@ public class MainActivity extends AppCompatActivity
 
 
     private void fetch() {
-        int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
-        String category = SP.getString("categorytype", "toutes");
+        int prefDistance = sp.getInt("SEEKBAR_VALUE", 0);
 
+        String category = sp.getString("categorytype", "All");
+        String list = SP.getString("friendslist","Empty");
+        boolean b = sp.getBoolean("offre_ami", false);
         receiver = new Receiver(category, prefDistance, this,this);
-        swipeRefreshLayout.setRefreshing(true);
 
-        try {
-            receiver.receiver(new Callback<JSONArray>() {
+        if(b==true&& !list.equalsIgnoreCase("Empty")){
+
+
+            receiver.friendsReceiver(list, new Callback<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray jsonArray) {
-                    myList.clear();
-                    try {
-                        ArrayList<Offres>  myList=new ArrayList<Offres>();
 
+                    try {
+                        myList.clear();
                         for (int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            myList.add(new Offres(jsonObject));
-                        }
-                        Log.e("response", "" + myList);
-                        for (Offres offre :myList){
-                            if ( offreDao2.insertOffre(offre)!=-1){
-                                Toast.makeText(MainActivity.this,"Données sauvegardées dans sqlite avec succes",Toast.LENGTH_LONG).show();
+                            for (int j = 0; j < jsonObject.length(); j++) {
+                                JSONArray ja = jsonObject.getJSONArray("offers");
+                                for (int a = 0; a < ja.length(); a++) {
+                                    JSONObject jsonObject1 = ja.getJSONObject(a);
+                                    myList.add(new Offres(jsonObject1));
+                                }
+
                             }
-                            else
-                                Toast.makeText(MainActivity.this,"Erreur!!!Données non sauvegardées dans sqlite.",Toast.LENGTH_LONG).show();
+
                         }
+
+
+
                         adapter.notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
-                        offreDao2.close();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
-
             });
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        }else {
+
+
+            swipeRefreshLayout.setRefreshing(true);
+            try {
+                receiver.receiver(new Callback<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+                        myList.clear();
+                        try {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                myList.add(new Offres(jsonObject));
+                            }
+                            Log.e("response", "" + myList);
+                            OffresDao offreDao2 = new OffresDao(MainActivity.this);
+                            try {
+                                offreDao2.openWrite();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                            for (Offres offre : myList) {
+                                if (offre.getDateFin() != null) {
+                                    offreDao2.insertOffre(offre);
+
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
+                            offreDao2.close();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
 

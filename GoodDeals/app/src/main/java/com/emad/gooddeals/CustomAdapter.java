@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.graphics.Color;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import data.stevo.SQlite.Offres;
@@ -94,8 +95,11 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
         mViewHolder.textViewTitre.setText(offre.getTitre());
         mViewHolder.textViewDesc.setText(offre.getDescription());
         mViewHolder.imageView.setImageBitmap(offre.getBipmapImage());
-      //  mViewHolder.textViewDate.setText(offre.getDateFin().toString());
+        SimpleDateFormat sd = new SimpleDateFormat();
 
+        if(offre.getDateFin()!=null) {
+            mViewHolder.textViewDate.setText(offre.getDateFin().toString());
+        }
         // nous retournos la vue de l'item demandé
         String color = bgColors[position % bgColors.length];
         mViewHolder.textViewDesc.setBackgroundColor(Color.parseColor(color));

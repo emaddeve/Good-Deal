@@ -36,8 +36,10 @@ public class ClientsResources {
 	@Path("/add")
 	public Response addClient(Clients client) {
 
-		clientsService.signup(client);
+		if(clientsService.signup(client))
 		return Response.status(Status.CREATED).build();
+		else
+			return Response.status(400).build();
 
 	}
 	@GET

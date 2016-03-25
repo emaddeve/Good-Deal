@@ -77,10 +77,13 @@ public class ClientsService {
 	 *            the client to be registered in the DB
 	 * @return the id of the client in DB
 	 */
-	public int signup(Clients client) {
+	public boolean signup(Clients client) {
 		Session session = createSessionFactory().openSession();
 		int id = 0;
 		Transaction tx = null;
+		if(exist(client.getEmail())){
+			return false;
+		}else{
 		try {
 			tx = session.beginTransaction();
 			id = (Integer) session.save(client);
@@ -94,7 +97,8 @@ public class ClientsService {
 		} finally {
 			session.close();
 		}
-		return id;
+		}
+		return true;
 	}
 
 	/**
@@ -179,5 +183,28 @@ public class ClientsService {
 			session.close();
 		}
 		return info;
+	}
+	
+	public boolean exist(String email){
+		Session session = createSessionFactory().openSession();
+		List<Clients> list = null;
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+
+			list = (List<Clients>) session.createQuery("FROM Clients").list();
+			for(Clients c : list){
+				if( c.getEmail().equalsIgnoreCase(email))
+				return true;
+			}
+
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return false;
 	}
 }

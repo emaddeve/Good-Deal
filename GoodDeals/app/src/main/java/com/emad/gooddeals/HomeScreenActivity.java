@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.emad.gooddeals.registration.SignUPActivity;
 public class HomeScreenActivity extends Activity {
     Button btnSignUp;
     TextView link;
+    SharedPreferences SP;
     public static final String MyPREFERENCES = "MyPrefs";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +30,10 @@ public class HomeScreenActivity extends Activity {
 
         String pass = sp.getString("pass", "Empty");
         Toast.makeText(this," "+email+" "+pass,Toast.LENGTH_LONG).show();
-       /** if(!email.equalsIgnoreCase("Empty") && !pass.equalsIgnoreCase("Empty")){
+        if(!email.equalsIgnoreCase("Empty") && !pass.equalsIgnoreCase("Empty")){
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
-        }*/
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen);
         btnSignUp = (Button) findViewById(R.id.buttonSignUP);
@@ -51,6 +53,7 @@ public class HomeScreenActivity extends Activity {
 
                 Intent intentSignIN = new Intent(getApplicationContext(),
                         MainActivity.class);
+
                 startActivity(intentSignIN);
             }
         });

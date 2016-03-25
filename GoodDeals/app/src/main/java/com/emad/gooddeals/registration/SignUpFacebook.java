@@ -24,8 +24,11 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by stevo on 21/03/16.
@@ -45,7 +48,7 @@ public class SignUpFacebook extends AppCompatActivity {
     String password;
     ProgressDialog progressDialog;
     private GoogleApiClient client;
-
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +57,7 @@ public class SignUpFacebook extends AppCompatActivity {
         editTextPassword2 = (EditText) findViewById(R.id.editTextPassword2);
         editTextConfirmPassword2 = (EditText) findViewById(R.id.editTextConfirmPassword2);
         createAccount = (Button) findViewById(R.id.createAccount);
-        result= (TextView) findViewById(R.id.textViewResult);
+        result = (TextView) findViewById(R.id.textViewResult);
         result.setVisibility(View.GONE);
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,19 +69,22 @@ public class SignUpFacebook extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+         intent = getIntent();
     }
 
     public void signup() {
        /* Log.d(TAG, "Signupfacebook"); */
 
         if (!validate()) {
-            onSignupFailed();
+            onSignupFailed("wrong entry");
             return;
         }
         Intent intent = getIntent();
-        final String jsondata = intent.getStringExtra("jsondata");
+        final String jsondatauser = intent.getStringExtra("jsondatauser");
+        final String jsondatafriend = intent.getStringExtra("jsondatafriend");
         FacebookSdk.sdkInitialize(getApplicationContext());
         JSONObject infoUser;
+        JSONArray infoFriend;
         createAccount.setEnabled(false);
 
           progressDialog = new ProgressDialog(SignUpFacebook.this,
@@ -87,12 +93,16 @@ public class SignUpFacebook extends AppCompatActivity {
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
         try {
-            infoUser = new JSONObject(jsondata);
+            infoUser = new JSONObject(jsondatauser);
+            infoFriend = new JSONArray(jsondatafriend);
             String firstName = infoUser.getString("first_name");
             String lastName = infoUser.getString("last_name");
              email = infoUser.getString("email");
             String token = infoUser.getString("id");
-             password = editTextPassword2.getText().toString();
+
+            Log.v("test",infoFriend.toString());
+
+            password = editTextPassword2.getText().toString();
             String passwordConfirm = editTextConfirmPassword2.getText().toString();
             final JSONObject jsonObject = new JSONObject();
             jsonObject.put("lastName",lastName);
@@ -109,8 +119,10 @@ public class SignUpFacebook extends AppCompatActivity {
                     progressDialog.dismiss();
                     if (integer == 201)
                         onSignupSuccess();
+                    else if (integer==400)
+                        onSignupFailed("email already exist");
                     else
-                        onSignupFailed();
+                        onSignupFailed("somthing went wrong");
                 }
 
 
@@ -131,10 +143,26 @@ public class SignUpFacebook extends AppCompatActivity {
         //startActivity(intent);
         SharedPreferences sp= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        Log.v("sharedpref",""+email+": "+password);
+        final String jsondatafriend = intent.getStringExtra("jsondatafriend");
+        JSONArray infoFriend;
+        ArrayList<String> friends= new ArrayList<>();
+        try {
+            infoFriend = new JSONArray(jsondatafriend);
+            for(int i =0; i<infoFriend.length();i++){
+                JSONObject json = infoFriend.getJSONObject(i);
+                friends.add(json.getString("id"));
+            }
+            Log.v("test", infoFriend.toString());
+
+
+        Log.v("sharedpref", "" + email + ": " + password);
         editor.putString("email", email);
-        editor.putString("pass",password);
+        editor.putString("pass", password);
+        editor.putString("friendslist",friends.toString());
         editor.commit();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         result.setVisibility(View.VISIBLE);
         result.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,8 +175,8 @@ public class SignUpFacebook extends AppCompatActivity {
         Toast.makeText(this, " Account successfully created.!", Toast.LENGTH_LONG).show();
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Register failed", Toast.LENGTH_LONG).show();
+    public void onSignupFailed(String message) {
+        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
 
         createAccount.setEnabled(true);
     }

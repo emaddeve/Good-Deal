@@ -53,7 +53,7 @@ public class OffersResources {
 			@QueryParam("prefDistance") double prefDistance, @NotNull @QueryParam("longitude") double longitude
 			, @QueryParam("latitude") double latitude) {
 
-		if (category != null && !category.equalsIgnoreCase("toutes")) {
+		if (category != null && !category.equalsIgnoreCase("All")) {
 			if (prefDistance > 0)
 				return offerService.getOffersCD(prefDistance, longitude, latitude, category);
 			return offerService.getOfferByCategory(category);
@@ -75,7 +75,7 @@ public class OffersResources {
 	
 	@POST
 	@Path("/friends")
-	public List<FriendsOffers> getFriendsOffers(ArrayList<Friends> f) {
+	public List<FriendsOffers> getFriendsOffers(ArrayList<String> f) {
 
 		return offerService.getface(f);
 	}

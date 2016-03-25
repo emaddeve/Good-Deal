@@ -13,7 +13,7 @@ import java.util.Date;
  * Created by stevo on 02/03/16.
  * Classe representant une offre
  */
-public class Offres {
+public class Offres  {
     private int id;
     private String titre;
     private Bitmap bitmapImage;
@@ -23,6 +23,7 @@ public class Offres {
     private Date dateFin;
     private JSONObject jsonObject;
     private ImageToJson imageToJson=new ImageToJson();
+    private  String userName;
 
     public Offres(JSONObject jsonObject) {
         this.jsonObject = jsonObject;
@@ -39,14 +40,14 @@ public class Offres {
         this.description = description;
         this.dateFin=date;
 
+
     }
 
     //GETTERS et SETTERS
 
     public int getId() throws JSONException {
         if (jsonObject==null){
-            return id
-                    ;
+            return id;
         }
         else{
         try {
