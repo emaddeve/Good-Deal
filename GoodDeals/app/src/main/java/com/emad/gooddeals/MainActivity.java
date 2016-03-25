@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity
     CustomAdapter adapter;
     ArrayList<Offres> myList;
     private GoogleApiClient client2;
-    OffresDao offreDao2 = new OffresDao(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,14 +112,6 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue
                         + "display offer to my friend " + activeVue,
                 Toast.LENGTH_LONG).show();
-        int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
-        String category = SP.getString("categorytype", "toutes");
-
-        try {
-            offreDao2.openWrite();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         /**
          * Verification de la connexion a internet
          */
@@ -137,18 +128,25 @@ public class MainActivity extends AppCompatActivity
             );
         } else {
             //s'il ya pas de connexion alors on recupere les offres dans sqlite database et on les affiche
-             myList =offreDao2.getAllOffres();
-            if(myList.size()==0){
+            OffresDao offreDao2 = new OffresDao(this);
+            try {
+                offreDao2.openWrite();
+                swipeRefreshLayout.setRefreshing(false);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+             ArrayList<Offres>list =offreDao2.getAllOffres();
+            Log.e("test", "" + list.size());
+            if(list.size()==0){
                 Toast.makeText(MainActivity.this, "Acune offre retourne", Toast.LENGTH_LONG).show();
             }else{
-               adapter.notifyDataSetChanged();
-               // listView.setOnItemClickListener(adapter);
-
-            offreDao2.close();
+               adapter=new CustomAdapter(this,list,this);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(adapter);
             Toast.makeText(MainActivity.this, "Reseau indisponible.Affichage des donnees de sqlite ", Toast.LENGTH_LONG).show();
             }
+            offreDao2.close();
         }
-         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -344,27 +342,31 @@ public class MainActivity extends AppCompatActivity
 
     private void fetch() {
         int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
-        String category = SP.getString("categorytype", "all");
+        String category = SP.getString("categorytype", "toutes");
 
         receiver = new Receiver(category, prefDistance, this,this);
         swipeRefreshLayout.setRefreshing(true);
-
         try {
             receiver.receiver(new Callback<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray jsonArray) {
                     myList.clear();
                     try {
-                        ArrayList<Offres>  myList=new ArrayList<Offres>();
-
                         for (int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             myList.add(new Offres(jsonObject));
                         }
                         Log.e("response", "" + myList);
+                        OffresDao offreDao2 = new OffresDao(MainActivity.this);
+                        try {
+                            offreDao2.openWrite();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                         for (Offres offre :myList){
                             if ( offreDao2.insertOffre(offre)!=-1){
+
                                 Toast.makeText(MainActivity.this,"Données sauvegardées dans sqlite avec succes",Toast.LENGTH_LONG).show();
                             }
                             else

@@ -16,18 +16,21 @@ import com.emad.gooddeals.Callback;
 import com.emad.gooddeals.MainActivity;
 import com.emad.gooddeals.R;
 import com.emad.gooddeals.http.Sender;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphRequestAsyncTask;
+import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,7 +49,10 @@ public class SignUPActivity extends Activity {
     JSONObject jsonObject;
     String email;
     String password;
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
     ProgressDialog progressDialog;
+    Intent intent;
     public static final String MyPREFERENCES = "MyPrefs" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,8 @@ public class SignUPActivity extends Activity {
        // LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
         setContentView(R.layout.activity_signup);
         jsonObject= new JSONObject();
+        sp= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        editor = sp.edit();
         sender = new Sender();
         editTextUserName = (EditText) findViewById(R.id.editTextUserName);
         editFirstName = (EditText) findViewById(R.id.editFirstName);
@@ -212,7 +220,8 @@ public class SignUPActivity extends Activity {
      */
     protected void getProfilDetail() {
         // Callback registration
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends","email"));
+        intent= new Intent(this, SignUpFacebook.class);
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends", "email"));
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     /**
@@ -223,26 +232,51 @@ public class SignUPActivity extends Activity {
                      * */
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        //startActivity(intent);
+
                         Bundle parameters = new Bundle();
                         parameters.putString("fields", "email,first_name,last_name");
-                        GraphRequestAsyncTask graphRequestAsyncTask = new GraphRequest(
+                        GraphRequestBatch batch = new GraphRequestBatch(
+                         new GraphRequest(
                                 loginResult.getAccessToken(),
                                 "/me",
                                 parameters,
                                 HttpMethod.GET,
                                 new GraphRequest.Callback() {
                                     public void onCompleted(GraphResponse response) {
-                                        Intent intent = new Intent(SignUPActivity.this, SignUpFacebook.class);
-                                            String infoUser = response.getJSONObject().toString();
-                                            intent.putExtra("jsondata", infoUser);
-                                            startActivity(intent);
-                                            /**editTextUserName.setText( response.getJSONObject().getString("email"));
-                                            editFirstName.setText( response.getJSONObject().getString("first_name"));
-                                            editLastName.setText( response.getJSONObject().getString("last_name"));*/
+                                        Log.i("objetfri",
+                                                response.toString());
+
+                                        String infoUser = response.getJSONObject().toString();
+                                        intent.putExtra("jsondatauser",infoUser);
                                     }
-                                }).executeAsync();
+                                }),
+                                new GraphRequest(
+                                        loginResult.getAccessToken(),
+                                        "/me/friends",
+                                        parameters,
+                                        HttpMethod.GET,
+                                        new GraphRequest.Callback() {
+                                            public void onCompleted(GraphResponse response) {
+                                                JSONArray rawName = null;
+                                                try {
+                                                    rawName = response.getJSONObject().getJSONArray("data");
+                                                    intent.putExtra("jsondatafriend",rawName.toString());
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                Log.v("dataidfac",response.toString());
+
+                                            }
+                                        })
+                        );
+                        batch.addCallback(new GraphRequestBatch.Callback() {
+                            @Override
+                            public void onBatchCompleted(GraphRequestBatch graphRequests) {
+                                startActivity(intent);
+                            }
+                        });
+                        batch.executeAsync();
+
                         LoginManager.getInstance().logOut();
                     }
 
@@ -256,6 +290,8 @@ public class SignUPActivity extends Activity {
                         //  code to handle error
                     }
                 });
+
+
     }
 
     @Override

@@ -148,9 +148,9 @@ public class Sender  {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
-
+                            String s=new String(responseBody);
                             if (callback != null) {
-                                callback.onResponse(responseBody.toString());
+                                callback.onResponse(s);
 
                             }
 

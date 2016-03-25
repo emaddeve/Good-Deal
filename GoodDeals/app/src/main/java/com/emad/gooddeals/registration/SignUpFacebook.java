@@ -24,6 +24,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -66,6 +67,15 @@ public class SignUpFacebook extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        Intent intent = getIntent();
+        final String jsondatafriend = intent.getStringExtra("jsondatafriend");
+        JSONArray infoFriend;
+        try {
+            infoFriend = new JSONArray(jsondatafriend);
+            Log.v("test",infoFriend.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void signup() {
@@ -76,9 +86,11 @@ public class SignUpFacebook extends AppCompatActivity {
             return;
         }
         Intent intent = getIntent();
-        final String jsondata = intent.getStringExtra("jsondata");
+        final String jsondatauser = intent.getStringExtra("jsondatauser");
+        final String jsondatafriend = intent.getStringExtra("jsondatafriend");
         FacebookSdk.sdkInitialize(getApplicationContext());
         JSONObject infoUser;
+        JSONArray infoFriend;
         createAccount.setEnabled(false);
 
           progressDialog = new ProgressDialog(SignUpFacebook.this,
@@ -87,12 +99,15 @@ public class SignUpFacebook extends AppCompatActivity {
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
         try {
-            infoUser = new JSONObject(jsondata);
+            infoUser = new JSONObject(jsondatauser);
+            infoFriend = new JSONArray(jsondatafriend);
             String firstName = infoUser.getString("first_name");
             String lastName = infoUser.getString("last_name");
              email = infoUser.getString("email");
             String token = infoUser.getString("id");
-             password = editTextPassword2.getText().toString();
+            Log.v("test",infoFriend.toString());
+
+            password = editTextPassword2.getText().toString();
             String passwordConfirm = editTextConfirmPassword2.getText().toString();
             final JSONObject jsonObject = new JSONObject();
             jsonObject.put("lastName",lastName);
