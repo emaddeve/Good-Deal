@@ -1,4 +1,4 @@
-package com.emad.gooddeals;
+package com.emad.gooddeals.settings;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -6,11 +6,8 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+
+import com.emad.gooddeals.R;
 
 /**
  * Created by stevo on 12/03/16.

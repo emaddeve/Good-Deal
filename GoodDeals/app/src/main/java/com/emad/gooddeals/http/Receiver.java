@@ -65,8 +65,6 @@ private JSONArray jsonArray = new JSONArray();
                         "&prefDistance="+prefDistance+"&category="+category,
                 new JsonHttpResponseHandler() {
 
-/**http://10.241.68.68:8080/GoodDealsws/webapi/offers?longitude="+longitude+"&latitude="+latitude+
- "&prefDistance="+prefDistance+"&category="+category*/
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);

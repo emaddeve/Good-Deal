@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
@@ -31,16 +30,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.emad.gooddeals.http.Receiver;
+import com.emad.gooddeals.settings.SettingsActivity;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,14 +45,9 @@ import org.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
-import data.stevo.SQlite.GoodDealHelper;
 import data.stevo.SQlite.Offres;
 import data.stevo.SQlite.OffresDao;
-
-import com.facebook.FacebookSdk;
 
 /**
  * Created by emad on 23/02/16.
@@ -344,7 +336,7 @@ public class MainActivity extends AppCompatActivity
 
     private void fetch() {
         int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
-        String category = SP.getString("categorytype", "all");
+        String category = SP.getString("categorytype", "toutes");
 
         receiver = new Receiver(category, prefDistance, this,this);
         swipeRefreshLayout.setRefreshing(true);

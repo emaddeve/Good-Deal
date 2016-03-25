@@ -1,4 +1,4 @@
-package com.emad.gooddeals;
+package com.emad.gooddeals.settings;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;

@@ -118,6 +118,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 progressDialog.dismiss();
+                Log.v("auth",""+response);
                 if (response.equalsIgnoreCase("true")) {
                     onLoginSuccess();
                 } else {
@@ -230,6 +231,7 @@ public class Login extends AppCompatActivity {
                                                     password = jsonObject.getString("password");
                                                     setpreference(email, password);
                                                     startActivity(intent1);
+
                                                 } else
                                                     intent2.putExtra("lastName", response.getJSONObject().getString("last_name"));
                                                 intent2.putExtra("firstName",response.getJSONObject().getString("first_name"));

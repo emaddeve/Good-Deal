@@ -139,7 +139,7 @@ public class Sender  {
         try {
             StringEntity entity = new StringEntity("null");
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            client.setBasicAuth(name,pass);
+            client.setBasicAuth(name, pass);
 
             client.get(context, "http://10.0.2.2:8080/GoodDealsws/webapi/clients/verify", entity, "application/json",
                     new AsyncHttpResponseHandler() {
@@ -148,11 +148,14 @@ public class Sender  {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
+                                String respnse = new String(responseBody);
 
-                            if (callback != null) {
-                                callback.onResponse(responseBody.toString());
+                                if (callback != null) {
+                                    callback.onResponse(respnse);
 
-                            }
+                                }
+
+
 
 
                         }

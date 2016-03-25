@@ -2,26 +2,9 @@ package org.unicaen.GoodDealsws.service;
 
 import java.io.IOException;
 
-
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 
-import java.util.Locale;
-import javax.imageio.ImageIO;
-import javax.ws.rs.client.Client;
+import java.util.List;
 
 //import com.vividsolutions.jts.geom.Point;
 import org.hibernate.HibernateException;
@@ -38,7 +21,6 @@ import org.unicaen.GoodDealsws.model.Offers;
 import org.unicaen.GoodDealsws.model.Clients;
 import org.unicaen.GoodDealsws.model.Friends;
 import org.unicaen.GoodDealsws.model.FriendsOffers;
-import org.unicaen.GoodDealsws.model.Offers;
 
 /**
  * OffersService class determine all the method needed to make operation on the
@@ -269,11 +251,9 @@ public class OffersService {
 		}
 		return list;
 	}
-	
-	
 
 	public List<FriendsOffers> getface(ArrayList<Friends> friends) {
-		
+
 		List<FriendsOffers> friendsOffersList = new ArrayList<FriendsOffers>();
 		Session session = createSessionFactory().openSession();
 		Transaction tx = null;
@@ -282,23 +262,24 @@ public class OffersService {
 
 			List<Clients> clients = (List<Clients>) session.createQuery("From Clients").list();
 			for (Clients c : clients) {
-				for (Friends f : friends) {
-					if (c.getToken().equalsIgnoreCase(f.getToken())) {
-						
-						
-						Query query = session.createQuery("FROM Offers O WHERE O.userid = :userid ");
-						query.setParameter("userid", c.getId());
-						List<Offers> offers = query.list();
-						if(offers.size()>0){
-						FriendsOffers friendsoffers = new FriendsOffers();
-						friendsoffers.setName(c.getFirstName());
-						friendsoffers.setOffers(offers);
-						friendsOffersList.add(friendsoffers);
+				if (friends != null) {
+					for (Friends f : friends) {
+						if (c.getToken() != null) {
+							if (c.getToken().equalsIgnoreCase(f.getToken())) {
+
+								Query query = session.createQuery("FROM Offers O WHERE O.userid = :userid ");
+								query.setParameter("userid", c.getId());
+								List<Offers> offers = query.list();
+								if (offers.size() > 0) {
+									FriendsOffers friendsoffers = new FriendsOffers();
+									friendsoffers.setName(c.getFirstName());
+									friendsoffers.setOffers(offers);
+									friendsOffersList.add(friendsoffers);
+								}
+							}
 						}
 					}
-
 				}
-
 			}
 
 		} catch (HibernateException e) {
@@ -309,6 +290,7 @@ public class OffersService {
 		} finally {
 			session.close();
 		}
+
 		return friendsOffersList;
 	}
 

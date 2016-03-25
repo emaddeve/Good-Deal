@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 
 import javax.ws.rs.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.ServletRequest;
+
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
