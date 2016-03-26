@@ -97,8 +97,8 @@ public class MainActivity extends AppCompatActivity
         listView.setAdapter(adapter);
 
         swipeRefreshLayout.setOnRefreshListener(this);
-        SP = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        editor = SP.edit();
+       // SP = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        //editor = SP.edit();
         /**
          * initialisation des valeurs par defaut de nos preferences lors de la premiere arriver sur cette activite
          *
@@ -341,9 +341,9 @@ public class MainActivity extends AppCompatActivity
 
 
     private void fetch() {
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         int prefDistance = SP.getInt("SEEKBAR_VALUE", 50);
-        String category = SP.getString("categorytype", "toutes");
+        String category = SP.getString("categorytype", "All");
         Toast.makeText(this, "la categorie est " + category + " et la distance est de " + prefDistance,
                 Toast.LENGTH_LONG).show();
         receiver = new Receiver(category, prefDistance, this,this);
@@ -353,6 +353,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onResponse(JSONArray jsonArray) {
                     myList.clear();
+                    Log.e("test", "" + jsonArray);
                     try {
                         for (int i = 0; i < jsonArray.length(); i++) {
 

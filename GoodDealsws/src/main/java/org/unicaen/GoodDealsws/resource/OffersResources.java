@@ -53,17 +53,18 @@ public class OffersResources {
 			@QueryParam("prefDistance") double prefDistance, @NotNull @QueryParam("longitude") double longitude
 			, @QueryParam("latitude") double latitude) {
 
-		if (category != null && !category.equalsIgnoreCase("toutes")) {
+		if (category != null && !category.equalsIgnoreCase("All")) {
 			if (prefDistance > 0)
 				return offerService.getOffersCD(prefDistance, longitude, latitude, category);
 			return offerService.getOfferByCategory(category);
 		}
 
-		else if (prefDistance > 0) {
+		/**else if (prefDistance > 0) {
 			return offerService.getNearOffers(prefDistance, longitude, latitude);
+		}*/
+		else{
+			return offerService.getAllOffers();
 		}
-		else
-		return offerService.getAllOffers();
 	}
 
 	@GET
