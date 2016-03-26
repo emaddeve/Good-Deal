@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/stevo/.gradle/caches/modules-2/files-2.1/cz.msebera.android/httpclient/4.3.6/526a9f794eab830eae4f23a62c572878b3f491ab/httpclient-4.3.6.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="526a9f794eab830eae4f23a62c572878b3f491ab">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/httpclient-4.3.6_49f8d97c5eafe349cac8ef09ef2b63ab7254d17d.jar" />
+    </item>
+    <item
+        jar="/home/stevo/.gradle/caches/modules-2/files-2.1/net.sourceforge.kobjects/kobjects-j2me/0.0-SNAPSHOT-20040926-2/9246ca92b16c65114a7fb80b906801e06be95305/kobjects-j2me-0.0-SNAPSHOT-20040926-2.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="9246ca92b16c65114a7fb80b906801e06be95305">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/kobjects-j2me-0.0-SNAPSHOT-20040926-2_5c3e1adf1166eb1108e0e3a4a8be10a6c06f0d05.jar" />
+    </item>
+    <item
+        jar="/home/stevo/.gradle/caches/modules-2/files-2.1/com.google.code.ksoap2-android/ksoap2-j2se/3.3.0/3bbcf49f06570312e9014946e3f4065d002efad4/ksoap2-j2se-3.3.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="3bbcf49f06570312e9014946e3f4065d002efad4">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/ksoap2-j2se-3.3.0_55b3b50e7f4bcf4f85075896d842e8bc74376f8d.jar" />
+    </item>
+    <item
+        jar="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.1.1_a89adca3e4e2432fa2c13706936284032086cadc.jar" />
+    </item>
+    <item
+        jar="/home/stevo/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.3.0/8a62fd16fcc1c06f284fc98e6cbded2a5af1dd4c/bolts-tasks-1.3.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="8a62fd16fcc1c06f284fc98e6cbded2a5af1dd4c">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/bolts-tasks-1.3.0_ea4c69e31f583ada3424bf89d21cc089ec2f4950.jar" />
+    </item>
+    <item
+        jar="/home/stevo/.gradle/caches/modules-2/files-2.1/com.google.code.ksoap2-android/ksoap2-base/3.3.0/6c7e0691f5b602d7db0739c31c59ad74b88f9b2a/ksoap2-base-3.3.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="6c7e0691f5b602d7db0739c31c59ad74b88f9b2a">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/ksoap2-base-3.3.0_9a2c491c8bda4d0c76d3f2d9a36fe081deddb1a3.jar" />
+    </item>
+    <item
+        jar="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-23.1.1_91a0f9d847c4df29e4cbab6100d49957f8e92cc9.jar" />
+    </item>
+    <item
+        jar="/home/stevo/.gradle/caches/modules-2/files-2.1/com.loopj.android/android-async-http/1.4.9/386a4339ffe52d5d63e80f9bed8d2b1d1a418249/android-async-http-1.4.9.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="386a4339ffe52d5d63e80f9bed8d2b1d1a418249">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/android-async-http-1.4.9_f8f716d1a3ef52fde44367704e5f7aca2af4f92b.jar" />
+    </item>
+    <item
+        jar="/home/stevo/.gradle/caches/modules-2/files-2.1/org.xmlpull/xmlpull/1.1.3.3/9b62254da05ce6399a09164362da7b2419de63ca/xmlpull-1.1.3.3.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="9b62254da05ce6399a09164362da7b2419de63ca">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/xmlpull-1.1.3.3_1eec5565b5e48e24e4e25b2c30d26c709fbd60b5.jar" />
+    </item>
+    <item
+        jar="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="379471b2bd17d9737c050345c08e8c7d16589784">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/com.android.support-design-23.1.1_494708de2c8f8b806ea53dfdf4c0f83ed4546f82.jar" />
+    </item>
+    <item
+        jar="/home/stevo/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.2.0/support-annotations-23.2.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="c5bf571bb10462bd90e5419ade67793f71acbc87">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/support-annotations-23.2.0_17c330db90bc7df8cb8ce6124c751719b99ca48b.jar" />
+    </item>
+    <item
+        jar="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="8e673cdfadd8f2d98fdb2fda2285c30f6e449782">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-basement-8.4.0_daee2042f6580ad32a23d7ca3a3fa67b641d876b.jar" />
+    </item>
+    <item
+        jar="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="bc599eb9531da9d18bc58ec4eb0b1a1d895f6839">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/com.android.support-cardview-v7-23.2.0_06f1647a142dc4d893f80bb1aa93f1253dfd5d2d.jar" />
+    </item>
+    <item
+        jar="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="fef2b3e4b6b1b0e5fe7b69fa137a5fa55a3182ab">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-base-8.4.0_a6adb72f07b673d9288aa6d882d82954cdf728e6.jar" />
+    </item>
+    <item
+        jar="/home/stevo/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-applinks/1.3.0/bc535105332645408ef5f1380215cc954b842178/bolts-applinks-1.3.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="bc535105332645408ef5f1380215cc954b842178">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/bolts-applinks-1.3.0_39239e0f7d3c9b14869e9ac13da442087f2c8e64.jar" />
+    </item>
+    <item
+        jar="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="e5f32fa48a3eb2de0c987025c11b6e3864b634d9">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.2.0_78ddee7a0df081d2db881f54012f847898732653.jar" />
+    </item>
+    <item
+        jar="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="53df71a373e68311fc2c587aa814db7f366ace95">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/com.facebook.android-facebook-android-sdk-4.10.1_971714d2bef5b792fd169fa86723bb3373c6e303.jar" />
+    </item>
+    <item
+        jar="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.0/jars/libs/internal_impl-23.2.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="6e239441500605809818997dd63b62a947195f8c">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/internal_impl-23.2.0_53b49884f646ae322c3069cad600d6a7a31aebe8.jar" />
+    </item>
+    <item
+        jar="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/8.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="65d086ee9daaf87b5af62ad24471edafa433354c">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-appindexing-8.4.0_befad74838708d525805ae5e9f7bc14c3ed2436d.jar" />
+    </item>
+    <item
+        jar="/home/stevo/.gradle/caches/modules-2/files-2.1/net.sourceforge.kxml/kxml/2.2.4/1642506e490548d96984b8370e44257c156097f7/kxml-2.2.4.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="1642506e490548d96984b8370e44257c156097f7">
+        <dex dex="/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/pre-dexed/debug/kxml-2.2.4_97606420f62ca175c2d50951b7ba60ab51c3935f.jar" />
+    </item>
+
+</items>

@@ -1,0 +1,218 @@
+[
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/com_facebook_button_login_silver_background.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/com_facebook_button_login_silver_background.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/com_facebook_auth_dialog_background.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/com_facebook_auth_dialog_background.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/deconnexion.png",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/src/main/res/drawable/deconnexion.png"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/accueil.jpg",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/src/main/res/drawable/accueil.jpg"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/gd.jpg",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/src/main/res/drawable/gd.jpg"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_list_selector_background_transition_holo_dark.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/android.png",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/src/main/res/drawable/android.png"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/com_facebook_auth_dialog_cancel_background.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/com_facebook_auth_dialog_cancel_background.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/common_plus_signin_btn_icon_dark.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_plus_signin_btn_icon_dark.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/common_google_signin_btn_icon_light.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_google_signin_btn_icon_light.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_text_cursor_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_text_cursor_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_dialog_material_background_dark.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_dialog_material_background_dark.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/messenger_button_white_bg_selector.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/messenger_button_white_bg_selector.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_btn_default_mtrl_shape.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_btn_default_mtrl_shape.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/common_google_signin_btn_text_dark.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_google_signin_btn_text_dark.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_cab_background_top_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_cab_background_top_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_ratingbar_full_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_ratingbar_full_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_edit_text_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_edit_text_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_btn_check_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_btn_check_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/common_plus_signin_btn_text_light.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_plus_signin_btn_text_light.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_seekbar_thumb_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_seekbar_thumb_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_switch_thumb_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/signup.png",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/src/main/res/drawable/signup.png"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_item_background_holo_dark.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_item_background_holo_dark.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/common_plus_signin_btn_icon_light.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_plus_signin_btn_icon_light.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/com_facebook_button_icon.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/com_facebook_button_icon.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_btn_borderless_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_btn_borderless_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/messenger_button_white_bg_round.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/messenger_button_white_bg_round.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_tab_indicator_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_tab_indicator_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/com_facebook_auth_dialog_header_background.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/com_facebook_auth_dialog_header_background.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_list_selector_holo_light.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_list_selector_holo_light.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/com_facebook_button_send_background.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/com_facebook_button_send_background.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/common_google_signin_btn_text_light.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_google_signin_btn_text_light.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/com_facebook_button_like_background.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/com_facebook_button_like_background.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_btn_colored_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_item_background_holo_light.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_spinner_textfield_background_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_spinner_textfield_background_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_cab_background_internal_bg.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_cab_background_internal_bg.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/greybackground.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/src/main/res/drawable/greybackground.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/design_snackbar_background.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/res/drawable/design_snackbar_background.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_seekbar_track_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_seekbar_track_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_btn_radio_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_btn_radio_material.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_list_selector_holo_dark.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_dialog_material_background_light.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_dialog_material_background_light.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/common_google_signin_btn_icon_dark.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_google_signin_btn_icon_dark.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/com_facebook_button_background.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/com_facebook_button_background.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/messenger_button_blue_bg_selector.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/messenger_button_blue_bg_selector.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/side_nav_bar.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/src/main/res/drawable/side_nav_bar.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_list_selector_background_transition_holo_light.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_list_selector_background_transition_holo_light.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/design_fab_background.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/res/drawable/design_fab_background.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/messenger_button_blue_bg_round.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/messenger_button_blue_bg_round.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/common_plus_signin_btn_text_dark.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_plus_signin_btn_text_dark.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/com_facebook_send_button_icon.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.10.1/res/drawable/com_facebook_send_button_icon.xml"
+    },
+    {
+        "merged": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/res/merged/debug/drawable/abc_textfield_search_material.xml",
+        "source": "/home/stevo/Good-Deal/GoodDeals/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_textfield_search_material.xml"
+    }
+]
