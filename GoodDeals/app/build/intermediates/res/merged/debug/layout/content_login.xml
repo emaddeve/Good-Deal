@@ -107,18 +107,10 @@
                     android:text="|"
                     android:textStyle="bold"
                     />
-                <TextView
-                    android:id="@+id/forgot_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16dp"
-                    android:textColor="#000000"
-                    android:text="Forgot Password?"
-                    android:textStyle="bold"
 
-                    />
 
             </LinearLayout>
+
             <Button android:layout_width="190dp"
                 android:layout_height="38dp"
                 android:layout_gravity="center_horizontal"
@@ -129,15 +121,16 @@
                 android:id="@+id/submit_button"
                 android:background="#13b586"/>
 
+<!--
+                       <com.facebook.login.widget.LoginButton
+                           android:id="@+id/login_button"
+                           android:layout_width="190dp"
+                           android:layout_height="0dp"
+                           android:text="submit"
+                           android:layout_marginTop="10dp"
+                           android:layout_weight="0.15" />
+                           -->
 
-
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/login_button"
-                android:layout_width="190dp"
-                android:layout_height="0dp"
-                android:text="submit"
-                android:layout_marginTop="10dp"
-                android:layout_weight="0.15" />
         </LinearLayout>
 
 

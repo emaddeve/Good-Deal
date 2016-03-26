@@ -29,6 +29,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphRequestAsyncTask;
+import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
@@ -37,6 +38,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -50,10 +52,15 @@ public class Login extends AppCompatActivity {
     private Button submit;
     private TextView register;
     private Sender sender;
+    private Intent intent;
      String username;
      String password;
+    JSONArray rawName = null;
+    String token;
     SharedPreferences sp;
+    String infoUser;
     SharedPreferences.Editor editor;
+    private JSONObject jsontoken;
     ProgressDialog progressDialog;
     public static final String MyPREFERENCES = "MyPrefs" ;
     @Override
@@ -68,12 +75,18 @@ public class Login extends AppCompatActivity {
         editPassword = (EditText) findViewById(R.id.input_password);
         submit = (Button) findViewById(R.id.submit_button);
         register = (TextView) findViewById(R.id.reg);
+/*
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        // Permet d'accéder à la liste d'amis qui utilisent l'application
         loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends", "email"));
-        //permet de savoir si un user est deja connecte
-        //AccessToken.getCurrentAccessToken();
-        getLoginDetails(loginButton);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getProfilDetail();
+            }
+        });
+
+*/
+
         submit.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -118,6 +131,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 progressDialog.dismiss();
+                Log.v("auth", "" + response);
                 if (response.equalsIgnoreCase("true")) {
                     onLoginSuccess();
                 } else {
@@ -186,85 +200,7 @@ public class Login extends AppCompatActivity {
     /**
      * Register a callback function with LoginButton to respond to the login result.
      */
-    protected void getLoginDetails(LoginButton login_button) {
-        // Callback registration
-        login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            /**
-             * lorsque la connexion est reussi le login manager
-             * definit le access token et le profil du user connecte
-             * Ces infos sont enregistres dans les preference partages par le facebook sdk  pendant SDK initialisation
-             *
-             * */
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                //startActivity(intent);
-                Bundle parameters = new Bundle();
-               parameters.putString("fields", "email,first_name,last_name,name");
-                GraphRequestAsyncTask graphRequestAsyncTask = new GraphRequest(
-                        loginResult.getAccessToken(),
-                        "/me/friends",
-                        parameters,
-                        HttpMethod.GET,
-                        new GraphRequest.Callback() {
-                            public void onCompleted(final GraphResponse response) {
-                               final Intent intent1 = new Intent(Login.this, MainActivity.class);
-                                final Intent intent2 = new Intent(Login.this, SignUpFacebook.class);
-                                try {
 
-                                    Log.v("friends", response.toString());
-                                    JSONArray rawName = response.getJSONObject().getJSONArray("data");
-                                    Log.v("dataidfac", rawName.toString());
-                                    editor.putString("FriendList", rawName.toString());
-                                    String token = Profile.getCurrentProfile().getId();
-                                    Log.v("token", token
-                                    );
-                                    sender.loginFacebook(token, new Callback<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject jsonObject) {
-                                            String email, password;
-
-                                            try {
-                                                if (jsonObject.getString("email") != null && jsonObject.getString("password") != null) {
-                                                    email = jsonObject.getString("email");
-                                                    password = jsonObject.getString("password");
-                                                    setpreference(email, password);
-                                                    startActivity(intent1);
-                                                } else
-                                                    intent2.putExtra("lastName", response.getJSONObject().getString("last_name"));
-                                                intent2.putExtra("firstName",response.getJSONObject().getString("first_name"));
-                                                intent2.putExtra("token",response.getJSONObject().getString("id"));
-                                                intent2.putExtra("email",response.getJSONObject().getString("email"));
-
-                                                    startActivity(intent2);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-
-
-                                    });
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }).executeAsync();
-                LoginManager.getInstance().logOut();
-
-            }
-
-            @Override
-            public void onCancel() {
-                // code for cancellation
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                //  code to handle error
-            }
-        });
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -306,12 +242,139 @@ public class Login extends AppCompatActivity {
         // Logs 'app deactivate' App Event.
         AppEventsLogger.deactivateApp(this);
     }
-    public void setpreference(String email,String password){
+
+/*
+
+    protected void getProfilDetail() {
+        // Callback registration
+        intent= new Intent(this, SignUpFacebook.class);
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends", "email"));
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "email,first_name,last_name");
+                        GraphRequestBatch batch = new GraphRequestBatch(
+                                new GraphRequest(
+                                        loginResult.getAccessToken(),
+                                        "/me",
+                                        parameters,
+                                        HttpMethod.GET,
+                                        new GraphRequest.Callback() {
+                                            public void onCompleted(GraphResponse response) {
+                                                Log.i("objetfri",
+                                                        response.toString());
+                                                jsontoken = response.getJSONObject();
+
+                                                 infoUser = response.getJSONObject().toString();
+                                                intent.putExtra("jsondatauser", infoUser);
+                                            }
+                                        }),
+                                new GraphRequest(
+                                        loginResult.getAccessToken(),
+                                        "/me/friends",
+                                        parameters,
+                                        HttpMethod.GET,
+                                        new GraphRequest.Callback() {
+                                            public void onCompleted(GraphResponse response) {
+
+                                                try {
+                                                    rawName = response.getJSONObject().getJSONArray("data");
+                                                    intent.putExtra("jsondatafriend", rawName.toString());
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                Log.v("dataidfac", response.toString());
+
+                                            }
+                                        })
+                        );
+                        batch.addCallback(new GraphRequestBatch.Callback() {
+                            @Override
+                            public void onBatchCompleted(GraphRequestBatch graphRequests) {
+                                String username = editUsername.getText().toString();
+                                String password = editPassword.getText().toString();
+                                try {
+                                    token = jsontoken.getString("id");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                Log.v("tttt",token);
+                                sender.loginFacebook(token, new Callback<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        progressDialog.dismiss();
+                                        Log.v("auth", "" + response);
+                                        if (response!=null) {
+                                            ArrayList<String> friends = new ArrayList<>();
+                                            try {
+
+                                                for (int i = 0; i < rawName.length(); i++) {
+
+                                                    JSONObject json = null;
+                                                    json = rawName.getJSONObject(i);
+                                                    friends.add(json.getString("id"));
+
+
+
+                                            }
+
+                                                String email = jsontoken.getString("email");
+                                                String pass = response;
+                                                Log.v("blabla",email+" :"+pass+": "+friends.toString());
+                                                setpreference(email,pass,friends.toString());
+                                            }catch(JSONException e){
+                                                e.printStackTrace();
+                                            }
+
+                                        } else {
+                                            Log.v("loginfaild", "true");
+                                            onLoginFailed();
+                                        }
+                                    }
+
+
+                                });
+                                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+
+
+                                startActivity(intent1);
+                            }
+                        });
+                        batch.executeAsync();
+
+                        LoginManager.getInstance().logOut();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // code for cancellation
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        //  code to handle error
+                    }
+                });
+
+
+    }
+
+
+
+*/
+
+
+    public void setpreference(String email,String password,String friends){
         SharedPreferences sp= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        Log.v("sharedpref",""+email+": "+password);
+        Log.v("sharedpref", "" + email + ": " + password);
         editor.putString("email", email);
         editor.putString("pass", password);
+        editor.putString("friendslist", friends);
         editor.commit();
     }
 

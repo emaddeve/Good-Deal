@@ -40,7 +40,7 @@ public class Sender  {
         try {
             StringEntity entity = new StringEntity(parameters.toString());
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            client.setBasicAuth(email,password);
+            client.setBasicAuth(email, password);
             client.post(context, "http://10.0.2.2:8080/GoodDealsws/webapi/offers/add", entity, "application/json",
                     new AsyncHttpResponseHandler() {
 
@@ -92,7 +92,10 @@ public class Sender  {
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                            if (callback != null) {
 
+                                callback.onResponse(statusCode);
+                            }
                         }
                     });
 
@@ -123,7 +126,10 @@ public class Sender  {
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                            if (callback != null) {
 
+                                callback.onResponse(statusCode);
+                            }
                         }
                     });
 
@@ -139,7 +145,7 @@ public class Sender  {
         try {
             StringEntity entity = new StringEntity("null");
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            client.setBasicAuth(name,pass);
+            client.setBasicAuth(name, pass);
 
             client.get(context, "http://10.0.2.2:8080/GoodDealsws/webapi/clients/verify", entity, "application/json",
                     new AsyncHttpResponseHandler() {
@@ -148,53 +154,60 @@ public class Sender  {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
-                            String s=new String(responseBody);
+
+                            String respnse = new String(responseBody);
+
                             if (callback != null) {
-                                callback.onResponse(s);
+                                callback.onResponse(respnse);
 
                             }
-
 
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                            if (callback != null) {
-                                callback.onResponse(responseBody.toString());
-                            }
+
                         }
+
                     });
 
 
-        } catch (UnsupportedEncodingException e) {
+
+
+    } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
     }
 
-    public void loginFacebook(String token, final Callback<JSONObject> callback){
+    public void loginFacebook(String token, final Callback<String> callback){
         try {
             StringEntity entity = new StringEntity(token);
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
 
 
             client.get(context, "http://10.0.2.2:8080/GoodDealsws/webapi/clients/loginInfo", entity, "application/json",
-                    new JsonHttpResponseHandler() {
+                    new AsyncHttpResponseHandler() {
 
 
                         @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
+
+                            String respnse = new String(responseBody);
 
                             if (callback != null) {
-                                callback.onResponse(response);
+                                callback.onResponse(respnse);
+
                             }
+
                         }
 
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                        }
 
                     });
-
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

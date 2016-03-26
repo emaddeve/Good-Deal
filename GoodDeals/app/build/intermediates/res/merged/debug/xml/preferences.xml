@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.emad.gooddeals.SeekBarPreference
+    <com.emad.gooddeals.settings.SeekBarPreference
         android:defaultValue="50"
         android:dialogMessage="@string/settings_dialog_message"
         android:key="SEEKBAR_VALUE"

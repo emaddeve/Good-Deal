@@ -89,7 +89,7 @@ public class SignUPActivity extends Activity {
         Log.d(TAG, "Signup");
 
         if (!validate()) {
-            onSignupFailed();
+            onSignupFailed("wrong entry");
             return;
         }
 
@@ -118,8 +118,10 @@ public class SignUPActivity extends Activity {
                     progressDialog.dismiss();
                     if (integer == 201)
                         onSignupSuccess();
+                    else if (integer==400)
+                        onSignupFailed("email already exist");
                     else
-                        onSignupFailed();
+                        onSignupFailed("somthing went wrong");
                 }
 
 
@@ -146,8 +148,9 @@ public class SignUPActivity extends Activity {
         Toast.makeText(this, "you account has been created !", Toast.LENGTH_LONG).show();
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Register failed", Toast.LENGTH_LONG).show();
+    public void onSignupFailed(String message) {
+        progressDialog.dismiss();
+        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
 
         btnCreateAccount.setEnabled(true);
     }
