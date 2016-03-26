@@ -53,6 +53,12 @@ import java.util.ArrayList;
 import data.stevo.SQlite.Offres;
 import data.stevo.SQlite.OffresDao;
 
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * Created by emad on 23/02/16.
  */
@@ -69,6 +75,7 @@ public class MainActivity extends AppCompatActivity
     String name;
     String desc;
     Point p1;
+
     String s = "name of offer";
     String s2 = "descritpi about ;thies";
     private SwipeRefreshLayout swipeRefreshLayout;
