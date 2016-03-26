@@ -105,13 +105,13 @@ public class MainActivity extends AppCompatActivity
          * */
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //test preference
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
+
+       /** int seekbarValue = SP.getInt("SEEKBAR_VALUE", 50);
         String categorytypeValue = SP.getString("categorytype", "toutes");
         Boolean activeVue = SP.getBoolean("offre_ami", false);
         Toast.makeText(this, "la categorie est " + categorytypeValue + " et la distance est de " + seekbarValue
                         + "display offer to my friend " + activeVue,
-                Toast.LENGTH_LONG).show();
+                Toast.LENGTH_LONG).show();*/
         /**
          * Verification de la connexion a internet
          */
@@ -341,9 +341,11 @@ public class MainActivity extends AppCompatActivity
 
 
     private void fetch() {
-        int prefDistance = SP.getInt("SEEKBAR_VALUE", 0);
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        int prefDistance = SP.getInt("SEEKBAR_VALUE", 50);
         String category = SP.getString("categorytype", "toutes");
-
+        Toast.makeText(this, "la categorie est " + category + " et la distance est de " + prefDistance,
+                Toast.LENGTH_LONG).show();
         receiver = new Receiver(category, prefDistance, this,this);
         swipeRefreshLayout.setRefreshing(true);
         try {

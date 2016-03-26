@@ -9,7 +9,7 @@
 
     <string name="facebook_app_id">1669835493283338</string>
 
-    <string name="update_default">toutes</string>
+    <string name="update_default">All</string>
     <string name="list_dialog_title">Categories</string>
     <string name="dialog_title"></string>
     <string name="menu_settings">Settings</string>
