@@ -1,12 +1,14 @@
 package data.stevo.SQlite;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
-import com.emad.gooddeals.ImageToJson;
+import com.emad.gooddeals.tools.ImageToJson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -22,6 +24,9 @@ public class Offres  {
     private String magasin;
     private Date dateFin;
     private JSONObject jsonObject;
+    private double longitude;
+     private double latitude;
+    SimpleDateFormat sd;
     private ImageToJson imageToJson=new ImageToJson();
     private  String userName;
 
@@ -35,15 +40,62 @@ public class Offres  {
     /**
      *constructeur de test
      */
-    public Offres(String titre, String image, String description,Date date) {
+    public Offres(String name, String description, String imageString,String category,
+                  double longitude,double latitude,String magasin,Date date,int userid) {
         this.titre = titre;
         this.description = description;
         this.dateFin=date;
+        this.userName=name;
+        this.categorie=category;
+        this.magasin=magasin;
+        sd = new SimpleDateFormat("yyyy-mm-dd");
 
 
     }
 
     //GETTERS et SETTERS
+
+
+    public void setLongitude(double logitude) {
+        this.longitude = logitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLatitude() {
+        if (jsonObject==null){
+            return latitude;
+        }
+        else{
+            try {
+                latitude = jsonObject.getDouble("latitude");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return latitude;
+    }
+
+    public double getLongitude() {
+        if (jsonObject==null){
+            return longitude;
+        }
+        else{
+            try {
+                longitude = jsonObject.getDouble("longitude");
+                Log.v("dsdsdsdsds",""+longitude);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        return longitude;
+    }
+
 
     public int getId() throws JSONException {
         if (jsonObject==null){
@@ -161,11 +213,12 @@ public class Offres  {
         else{
         try {
             magasin = jsonObject.getString("magasin");
+            Log.v("offerrrr",magasin);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         }
-        return titre;
+        return magasin;
     }
 
     public void setMagasin(String magasin) {

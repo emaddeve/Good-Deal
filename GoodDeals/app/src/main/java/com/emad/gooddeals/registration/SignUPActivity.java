@@ -12,17 +12,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.emad.gooddeals.Callback;
+import com.emad.gooddeals.http.Callback;
 import com.emad.gooddeals.MainActivity;
 import com.emad.gooddeals.R;
 import com.emad.gooddeals.http.Sender;
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
-import com.facebook.GraphRequestAsyncTask;
 import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
@@ -44,7 +42,6 @@ public class SignUPActivity extends Activity {
     private CallbackManager callbackManager;
     EditText editTextUserName, editTextPassword, editTextConfirmPassword, editFirstName, editLastName;
     Button btnCreateAccount, btnCreateAccountWithFacebook;
-    Context context = this;
     Sender sender;
     JSONObject jsonObject;
     String email;
@@ -104,7 +101,6 @@ public class SignUPActivity extends Activity {
         String lastName = editLastName.getText().toString();
          email = editTextUserName.getText().toString();
          password = editTextPassword.getText().toString();
-        String passwordConfirm = editTextConfirmPassword.getText().toString();
 
 
         try {
@@ -142,7 +138,7 @@ public class SignUPActivity extends Activity {
         Log.v("sharedpref",""+email+": "+password);
         editor.putString("email", email);
         editor.putString("pass", password);
-        editor.commit();
+        editor.apply();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         Toast.makeText(this, "you account has been created !", Toast.LENGTH_LONG).show();

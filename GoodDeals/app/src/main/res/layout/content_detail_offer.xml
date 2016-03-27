@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/image_offer"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="65dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="titre"
+        android:id="@+id/titre_offer"
+        android:layout_below="@+id/image_offer"
+        android:layout_alignStart="@+id/image_offer"
+        android:layout_marginStart="33dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="description"
+        android:id="@+id/descr_offer"
+        android:layout_below="@+id/titre_offer"
+        android:layout_alignStart="@+id/titre_offer"
+        android:layout_marginTop="38dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="category"
+        android:id="@+id/category_offer"
+        android:layout_marginTop="49dp"
+        android:layout_below="@+id/descr_offer"
+        android:layout_alignStart="@+id/magasin_offer" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="date"
+        android:id="@+id/date_offer"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/magasin_offer"
+        android:layout_marginBottom="40dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="magasin"
+        android:id="@+id/magasin_offer"
+        android:layout_above="@+id/carte_offre"
+        android:layout_alignStart="@+id/descr_offer" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/carte_offre"
+        android:src="@mipmap/googlemap"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/image_offer" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Title :"
+        android:id="@+id/titrelable"
+        android:textStyle="bold"
+        android:layout_below="@+id/image_offer"
+        android:layout_alignStart="@+id/magasinlable" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Description :"
+        android:id="@+id/descriptionlabel"
+        android:layout_alignTop="@+id/descr_offer"
+        android:layout_toStartOf="@+id/descr_offer"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Category :"
+        android:id="@+id/categorylable"
+        android:textStyle="bold"
+        android:layout_alignBaseline="@+id/category_offer"
+        android:layout_alignBottom="@+id/category_offer"
+        android:layout_alignStart="@+id/descriptionlabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Magasin :"
+        android:id="@+id/magasinlable"
+        android:textStyle="bold"
+        android:layout_alignBottom="@+id/magasin_offer"
+        android:layout_alignStart="@+id/categorylable" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Date :"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/enddatelable"
+        android:textStyle="bold"
+        android:layout_alignTop="@+id/date_offer"
+        android:layout_alignStart="@+id/magasinlable" />
+</RelativeLayout>

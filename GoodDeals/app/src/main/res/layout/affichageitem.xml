@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
     android:weightSum="1">
     <ImageView
         android:id="@+id/imageViewItem"
@@ -9,7 +10,11 @@
         android:layout_height="200dp"
         android:paddingRight="10sp"
         android:paddingLeft="10sp"
-        android:src="@drawable/android" />
+        android:src="@drawable/android"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        />
 
 
     <LinearLayout
@@ -17,7 +22,9 @@
         android:layout_height="201dp"
         android:orientation="vertical"
         android:paddingTop="24sp"
-        android:layout_marginLeft="30dp">
+        android:layout_marginLeft="30dp"
+
+        >
 
         <TextView
             android:id="@+id/textViewTitre"
@@ -25,7 +32,11 @@
             android:layout_height="wrap_content"
             android:textSize="16dp"
             android:textColor="#36007F"
-            android:text="TITRE" />
+            android:text="TITRE"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            />
 
         <TextView
             android:id="@+id/textViewDesc"
@@ -33,7 +44,11 @@
             android:layout_height="wrap_content"
             android:textSize="10dp"
             android:textColor="#404040"
-            android:text="description" />
+            android:text="description"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,13 +56,21 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="End date "
             android:id="@+id/textViewDate"
-            android:textSize="10dp" />
+            android:textSize="10dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/friendName" />
+            android:id="@+id/friendName"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            />
 
 
     </LinearLayout>

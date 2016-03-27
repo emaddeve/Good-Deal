@@ -12,55 +12,31 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.widget.Toast;
 
-import com.emad.gooddeals.Callback;
+import com.emad.gooddeals.http.Callback;
 import com.emad.gooddeals.MainActivity;
 import com.emad.gooddeals.R;
 import com.emad.gooddeals.http.Sender;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphRequestAsyncTask;
-import com.facebook.GraphRequestBatch;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
-import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class Login extends AppCompatActivity {
     private static final String TAG = "Login";
     private static final int REQUEST_SIGNUP = 0;
-    private LoginButton loginButton;
     private CallbackManager callbackManager;
     private EditText editUsername;
     private EditText editPassword;
     private Button submit;
     private TextView register;
     private Sender sender;
-    private Intent intent;
      String username;
      String password;
-    JSONArray rawName = null;
-    String token;
     SharedPreferences sp;
-    String infoUser;
     SharedPreferences.Editor editor;
-    private JSONObject jsontoken;
     ProgressDialog progressDialog;
     public static final String MyPREFERENCES = "MyPrefs" ;
     @Override

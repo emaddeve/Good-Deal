@@ -19,8 +19,7 @@ import org.hibernate.service.ServiceRegistry;
 import org.unicaen.GoodDealsws.model.Offers;
 
 import org.unicaen.GoodDealsws.model.Clients;
-import org.unicaen.GoodDealsws.model.Friends;
-import org.unicaen.GoodDealsws.model.FriendsOffers;
+
 
 /**
  * OffersService class determine all the method needed to make operation on the
@@ -252,9 +251,10 @@ public class OffersService {
 		return list;
 	}
 
-	public List<FriendsOffers> getface(ArrayList<String> friends) {
+	public List<Offers> getface(ArrayList<String> friends) {
 
-		List<FriendsOffers> friendsOffersList = new ArrayList<FriendsOffers>();
+		List<Offers> friendsOffersList = new ArrayList<Offers>();
+
 		Session session = createSessionFactory().openSession();
 		Transaction tx = null;
 		try {
@@ -271,10 +271,10 @@ public class OffersService {
 								query.setParameter("userid", c.getId());
 								List<Offers> offers = query.list();
 								if (offers.size() > 0) {
-									FriendsOffers friendsoffers = new FriendsOffers();
-									friendsoffers.setName(c.getFirstName());
-									friendsoffers.setOffers(offers);
-									friendsOffersList.add(friendsoffers);
+									for (Offers o : offers) {
+										friendsOffersList.add(o);
+									}
+
 								}
 							}
 						}

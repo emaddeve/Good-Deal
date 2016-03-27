@@ -1,5 +1,4 @@
-package com.emad.gooddeals;
-import android.app.Activity;
+package com.emad.gooddeals.ui;
 
 
 import android.app.DatePickerDialog;
@@ -22,6 +21,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.emad.gooddeals.tools.ImageToJson;
+import com.emad.gooddeals.MainActivity;
+import com.emad.gooddeals.R;
+import com.emad.gooddeals.geolocation.GPSTracker;
 import com.emad.gooddeals.http.Sender;
 import com.emad.gooddeals.registration.Login;
 
@@ -79,7 +82,7 @@ public class TakePhoto extends AppCompatActivity implements
       //  datePicker = (DatePicker)findViewById(R.id.datePicker);
         imageToJson=new ImageToJson();
          dropdown = (Spinner)findViewById(R.id.spinner1);
-        String[] items = new String[]{"clothes", "grocery", "other"};
+        String[] items = new String[]{"Sport", "Grocery", "Clothes","Other"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
 
@@ -138,6 +141,7 @@ public class TakePhoto extends AppCompatActivity implements
      */
     public void sendOffer(View view){
         try {
+
             encodedImage = imageToJson.getStringFromBitmap(image);
             jsonObject.put("category", dropdown.getSelectedItem().toString());
             jsonObject.put("description", offerDisc.getText().toString());
@@ -176,12 +180,14 @@ public class TakePhoto extends AppCompatActivity implements
 
                 String pass = sp.getString("pass", "Empty");
             if(!email.equalsIgnoreCase("Empty") && !pass.equalsIgnoreCase("Empty")){
-                Sender send = new Sender();
-                send.send(jsonObject, email, pass);
-                Toast.makeText(this, "Your offer has been sent",
-                        Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                if(validate()) {
+                    Sender send = new Sender();
+                    send.send(jsonObject, email, pass);
+                    Toast.makeText(this, "Your offer has been sent",
+                            Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                }
             }
             else{
                 Intent i = new Intent(this,Login.class);
@@ -226,6 +232,32 @@ public class TakePhoto extends AppCompatActivity implements
                     }
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
+    }
+
+    public boolean validate() {
+        boolean valid = true;
+
+        String magasin = offerMagasin.getText().toString();
+        String descirption = offerDisc.getText().toString();
+        String name = offerName.getText().toString();
+        String date = txtDate.getText().toString();
+
+        if (magasin.isEmpty() ) {
+            offerMagasin.setError("magasin name is required ");
+            valid = false;
+        } else if (descirption.isEmpty()){
+            offerDisc.setError("describe this offer please");
+            valid = false;
+        }else
+
+        if (name.isEmpty()) {
+            offerName.setError("enter a name for this offer");
+            valid = false;
+        }else if(date.isEmpty()){
+            txtDate.setError("Tell us when this offer will end");
+        }
+
+        return valid;
     }
 }
 

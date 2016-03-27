@@ -4,9 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
-import com.emad.gooddeals.ImageToJson;
+import com.emad.gooddeals.tools.ImageToJson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +15,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by stevo on 03/03/16.

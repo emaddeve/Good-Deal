@@ -1,4 +1,4 @@
-package com.emad.gooddeals;
+package com.emad.gooddeals.http;
 
 /**
  * Created by emad on 22/03/16.

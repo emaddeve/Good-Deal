@@ -3,15 +3,9 @@ package com.emad.gooddeals.http;
 import android.content.Context;
 import android.util.Log;
 
-import com.emad.gooddeals.Callback;
-import com.emad.gooddeals.registration.Login;
-import com.emad.gooddeals.registration.SignUPActivity;
-import com.emad.gooddeals.registration.SignUpFacebook;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -22,21 +16,24 @@ import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.protocol.HTTP;
 
 /**
+ * Class for making requests to the service to send data
+ * <p/>
  * Created by emad on 09/03/16.
  */
-public class Sender  {
-    boolean b = false;
+public class Sender {
 
-    // json object to be send to the server
-    JSONObject parameters;
-    // string to save the response code coming from the server
-    String serverResponse;
-    Context context;
     private static AsyncHttpClient client = new AsyncHttpClient();
+    private Context context;
     //constructor to initialize the paramerters
 
-
-    public void send(JSONObject parameters,String email,String password){
+    /**
+     * Method for sending a get request to the servie to get list of offers
+     *
+     * @param parameters parameters to filter the offer list
+     * @param email      the email address of the client
+     * @param password   password of the client
+     */
+    public void send(JSONObject parameters, String email, String password) {
         try {
             StringEntity entity = new StringEntity(parameters.toString());
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
@@ -64,17 +61,21 @@ public class Sender  {
 
     }
 
+    /**
+     * Method to create a new account
+     *
+     * @param parameters the new account information
+     * @param callback   the callback when the method get the result from the service.
+     */
+    public void signup(final JSONObject parameters, final Callback<Integer> callback) {
 
-    public void signup(final JSONObject parameters,final Callback<Integer> callback){
 
-        final SignUPActivity signUPActivity = new SignUPActivity();
-
-            Log.v("clientjson", parameters.toString());
+        Log.v("clientjson", parameters.toString());
 
 
-                            try {
-                            StringEntity entity = new StringEntity(parameters.toString());
-                            entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+        try {
+            StringEntity entity = new StringEntity(parameters.toString());
+            entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
 
             client.post(context, "http://10.0.2.2:8080/GoodDealsws/webapi/clients/add", entity, "application/json",
                     new AsyncHttpResponseHandler() {
@@ -99,15 +100,20 @@ public class Sender  {
                         }
                     });
 
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
 
     }
 
-    public void signupfacebook(JSONObject parameters,final Callback<Integer> callback){
-        final SignUpFacebook signUpFacebook = new SignUpFacebook();
+    /**
+     * Method for creating a new account by Facebook
+     * @param parameters the new account information
+     * @param callback the callback when the method get the result from the service.
+     */
+    public void signupfacebook(JSONObject parameters, final Callback<Integer> callback) {
+
         try {
 
             StringEntity entity = new StringEntity(parameters.toString());
@@ -140,8 +146,14 @@ public class Sender  {
 
     }
 
-    public void login(String name, String pass, final Callback<String> callback){
-        final Login login = new Login();
+    /**
+     * Log in Method
+     * @param name name of the user
+     * @param pass password of the user
+     * @param callback the callback when the method get the result from the service.
+     */
+    public void login(String name, String pass, final Callback<String> callback) {
+
         try {
             StringEntity entity = new StringEntity("null");
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
@@ -172,14 +184,18 @@ public class Sender  {
                     });
 
 
-
-
-    } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
 
-    public void loginFacebook(String token, final Callback<String> callback){
+    /**
+     * Log in Method by Facebook account
+     * @param token
+     * @param callback
+     */
+
+    public void loginFacebook(String token, final Callback<String> callback) {
         try {
             StringEntity entity = new StringEntity(token);
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));

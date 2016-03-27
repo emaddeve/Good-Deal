@@ -51,9 +51,10 @@ public class SettingsActivity extends PreferenceActivity {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-            // Set seekbar summary :
-            int radius = PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getInt("SEEKBAR_VALUE", 0);
-            _seekBarPref.setSummary(this.getString(R.string.settings_summary).replace("$1", ""+radius));
+            // Set seekbar summary :if(PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getInt("SEEKBAR_VALUE", 50)!=null) {
+
+
+
         }
     }
 

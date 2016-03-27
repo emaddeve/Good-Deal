@@ -1,4 +1,4 @@
-package com.emad.gooddeals;
+package com.emad.gooddeals.tools;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

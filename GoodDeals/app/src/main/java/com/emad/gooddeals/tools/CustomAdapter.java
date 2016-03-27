@@ -1,7 +1,9 @@
-package com.emad.gooddeals;
+package com.emad.gooddeals.tools;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.graphics.Color;
+
+import com.emad.gooddeals.DetailOffer;
+import com.emad.gooddeals.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,7 +30,7 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
 
     ArrayList<Offres> myList = new ArrayList<Offres>();
     Context context;
-    private Activity activity;
+    Activity activity;
     private String[] bgColors;
 
     // on passe le context afin d'obtenir un LayoutInflater pour utiliser notre
@@ -120,9 +125,21 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        Toast toast = Toast.makeText(context, "Item " + (position + 1) + ": "
-                + this.myList.get(position), Toast.LENGTH_SHORT);
-        toast.show();
+        /**
+         *
+         * CODE AJOUTER ......................................................
+         * */
+        Intent intent=new Intent(activity,DetailOffer.class);
+        intent.putExtra("image",getItem(position).getBipmapImage());
+        intent.putExtra("titre", getItem(position).getTitre());
+        intent.putExtra("description",getItem(position).getDescription());
+        intent.putExtra("categorie",getItem(position).getCategorie());
+        intent.putExtra("magasin",getItem(position).getMagasin());
+        Log.v("custommmm",getItem(position).getMagasin());
+        intent.putExtra("date",getItem(position).getDateFin().toString());
+        intent.putExtra("latitude",getItem(position).getLatitude());
+        intent.putExtra("longitude",getItem(position).getLongitude());
+        activity.startActivity(intent);
 
     }
 

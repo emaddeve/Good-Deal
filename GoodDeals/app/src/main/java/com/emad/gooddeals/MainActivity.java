@@ -33,9 +33,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.emad.gooddeals.geolocation.GPSTracker;
 import com.emad.gooddeals.http.Receiver;
 import com.emad.gooddeals.registration.Login;
 import com.emad.gooddeals.settings.SettingsActivity;
+import com.emad.gooddeals.http.Callback;
+import com.emad.gooddeals.tools.CustomAdapter;
+import com.emad.gooddeals.ui.HomeScreenActivity;
+import com.emad.gooddeals.ui.TakePhoto;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
@@ -53,12 +58,6 @@ import java.util.ArrayList;
 import data.stevo.SQlite.Offres;
 import data.stevo.SQlite.OffresDao;
 
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * Created by emad on 23/02/16.
  */
@@ -101,19 +100,14 @@ public class MainActivity extends AppCompatActivity
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         listView = (ListView) findViewById(R.id.listviewperso);
         adapter = new CustomAdapter(this,myList,this);
+        listView.setOnItemClickListener(adapter);
         listView.setAdapter(adapter);
         FacebookSdk.sdkInitialize(getApplicationContext());
         swipeRefreshLayout.setOnRefreshListener(this);
 
 
 
-        /**
-         * initialisation des valeurs par defaut de nos preferences lors de la premiere arriver sur cette activite
-         *
-         * */
-      //  PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        //test preference
-       //  SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
         SP= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
          editor = SP.edit();
          sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -371,17 +365,8 @@ public class MainActivity extends AppCompatActivity
                         for (int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            for (int j = 0; j < jsonObject.length(); j++) {
-                                JSONArray ja = jsonObject.getJSONArray("offers");
-                                for (int a = 0; a < ja.length(); a++) {
-                                    JSONObject jsonObject1 = ja.getJSONObject(a);
-                                    myList.add(new Offres(jsonObject1));
-                                }
-
-                            }
-
+                            myList.add(new Offres(jsonObject));
                         }
-
 
 
                         adapter.notifyDataSetChanged();

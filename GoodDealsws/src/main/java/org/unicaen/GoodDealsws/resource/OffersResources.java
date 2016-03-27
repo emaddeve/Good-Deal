@@ -17,8 +17,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.unicaen.GoodDealsws.model.Base64;
-import org.unicaen.GoodDealsws.model.Friends;
-import org.unicaen.GoodDealsws.model.FriendsOffers;
 import org.unicaen.GoodDealsws.model.Offers;
 import org.unicaen.GoodDealsws.service.ClientsService;
 import org.unicaen.GoodDealsws.service.OffersService;
@@ -75,7 +73,7 @@ public class OffersResources {
 	
 	@POST
 	@Path("/friends")
-	public List<FriendsOffers> getFriendsOffers(ArrayList<String> f) {
+	public List<Offers> getFriendsOffers(ArrayList<String> f) {
 
 		return offerService.getface(f);
 	}

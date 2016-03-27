@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.emad.gooddeals.Callback;
+import com.emad.gooddeals.http.Callback;
 import com.emad.gooddeals.MainActivity;
 import com.emad.gooddeals.R;
 import com.emad.gooddeals.http.Sender;
@@ -103,7 +102,6 @@ public class SignUpFacebook extends AppCompatActivity {
             Log.v("test",infoFriend.toString());
 
             password = editTextPassword2.getText().toString();
-            String passwordConfirm = editTextConfirmPassword2.getText().toString();
             final JSONObject jsonObject = new JSONObject();
             jsonObject.put("lastName",lastName);
             jsonObject.put("firstName",firstName);
@@ -143,6 +141,8 @@ public class SignUpFacebook extends AppCompatActivity {
         //startActivity(intent);
         SharedPreferences sp= this.getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
+        editor.clear();
+        editor.apply();
         final String jsondatafriend = intent.getStringExtra("jsondatafriend");
         JSONArray infoFriend;
         ArrayList<String> friends= new ArrayList<>();

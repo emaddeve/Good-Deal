@@ -1,4 +1,4 @@
-package com.emad.gooddeals;
+package com.emad.gooddeals.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.emad.gooddeals.MainActivity;
+import com.emad.gooddeals.R;
 import com.emad.gooddeals.registration.SignUPActivity;
 
 /**
